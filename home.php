@@ -1,4 +1,7 @@
 <?php
+  $index = false;
+  $home = true;
+  $about = false;
   include "share/header.inc.php";
 ?>
 

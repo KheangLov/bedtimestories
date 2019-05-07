@@ -3,11 +3,11 @@
       <div class="row">
         <div class="col-md-6">
           <div class="inner-footer">
-            <a href="<?php echo $stories == true ? '../' : ''; ?>index.php" class="brand-footer">
+            <a href="<?php //echo $stories == true ? '../' : ''; ?>index.php" class="brand-footer">
               <div class="row mar-bot">
                 <div class="col-sm-2 text-center no-padd">
                   <div class="logo-brand">
-                    <img src="<?php echo $stories == true ? '../' : ''; ?>assets/images/icon-logo.png" alt="Bedtimestories" class="img-logo">
+                    <img src="<?php //echo $stories == true ? '../' : ''; ?>assets/images/icon-logo.png" alt="Bedtimestories" class="img-logo">
                   </div>
                 </div>
                 <div class="col-sm-10 no-lpadd">
