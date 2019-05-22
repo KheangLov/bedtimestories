@@ -1,3 +1,16 @@
+<?php
+  include "../share/db-conn.inc.php";
+  include "../share/constant.inc.php";
+  session_start();
+  $text = "";
+  if($_SESSION['isLogin'] == true) {
+    $text = "Welcome to our homepage user: ";
+  } else {
+    $_SESSION['error'] = 'Please login first!';
+    header("Location:../login.php");
+  }
+  $_SESSION['isLogin'] == false;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Admin Panel</title>
-  <link rel="shortcut icon" href="../assets/images/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="../assets/images/icon-logo.png" type="image/x-icon">
   <link rel="stylesheet" href="../assets/libraries/fontawesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
@@ -13,37 +26,27 @@
   <div class="wrapper clearfix">
     <aside class="sidebar">
       <div class="sidebar-header text-center">
-        <h3 class="site-name">Bedtimestories</h3>
+        <h3 class="site-name"><?php echo BEDTIMESTORIES; ?></h3>
       </div>
       <ul class="nav nav-menu">
-        <li>
-          <a href="index.html">
+        <li class="<?php echo $index === true ? 'active' : ''; ?>">
+          <a href="index.php">
             <i class="fa fa-tachometer"></i>Dashboard
           </a>
         </li>
-        <li>
-          <a href="../index.html">
-            <i class="fa fa-globe"></i>Homepage
+        <li class="<?php echo $profile === true ? 'active' : ''; ?>">
+          <a href="profile.php">
+            <i class="fa fa-user-circle"></i>Profile
           </a>
         </li>
-        <li>
-          <a href="post.html">
-            <i class="fa fa-pencil-square-o"></i>Posts <b class="caret drop-custom"></b>
+        <li class="<?php echo $user === true ? 'active' : ''; ?>">
+          <a href="user.php">
+            <i class="fa fa-user"></i>Users
           </a>
         </li>
-        <li class="active">
-          <a href="user.html">
-            <i class="fa fa-user"></i>Profile
-          </a>
-        </li>
-        <li>
-          <a href="table.html">
-            <i class="fa fa-table"></i>Tables
-          </a>
-        </li>
-        <li>
-          <a href="form.html">
-            <i class="fa fa-wpforms"></i>Forms
+        <li class="<?php echo $post === true ? 'active' : ''; ?>">
+          <a href="post.php">
+            <i class="fa fa-pencil-square-o"></i>Posts
           </a>
         </li>
       </ul>
@@ -59,7 +62,7 @@
               <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">
-              Profile
+              <?php echo $index === true ? DASHBOARD : ($profile === true ? PROFILE : ($user === true ? USERS : ($post === true ? POSTS : ''))); ?>
             </a>
           </div>
       
@@ -78,9 +81,10 @@
                   <i class="fa fa-user fa-nav"></i>
                 </a>
                 <ul class="dropdown-menu card card-navbar">
-                  <li><a href="user.html">Admin</a></li>
-                  <li><a href="form.html">Edit</a></li>
-                  <li><a href="../login.html">Log Out</a></li>
+                  <li><a href="../home.php"><strong>See Homepage</strong></a></li>
+                  <li><a href=""><?php echo ucfirst($_SESSION['name']); ?></a></li>
+                  <li><a href=""><?php echo ucfirst($_SESSION['role_name']); ?></a></li>
+                  <li><a href="../logout.php">Log Out</a></li>
                 </ul>
               </li>
             </ul>

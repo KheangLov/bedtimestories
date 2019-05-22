@@ -1,5 +1,14 @@
 <?php
-
+  include "constant.inc.php";
+  $page_title = '';
+  if($home === true)
+    $page_title = HOME;
+  else if($index === true)
+    $page_title = LIBRARIES;
+  else if($about === true)
+    $page_title = ABOUT;
+  else
+    $page_title = '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +16,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Home</title>
+  <title><?php echo BEDTIMESTORIES . ' - ' . $page_title; ?></title>
   <link rel="shortcut icon" href="assets/images/icon-logo.png" type="image/x-icon">
   <link rel="stylesheet" href="assets/libraries/fontawesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="assets/css/style.css">
@@ -22,17 +31,17 @@
           </a>
         </div>
         <ul class="nav navbar-nav navbar-right">
-          <li class="<?php echo $home == true ? 'active' : ''; ?>">
+          <li class="<?php echo $home === true ? 'active' : ''; ?>">
             <a href="<?php //echo $stories == true ? '../' : ''; ?>home.php">Home</a>
           </li>
-          <li class="<?php echo $index == true ? 'active' : ''; ?>">
+          <li class="<?php echo $index === true ? 'active' : ''; ?>">
             <a href="<?php //echo $stories == true ? '../' : ''; ?>index.php">Library</a>
           </li>
-          <li class="<?php echo $about == true ? 'active' : ''; ?>">
+          <li class="<?php echo $about === true ? 'active' : ''; ?>">
             <a href="<?php //echo $stories == true ? '../' : ''; ?>aboutus.php">About Us</a>
           </li>
           <!-- <li class="btn-reg"><a href="register.php" class="bcolor">Register</a></li> -->
-          <li class="btn-log"><a href="logout.php" class="bwhite">Logout</a></li>
+          <!-- <li class="btn-log"><a href="logout.php" class="bwhite">Logout</a></li> -->
         </ul>
       </div>
     </nav>

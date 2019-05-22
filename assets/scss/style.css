@@ -6299,12 +6299,6 @@ img::-moz-selection {
 input[type="radio"], input[type="checkbox"] {
   margin-top: 15px; }
 
-.col-half-padd-right {
-  padding-right: 7.5px; }
-
-.col-half-padd-left {
-  padding-left: 7.5px; }
-
 .navbar-main .navbar-brand {
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -6841,15 +6835,15 @@ input[type="radio"], input[type="checkbox"] {
       margin-bottom: 15px;
       font-size: 16px;
       color: #adb5bd; }
+    .card.card-profile .card-body .author .text-profile {
+      font-size: 16px;
+      color: #adb5bd; }
   .card.card-profile .card-footer {
-    padding-top: 145px; }
+    padding-top: 240px; }
     .card.card-profile .card-footer .profile-footer {
       display: block;
       color: #343a40;
       font-size: 18px; }
-    .card.card-profile .card-footer .text-profile {
-      font-size: 16px;
-      color: #adb5bd; }
   .card.card-info .card-header .header {
     font-size: 26px;
     font-weight: bold;

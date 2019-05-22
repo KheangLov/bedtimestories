@@ -233,18 +233,18 @@
           font-size: 16px;
           color: $gray-500;
         }
-        .text-profile {
-          font-size: 16px;
-          color: $gray-500;
-        }
       }
     }
     .card-footer {
-      padding-top: 240px;
+      padding-top: 145px;
       .profile-footer {
         display: block;
         color: $gray-800;
         font-size: 18px;
+      }
+      .text-profile {
+        font-size: 16px;
+        color: $gray-500;
       }
     }
   }
