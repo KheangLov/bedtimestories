@@ -7,7 +7,7 @@
 ?>
 
     <div class="content">
-      <a href="newpost.html" class="btn btn-default btn-addp">Add New</a>
+      <a href="new-post.php" class="btn btn-default btn-addp">Add New</a>
       <div class="row">
         <div class="col-sm-12">
           <div class="card card-tasks">
