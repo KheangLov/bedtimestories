@@ -33,7 +33,8 @@
         $about = $_POST['about'];
         $quote = $_POST['quote'];
         $status = INACTIVE;
-        $role_sql = "SELECT * FROM roles WHERE LOWER(name) = 'subscriber' LIMIT 1";
+        $default_role = SUBSCRIBER;
+        $role_sql = "SELECT * FROM roles WHERE LOWER(name) = '$default_role' LIMIT 1";
         $roles_result = mysqli_query($conn, $role_sql);
         if(mysqli_num_rows($roles_result) > 0) {
           $data = $roles_result->fetch_array();
@@ -84,8 +85,8 @@
             <div class="card-header text-center">
               <img src="assets/images/icon-logo.png" alt="bedtimestories" class="img-responsive img-login">
               <h4 class="header-login">Register</h4>
-              <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h5>
-              <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h5>
+              <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
+              <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
             </div>
             <div class="card-body">
               <form action="register.php" method="post">
