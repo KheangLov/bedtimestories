@@ -47,75 +47,75 @@
                     <div class="col-sm-4">
                       <div class="form-group">
                         <label class="info-name">Username</label>
-                        <input type="text" name="name" class="form-control" placeholder="Username" value="<?php echo ucfirst($data['fullname']); ?>" readonly>
+                        <input type="text" name="name" class="form-control" value="<?php echo ucfirst($data['fullname']); ?>" readonly>
                       </div>
                     </div>
                     <div class="col-sm-4">
                       <div class="form-group">
                         <label class="info-name">Email Address</label>
-                        <input type="email" name="email" class="form-control" placeholder="Email" value="<?php echo $data['email']; ?>" readonly>
+                        <input type="email" name="email" class="form-control" value="<?php echo $data['email']; ?>" readonly>
                       </div>
                     </div>
                     <div class="col-sm-4">
                       <div class="form-group">
                         <label class="info-name">Role</label>
-                        <input type="text" name="role" class="form-control" placeholder="Role" value="<?php echo ucfirst($data['role_name']); ?>" readonly>
+                        <input type="text" name="role" class="form-control" value="<?php echo ucfirst($data['role_name']); ?>" readonly>
                       </div>
                     </div>
                     <div class="col-sm-3">
                       <div class="form-group">
                         <label class="info-name">Firstname</label>
-                        <input type="text" name="firstname" class="form-control" placeholder="Firstname" value="<?php echo ucfirst($data['firstname']); ?>" readonly>
+                        <input type="text" name="firstname" class="form-control" value="<?php echo ucfirst($data['firstname']); ?>" readonly>
                       </div>
                     </div>
                     <div class="col-sm-3">
                       <div class="form-group">
                         <label class="info-name">Lastname</label>
-                        <input type="text" name="lastname" class="form-control" placeholder="Lastname" value="<?php echo ucfirst($data['lastname']); ?>" readonly>
+                        <input type="text" name="lastname" class="form-control" value="<?php echo ucfirst($data['lastname']); ?>" readonly>
                       </div>
                     </div>
                     <div class="col-sm-3">
                       <div class="form-group">
                         <label class="info-name">Gender</label>
-                        <input type="text" name="gender" class="form-control" placeholder="Gender" value="<?php echo ucfirst($data['gender']); ?>" readonly>
+                        <input type="text" name="gender" class="form-control" value="<?php echo ucfirst($data['gender']); ?>" readonly>
                       </div>
                     </div>
                     <div class="col-sm-3">
                       <div class="form-group">
                         <label class="info-name">Date of Birth</label>
-                        <input type="date" name="dob" class="form-control" placeholder="Date of Birth" value="<?php echo $data['dob']; ?>" readonly>
+                        <input type="date" name="dob" class="form-control" value="<?php echo $data['dob']; ?>" readonly>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label class="info-name">Address</label>
-                        <textarea name="address" class="form-control" rows="3" placeholder="Address" readonly><?php echo $data['address']; ?></textarea>
+                        <textarea name="address" class="form-control" rows="3" readonly><?php echo $data['address']; ?></textarea>
                       </div>
                     </div>
                     <div class="col-sm-4">
                       <div class="form-group">
                         <label class="info-name">City</label>
-                        <input type="text" name="address" class="form-control" placeholder="City" value="<?php echo ucfirst($data['city']); ?>" readonly>
+                        <input type="text" name="address" class="form-control" value="<?php echo ucfirst($data['city']); ?>" readonly>
                       </div>
                     </div>
                     <div class="col-sm-4">
                       <div class="form-group">
                         <label class="info-name">Country</label>
-                        <input type="text" name="address" class="form-control" placeholder="Country" value="<?php echo ucfirst($data['country']); ?>" readonly>
+                        <input type="text" name="address" class="form-control" value="<?php echo ucfirst($data['country']); ?>" readonly>
                       </div>
                     </div>
                     <div class="col-sm-4">
                       <div class="form-group">
                         <label class="info-name">Phone</label>
-                        <input type="text" name="address" class="form-control" placeholder="Phone" value="<?php echo ucfirst($data['phone']); ?>" readonly>
+                        <input type="text" name="address" class="form-control" value="<?php echo ucfirst($data['phone']); ?>" readonly>
                       </div>
                     </div>
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label class="info-name">About Me</label>
-                        <textarea name="about" class="form-control" rows="3" placeholder="About Me" readonly><?php echo $data['about']; ?></textarea>
+                        <textarea name="about" class="form-control" rows="3" readonly><?php echo $data['about']; ?></textarea>
                           <div class="text-right btn-wrap">
-                            <button class="btn btn-default btn-mar">Update Profile</button>
+                            <a href="edit-user.php?id=<?php echo $data['id']; ?>" class="btn btn-default btn-mar">Update Profile</a>
                           </div>
                       </div>
                     </div>
