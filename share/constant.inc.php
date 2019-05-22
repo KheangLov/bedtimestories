@@ -22,4 +22,11 @@
   define("ADMIN", "admin");
   define("AUTHOR", "author");
   define("SUBSCRIBER", "subscriber");
+
+  // Action's status
+  define("SUCCESS", "success");
+  define("FAIL", "fail");
+
+  // Page
+  define("PERPAGE", 10);
 ?>
