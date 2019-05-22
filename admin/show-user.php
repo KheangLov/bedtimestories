@@ -8,12 +8,14 @@
   $user_id = $_GET['id'];
   $user_sql = "SELECT users.*, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE users.id = $user_id";
   $user_result = mysqli_query($conn, $user_sql);
+  // var_dump($user_result);
 ?>
 
     <div class="content">
       <?php
         if(mysqli_num_rows($user_result) > 0) :
           $data = $user_result->fetch_array();
+          // var_dump($data);
       ?>
           <div class="row">
             <div class="col-sm-4">
