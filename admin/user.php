@@ -102,9 +102,9 @@
                                   <?php
                                     endif;
                                   ?>
-                                  <a href="#" onClick="deleteUser(<?php echo $row['id']; ?>)" class="btn btn-danger">
-                                    <i class="fa fa-times"></i>
-                                  </a>
+                                <a href="#" onClick="deleteUser(<?php echo $row['id']; ?>)" class="btn btn-danger">
+                                  <i class="fa fa-times"></i>
+                                </a>
                               <?php
                                 endif;
                               ?>

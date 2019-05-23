@@ -29,4 +29,15 @@
 
   // Page
   define("PERPAGE", 10);
+
+  // Post status
+  define("DRAFT", "draft");
+  define("PUBLISH", "publish");
+
+  // Post visibility
+  define("PUBLICVIS", "public");
+  define("PRIVATEVIS", "private");
+
+  // Post time
+  define("IMMEDIATELY", "immediately");
 ?>

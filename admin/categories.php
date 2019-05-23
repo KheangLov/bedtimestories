@@ -1,4 +1,8 @@
 <?php
+  $post = true;
+  $index = false;
+  $profile = false;
+  $user = false;
   include "share/header.inc.php";
 ?>
 

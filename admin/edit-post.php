@@ -6,35 +6,31 @@
   include "share/header.inc.php";
   $msg = '';
   $error = '';
-  $image = '';
+  $_SESSION['image'] = '';
   $target = '';
-  $thumbnail = '';
+  $_SESSION['thumbnail'] = '';
   $check_required = false;
-  $default_status = DRAFT;
-  $default_visibility = PRIVATEVIS;
-  $default_time_text = IMMEDIATELY;
-  $username = $_SESSION['name'];
-  $get_user_sql = "SELECT * FROM users WHERE LOWER(fullname) = LOWER('$username')";
-  $get_user_result = mysqli_query($conn, $get_user_sql);
-  if(mysqli_num_rows($get_user_result) > 0) {
-    $get_user = $get_user_result->fetch_array();
-    $post_user = $get_user['id'];
-  }
-  if(isset($_POST['upload_image'])) {
-    $image = $_FILES['file_upload']['name'];
-    $tmp_name = $_FILES['file_upload']['tmp_name'];
-    $target = "../assets/upload/images/" . $image;
-    if(move_uploaded_file($tmp_name, $target)) {
-      $msg = "Feature image have been upload successfully!";
-    } else {
-      $error = "There was an error while uploading feature image!";
-    }
+  $post_id = $_GET['id'];
+  $post_sql = "SELECT stories.*, users.id AS users_id, categories.id AS cate_id, categories.name AS cate_name FROM stories INNER JOIN users ON stories.user_id = users.id INNER JOIN categories ON stories.category_id = categories.id WHERE stories.id = $post_id";
+  $post_result = mysqli_query($conn, $post_sql);
+  if(mysqli_num_rows($post_result) > 0) {
+    $data = $post_result->fetch_array();
   }
   // if(isset($_POST['upload_thumbnail'])) {
-  //   $thumbnail = $_FILES['thumbnail']['name'];
+  //   $_SESSION['thumbnail'] = $_FILES['thumbnail']['name'];
   //   $thumb_tmpname = $_FILES['thumbnail']['tmp_name'];
-  //   $destination = "../assets/upload/thumbnails/" . $thumbnail;
+  //   $destination = "../assets/upload/thumbnails/" . $_SESSION['thumbnail'];
   //   if(move_uploaded_file($thumb_tmpname, $destination)) {
+  //     $msg = "Thumbnail have been upload successfully!";
+  //   } else {
+  //     $error = "There was an error while uploading thumbnail!";
+  //   }
+  // }
+  // if(isset($_POST['upload_image'])) {
+  //   $_SESSION['image'] = $_FILES['file_upload']['name'];
+  //   $tmp_name = $_FILES['file_upload']['tmp_name'];
+  //   $target = "../assets/upload/images/" . $_SESSION['image'];
+  //   if(move_uploaded_file($tmp_name, $target)) {
   //     $msg = "Feature image have been upload successfully!";
   //   } else {
   //     $error = "There was an error while uploading feature image!";
@@ -60,6 +56,8 @@
       $error = 'Please input category name!';
     }
   }
+  var_dump($_SESSION['image']);
+  var_dump($_SESSION['thumbnail']);
   if(isset($_POST['save_draft'])) {
     $post_title = trim($_POST['title']);
     $post_content = $_POST['content'];
@@ -67,23 +65,21 @@
     $post_cate = trim($_POST['category']);
     $post_status = strtolower($default_status);
     $post_vis = strtolower($default_visibility);
-    $post_user = $get_user['id'];
-    if($image != '') {
-      $post_image = $image;
-    } else {
-      $post_image = '';
-    }
-    if($thumbnail != '') {
-      $post_thumbnail = $thumbnail;
-    } else {
-      $post_thumbnail = '';
-    }
-    $post_create = date("Y-m-d h:i:s");
+    $post_user = $data['users_id'];
+    // if($image != '') {
+    //   $post_image = $_SESSION['image'];
+    // } else {
+    //   $post_image = '';
+    // }
+    // if($thumbnail != '') {
+    //   $post_thumbnail = $_SESSION['thumbnail'];
+    // } else {
+    //   $post_thumbnail = '';
+    // }
     $post_update = date("Y-m-d h:i:s");
-    $draft_post_sql = "INSERT INTO stories(title, content, description, image, status, visibility, user_id, category_id, created_date, updated_date)
-                      VALUES('$post_title', '$post_content', '$post_desc', '$post_image', '$post_status', '$post_vis', $post_user, $post_cate, '$post_create', '$post_update')";
+    $draft_post_sql = "UPDATE stories SET title = '$post_title', content = '$post_content', description = '$post_desc', status = '$post_status', visibility = '$post_vis', user_id = $post_user, category_id = $post_cate, updated_date = '$post_update' WHERE id = $post_id";
     if($conn->query($draft_post_sql) === true) {
-      header("Location: post.php?post=draft");
+      header("Location: post.php?post=draft_updated");
     } else {
       $error = "Error: " . $conn->error;
     }
@@ -98,23 +94,21 @@
       $post_cate = trim($_POST['category']);
       $post_status = strtolower(PUBLISH);
       $post_vis = strtolower(PUBLICVIS);
-      $post_user = $get_user['id'];
+      $post_user = $data['users_id'];
       if($image != '') {
-        $post_image = $image;
+        $post_image = $_SESSION['image'];
       } else {
         $post_image = '';
       }
       if($thumbnail != '') {
-        $post_thumbnail = $thumbnail;
+        $post_thumbnail = $_SESSION['thumbnail'];
       } else {
         $post_thumbnail = '';
       }
-      $post_create = date("Y-m-d h:i:s");
       $post_update = date("Y-m-d h:i:s");
-      $publish_post_sql = "INSERT INTO stories(title, content, description, image, thumbnail, status, visibility, user_id, category_id, created_date, updated_date)
-                        VALUES('$post_title', '$post_content', '$post_desc', '$post_image', '$post_thumbnail', '$post_status', '$post_vis', $post_user, $post_cate, '$post_create', '$post_update')";
+      $publish_post_sql = "UPDATE stories SET title = '$post_title', content = '$post_content', description = '$post_desc', image = '$post_image', status = '$post_status', visibility = '$post_vis', user_id = $post_user, category_id = $post_cate, updated_date = '$post_update' WHERE id = $post_id";
       if($conn->query($publish_post_sql) === true) {
-        header("Location: post.php?post=publish");
+        header("Location: post.php?post=publish_updated");
       } else {
         $error = "Error: " . $conn->error;
       }
@@ -123,7 +117,7 @@
 ?>
 
     <div class="content">
-      <form action="new-post.php" method="post" enctype="multipart/form-data">
+      <form action="edit-post.php?id=<?php echo $post_id; ?>" id="post-form" method="post" enctype="multipart/form-data">
         <div class="row">
           <div class="col-sm-9">
             <div class="card">
@@ -133,18 +127,20 @@
                 <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
               </div>
               <div class="card-body">
-                <input type="text" name="title" class="form-control input-lg">
+                <input type="text" name="title" class="form-control input-lg" value="<?php echo $data['title']; ?>">
               </div>
             </div>
             <div class="card">
               <div class="card-header">
-                <!-- <input type="submit" value="Upload" name="upload_thumbnail" class="btn btn-default btn-sm">
+                <!-- <div id='preview'>
+                </div>
+                <input type="submit" value="Upload" name="upload_thumbnail" class="btn btn-default btn-sm" value="<?php echo $data['thumbnail']; ?>">
                 <input type="file" name="thumbnail" class="input-display" id="thumbnail-input">
                 <button type="button" class="btn btn-default btn-sm" id="thumbnail-button">Choose File</button>
                 <span id="thumbnail-text">No file chosen!</span> -->
               </div>
               <div class="card-body">
-                <textarea name="content" id="" cols="30" rows="30" class="form-control"></textarea>
+                <textarea name="content" id="" cols="30" rows="30" class="form-control"><?php echo $data['content']; ?></textarea>
               </div>
             </div>
             <div class="card">
@@ -152,7 +148,7 @@
                 <h3 class="add-post">Description</h3>
               </div>
               <div class="card-body">
-                <textarea name="description" id="" cols="30" rows="3" class="form-control"></textarea>
+                <textarea name="description" id="" cols="30" rows="3" class="form-control"><?php echo $data['description']; ?></textarea>
               </div>
             </div>
           </div>
@@ -162,9 +158,9 @@
                 <h3 class="add-post">Publish</h3>
               </div>
               <div class="card-body">
-                <span class="status"><i class="fa fa-thermometer-full"></i>Status: <strong><?php echo ucfirst($default_status); ?></strong></span>
-                <span class="status"><i class="fa fa-eye"></i>Visibility: <strong><?php echo ucfirst($default_visibility); ?></strong></span>
-                <span class="status"><i class="fa fa-calendar"></i>Publish: <strong><?php echo ucfirst($default_time_text); ?></strong></span>
+                <span class="status"><i class="fa fa-thermometer-full"></i>Status: <strong><?php echo ucfirst($data['status']); ?></strong></span>
+                <span class="status"><i class="fa fa-eye"></i>Visibility: <strong><?php echo ucfirst($data['visibility']); ?></strong></span>
+                <span class="status"><i class="fa fa-calendar"></i>Publish: <strong><?php echo ucfirst($data['updated_date']); ?></strong></span>
                 <div class="btn-wrap text-right">
                   <div class="row">
                     <div class="col-sm-6 text-left">
