@@ -11,7 +11,7 @@
     }
   } else if($_GET['ban']) {
     $user_id = $_GET['ban'];
-    $ban_sql = "UPDATE users SET status = LOWER('BAN') WHERE id = $user_id";
+    $ban_sql = "UPDATE users SET status = 'ban' WHERE id = $user_id";
     if($conn->query($ban_sql) === true) {
       header("Location: user.php?banned=success");
     } else {

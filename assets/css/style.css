@@ -6305,6 +6305,21 @@ input[type="radio"], input[type="checkbox"] {
 .col-half-padd-left {
   padding-left: 7.5px; }
 
+.mar-top-bot {
+  margin: 15px 0; }
+
+input[type="file"].input-display {
+  display: none; }
+
+.file-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
+
+.mar-top {
+  margin-top: 15px; }
+
 .navbar-main .navbar-brand {
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -6742,6 +6757,7 @@ input[type="radio"], input[type="checkbox"] {
   .card .card-footer {
     padding: 0 15px 15px 15px; }
     .card .card-footer .add-cat {
+      cursor: pointer;
       font-size: 16px;
       font-weight: 600;
       text-decoration: underline; }

@@ -102,3 +102,24 @@ input[type="radio"], input[type="checkbox"] {
 .col-half-padd-left {
   padding-left: 7.5px;
 }
+
+.mar-top-bot {
+  margin: 15px 0;
+}
+
+input[type="file"] {
+  &.input-display {
+    display: none;
+  }
+}
+
+.file-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mar-top {
+  margin-top: 15px;
+}

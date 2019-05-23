@@ -4,242 +4,159 @@
   $profile = false;
   $user = false;
   include "share/header.inc.php";
+  $msg = '';
+  $error = '';
+  if(isset($_GET['page'])) {
+    $get_page = $_GET['page'];
+  } else {
+    $get_page = 1;
+  }
+  if(isset($_GET['deleted'])) {
+    $deleted = strtolower(trim($_GET['deleted']));
+    if($deleted === strtolower(SUCCESS)) {
+      $msg = 'Post have been deleted!';
+    } else if($deleted === strtolower(FAIL)) {
+      $error = 'Fail to delete post!';
+    }
+  } else if(isset($_GET['updated'])) {
+    $updated = strtolower(trim($_GET['updated']));
+    if($updated === strtolower(SUCCESS)) {
+      $msg = 'Post have been updated!';
+    } else {
+      $error = 'Fail to update post!';
+    }
+  }
+  $sql = "SELECT * FROM stories";
+  $result = mysqli_query($conn, $sql);
+  $number_of_post = mysqli_num_rows($result);
+  $per_page = PERPAGE;
+  $first_page_result = ($get_page - 1) * $per_page;
+  $posts_sql = "SELECT stories.*, categories.name AS cate_name FROM stories INNER JOIN categories ON stories.category_id = categories.id LIMIT $first_page_result, $per_page";
+  $posts_result = mysqli_query($conn, $posts_sql);
 ?>
 
     <div class="content">
       <a href="new-post.php" class="btn btn-default btn-addp">Add New</a>
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="card card-tasks">
-            <div class="card-header">
-              <h2 class="add-post">All Posts</h2>
-            </div>
-            <div class="card-body">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" checked="">
-                          <span class="form-check-sign"></span>
-                        </label>
-                      </div>
-                    </th>
-                    <th>Author</th>
-                    <th>Title</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" checked="">
-                          <span class="form-check-sign"></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td class="img-row">
-                      <div class="img-wrapper">
-                        <img src="../assets/images/thomas_and_the_new_world.jpg" class="img-raised">
-                      </div>
-                    </td>
-                    <td class="text-left">Thomas and the New World</td>
-                    <td class="td-actions">Sep-11-2018</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" checked="">
-                          <span class="form-check-sign"></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td class="img-row">
-                      <div class="img-wrapper">
-                        <img src="../assets/images/the_holiday_girl.jpg" class="img-raised">
-                      </div>
-                    </td>
-                    <td class="text-left">The Holiday Girls</td>
-                    <td class="td-actions">Sep-09-2018</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" checked="">
-                          <span class="form-check-sign"></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td class="img-row">
-                      <div class="img-wrapper">
-                        <img src="../assets/images/Changeling.jpg" class="img-raised">
-                      </div>
-                    </td>
-                    <td class="text-left">Changeling</td>
-                    <td class="td-actions">Sep-09-2018</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" checked="">
-                          <span class="form-check-sign"></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td class="img-row">
-                      <div class="img-wrapper">
-                        <img src="../assets/images/Nikki & the Long Lost Treasure.jpg" class="img-raised">
-                      </div>
-                    </td>
-                    <td class="text-left">Nikki & the Long Lost Treasure</td>
-                    <td class="td-actions">Sep-08-2018</td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" checked="">
-                          <span class="form-check-sign"></span>
-                        </label>
-                      </div>
-                    </td>
-                    <td class="img-row">
-                      <div class="img-wrapper">
-                        <img src="../assets/images/Tate’s Time Traveling Top.jpg" class="img-raised">
-                      </div>
-                    </td>
-                    <td class="text-left">Tate’s Time Traveling Top</td>
-                    <td class="td-actions">Sep-08-2018</td>
-                  </tr>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" checked="">
-                        <span class="form-check-sign"></span>
-                      </label>
-                    </div>
-                  </td>
-                  <td class="img-row">
-                    <div class="img-wrapper">
-                      <img src="../assets/images/Terry the Trouble Bunny.jpg" class="img-raised">
-                    </div>
-                  </td>
-                  <td class="text-left">Terry the Trouble Bunny</td>
-                  <td class="td-actions">Sep-08-2018</td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" checked="">
-                        <span class="form-check-sign"></span>
-                      </label>
-                    </div>
-                  </td>
-                  <td class="img-row">
-                    <div class="img-wrapper">
-                      <img src="../assets/images/Samba & the Missing Letters.jpg" class="img-raised">
-                    </div>
-                  </td>
-                  <td class="text-left">Samba & the Missing Letters</td>
-                  <td class="td-actions">Sep-08-2018</td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" checked="">
-                        <span class="form-check-sign"></span>
-                      </label>
-                    </div>
-                  </td>
-                  <td class="img-row">
-                    <div class="img-wrapper">
-                      <img src="../assets/images/The Moonlight Farmers.jpg" class="img-raised">
-                    </div>
-                  </td>
-                  <td class="text-left">The Moonlight Farmers</td>
-                  <td class="td-actions">Sep-08-2018</td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" checked="">
-                        <span class="form-check-sign"></span>
-                      </label>
-                    </div>
-                  </td>
-                  <td class="img-row">
-                    <div class="img-wrapper">
-                      <img src="../assets/images/Kris Snowman – Rockstar On Tour.jpg" class="img-raised">
-                    </div>
-                  </td>
-                  <td class="text-left">Kris Snowman – Rockstar On Tour</td>
-                  <td class="td-actions">Sep-08-2018</td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="form-check">
-                      <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" checked="">
-                        <span class="form-check-sign"></span>
-                      </label>
-                    </div>
-                  </td>
-                  <td class="img-row">
-                    <div class="img-wrapper">
-                      <img src="../assets/images/My Sister the Werewolf.jpg" class="img-raised">
-                    </div>
-                  </td>
-                  <td class="text-left">My Sister the Werewolf</td>
-                  <td class="td-actions">Sep-08-2018</td>
-                </tr>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <th>
-                      <div class="form-check">
-                        <label class="form-check-label">
-                          <input class="form-check-input" type="checkbox" checked="">
-                          <span class="form-check-sign"></span>
-                        </label>
-                      </div>
-                    </th>
-                    <th>Author</th>
-                    <th>Title</th>
-                    <th>Date</th>
-                  </tr>
-                </tfoot>
-              </table>
+      <?php
+        if(mysqli_num_rows($posts_result) > 0) :
+      ?>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="card card-tasks">
+                <div class="card-header">
+                  <h2 class="add-post">All Posts</h2>
+                  <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
+                  <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
+                </div>
+                <div class="card-body">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Thumbnail</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Visibility</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                        if($get_page == 1) {
+                          $i = 0;
+                        } else {
+                          $i = ($get_page - 1) * 10;
+                        }
+                        while($posts = $posts_result->fetch_assoc()) :
+                          $i++;
+                      ?>
+                          <tr>
+                            <td><?php echo $i; ?></td>
+                            <td class="img-row">
+                              <div class="img-wrapper">
+                                <a href="image-post.php?id=<?php echo $posts['id']; ?>">
+                                  <img src="<?php echo $posts['thumbnail'] != '' ? '../assets/upload/images/' . $posts['image'] : '../assets/upload/no-image.png' ; ?>" class="img-raised">
+                                </a>
+                              </div>
+                            </td>
+                            <td>
+                              <a href="edit-post.php?<?php echo "id={$posts['id']}"; ?>">
+                                <strong><?php echo $posts['title']; ?></strong>
+                              </a>
+                            </td>
+                            <td><?php echo $posts['cate_name']; ?></td>
+                            <td><?php echo strtolower($posts['status']) == strtolower(PUBLISH) ? '<span class="label label-success">' . ucfirst($posts['status']) . '</span>' : (strtolower($posts['status']) == strtolower(DRAFT) ? '<span class="label label-danger">' . ucfirst($posts['status']) . '</span>' : (strtolower($posts['status']) == strtolower(BAN) ? '<span class="label label-warning">' . ucfirst($posts['status']) . '</span>' : '')); ?></td>
+                            <td><?php echo strtolower($posts['visibility']) == strtolower(PRIVATEVIS) ? '<span class="label label-info">' . ucfirst($posts['visibility']) . '</span>' : (strtolower($posts['visibility']) == strtolower(PUBLICVIS) ? '<span class="label label-primary">' . ucfirst($posts['visibility']) . '</span>' : ''); ?></td>
+                            <td class="td-actions">
+                              <a href="#" onClick="banPost(<?php echo $posts['id']; ?>)" class="btn btn-warning">
+                                <i class="fa fa-ban"></i>
+                              </a>
+                              <a href="#" onClick="deletePost(<?php echo $posts['id']; ?>)" class="btn btn-danger">
+                                <i class="fa fa-times"></i>
+                              </a>
+                            </td>
+                          </tr>
+                      <?php
+                        endwhile;
+                      ?>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <th>#</th>
+                        <th>Thumbnail</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Visibility</th>
+                        <th>Action</th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+      <?php
+        endif;
+      ?>
       <div class="pagination-wrap text-right">
         <nav aria-label="Page navigation">
           <ul class="pagination">
             <li>
-              <a href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
+              <a href="user.php?page=1" aria-label="Previous">
+                <i class="fa fa-angle-double-left"></i>
               </a>
             </li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
+            <?php
+              if($get_page != '' && $get_page != 1) :
+            ?>
+                <li>
+                  <a href="#" onClick="prevUser(<?php echo $get_page; ?>)" aria-label="Previous">
+                    <i class="fa fa-angle-left"></i>
+                  </a>
+                </li>
+            <?php
+              endif;
+              $number_of_page = ceil($number_of_post / $per_page);
+              for($page=1; $page<=$number_of_page; $page++) :
+            ?>
+                <li class="<?php echo $page == $get_page ? 'active' : ''; ?>"><a href="user.php?page=<?php echo $page; ?>"><?php echo $page; ?></a></li>
+            <?php
+              endfor;
+              if($get_page != '' && $get_page != $number_of_page) :
+            ?>
+                <li>
+                  <a href="#" onClick="nextUser(<?php echo $get_page; ?>)" aria-label="Next">
+                    <i class="fa fa-angle-right"></i>
+                  </a>
+                </li>
+            <?php
+              endif;
+            ?>
             <li>
-              <a href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
+              <a href="post.php?page=<?php echo $number_of_page; ?>" aria-label="Next">
+                <i class="fa fa-angle-double-right"></i>
               </a>
             </li>
           </ul>
