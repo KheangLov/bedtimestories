@@ -3,7 +3,11 @@
   $index = false;
   $profile = false;
   $post = false;
+  $cate = false;
   include "share/header.inc.php";
+  if(strtolower($_SESSION['role_name']) != strtolower(ADMIN)) {
+    header("Location: index.php?permission=denied");
+  }
   $error = '';
   $msg = '';
   $check_required = false;

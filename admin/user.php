@@ -3,7 +3,11 @@
   $index = false;
   $profile = false;
   $post = false;
+  $cate = false;
   include "share/header.inc.php";
+  if(strtolower($_SESSION['role_name']) != strtolower(ADMIN)) {
+    header("Location: index.php?permission=denied");
+  }
   $msg = '';
   $error = '';
   if(isset($_GET['page'])) {
@@ -45,6 +49,14 @@
     <div class="content">
       <a href="new-user.php" class="btn btn-default btn-addp">Add New</a>
       <?php
+        if(isset($_GET['user_id']) && strtolower($_GET['user_id']) === 'wrong') :
+      ?>
+          <div class="alert alert-danger alert-dismissible">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Error!</strong> Cannot find the provided user id!
+          </div>
+      <?php
+        endif;
         if(mysqli_num_rows($users_result) > 0) :
       ?>
           <div class="row">
@@ -87,10 +99,17 @@
                               <a href="show-user.php?<?php echo "id={$row['id']}"; ?>" class="btn btn-primary">
                                 <i class="fa fa-list-alt"></i>
                               </a>
-                              <a href="edit-user.php?<?php echo "id={$row['id']}"; ?>" class="btn btn-info">
-                                <i class="fa fa-pencil"></i>
-                              </a>
                               <?php
+                                $count_admin_sql = "SELECT COUNT(*) AS count_user, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE LOWER(roles.name) = 'admin'";
+                                $count_admin_result = mysqli_query($conn, $count_admin_sql);
+                                $count_admin = $count_admin_result->fetch_array();
+                                if($count_admin['count_user'] > 1 || strtolower($row['role_name']) != 'admin') :
+                              ?>
+                                  <a href="edit-user.php?<?php echo "id={$row['id']}"; ?>" class="btn btn-info">
+                                    <i class="fa fa-pencil"></i>
+                                  </a>
+                              <?php
+                                endif;
                                 if(strtolower($row['role_name']) != 'admin' || strtolower($row['status']) != strtolower(ACTIVE)) :
                               ?>
                                   <?php

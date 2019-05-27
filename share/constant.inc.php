@@ -6,6 +6,7 @@
   define("ABOUT", "About Us");
   define("LOGIN", "Login");
   define("REGISTER", "Register");
+  define("CATEGORIES", "Categories");
 
   // DB Status
   define("ACTIVE", "active");
@@ -18,6 +19,7 @@
   define("USERS", "Users");
   define("POSTS", "Posts");
 
+  define("USER", "user");
   // System Roles
   define("ADMIN", "admin");
   define("AUTHOR", "author");

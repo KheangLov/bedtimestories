@@ -3,6 +3,7 @@
   background-color: $main-wrapper;
   width: calc(100% - 260px);
   float: right;
+  transition: all 0.3s ease-in-out;
 }
 
 .login-wrapper {
@@ -51,10 +52,23 @@
   border-radius: 0;
   margin: 0;
   padding: 10px 15px;
-  background-color: $main-wrapper;
+  background-color: $white;
   border-right: none;
   border-top: none;
   border-left: none;
+  box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.15);
+  .btn-toggle-sidebar {
+    display: inline;
+    font-size: 35px;
+    padding-right: 20px;
+    cursor: pointer;
+    color: #777;
+  }
+  .btn-show-sidebar {
+    &#long-sidebar {
+      display: none;
+    }
+  }
 }
 
 .content {
@@ -69,6 +83,28 @@
     margin-right: 15px;
     .fa-danger {
       color: $danger;
+    }
+  }
+}
+
+.float-left {
+  float: right;
+}
+
+@media (max-width: 1125px) {
+  .main-wrapper {
+    position: relative;
+    background-color: $main-wrapper;
+    width: calc(100% - 90px);
+    float: right;
+    transition: all 0.3s ease-in-out;
+    #toggle-sidebar {
+      display: none;
+    }
+    .btn-show-sidebar {
+      &#long-sidebar {
+      display: inline;
+      }
     }
   }
 }

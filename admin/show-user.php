@@ -3,7 +3,11 @@
   $index = false;
   $profile = false;
   $post = false;
+  $cate = false;
   include "share/header.inc.php";
+  if(strtolower($_SESSION['role_name']) != strtolower(ADMIN)) {
+    header("Location: index.php?permission=denied");
+  }
   $username = $_SESSION['name'];
   $user_id = $_GET['id'];
   $user_sql = "SELECT users.*, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE users.id = $user_id";

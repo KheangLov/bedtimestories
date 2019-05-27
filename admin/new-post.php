@@ -3,7 +3,11 @@
   $index = false;
   $profile = false;
   $user = false;
+  $cate = false;
   include "share/header.inc.php";
+  if(strtolower($_SESSION['role_name']) != ADMIN || strtolower($_SESSION['role_name']) != AUTHOR) {
+    header("Location: index.php?permission=denied");
+  }
   $msg = '';
   $error = '';
   $image = '';
@@ -30,16 +34,6 @@
       $error = "There was an error while uploading feature image!";
     }
   }
-  // if(isset($_POST['upload_thumbnail'])) {
-  //   $thumbnail = $_FILES['thumbnail']['name'];
-  //   $thumb_tmpname = $_FILES['thumbnail']['tmp_name'];
-  //   $destination = "../assets/upload/thumbnails/" . $thumbnail;
-  //   if(move_uploaded_file($thumb_tmpname, $destination)) {
-  //     $msg = "Feature image have been upload successfully!";
-  //   } else {
-  //     $error = "There was an error while uploading feature image!";
-  //   }
-  // }
   if(isset($_POST['add_category'])) {
     $cate_name = trim($_POST['cate_name']);
     $cate_desc = trim($_POST['cate_description']);
@@ -62,30 +56,34 @@
   }
   if(isset($_POST['save_draft'])) {
     $post_title = trim($_POST['title']);
-    $post_content = $_POST['content'];
-    $post_desc = $_POST['description'];
-    $post_cate = trim($_POST['category']);
-    $post_status = strtolower($default_status);
-    $post_vis = strtolower($default_visibility);
-    $post_user = $get_user['id'];
-    if($image != '') {
-      $post_image = $image;
+    if($post_title != '') {
+      $post_content = $_POST['content'];
+      $post_desc = $_POST['description'];
+      $post_cate = trim($_POST['category']);
+      $post_status = strtolower($default_status);
+      $post_vis = strtolower($default_visibility);
+      $post_user = $get_user['id'];
+      if($image != '') {
+        $post_image = $image;
+      } else {
+        $post_image = '';
+      }
+      if($thumbnail != '') {
+        $post_thumbnail = $thumbnail;
+      } else {
+        $post_thumbnail = '';
+      }
+      $post_create = date("Y-m-d h:i:s");
+      $post_update = date("Y-m-d h:i:s");
+      $draft_post_sql = "INSERT INTO stories(title, content, description, image, status, visibility, user_id, category_id, created_date, updated_date)
+                        VALUES('$post_title', '$post_content', '$post_desc', '$post_image', '$post_status', '$post_vis', $post_user, $post_cate, '$post_create', '$post_update')";
+      if($conn->query($draft_post_sql) === true) {
+        header("Location: post.php?post=draft");
+      } else {
+        $error = "Error: " . $conn->error;
+      }
     } else {
-      $post_image = '';
-    }
-    if($thumbnail != '') {
-      $post_thumbnail = $thumbnail;
-    } else {
-      $post_thumbnail = '';
-    }
-    $post_create = date("Y-m-d h:i:s");
-    $post_update = date("Y-m-d h:i:s");
-    $draft_post_sql = "INSERT INTO stories(title, content, description, image, status, visibility, user_id, category_id, created_date, updated_date)
-                      VALUES('$post_title', '$post_content', '$post_desc', '$post_image', '$post_status', '$post_vis', $post_user, $post_cate, '$post_create', '$post_update')";
-    if($conn->query($draft_post_sql) === true) {
-      header("Location: post.php?post=draft");
-    } else {
-      $error = "Error: " . $conn->error;
+      $error = 'Please input the title!';
     }
   }
   if(isset($_POST['save_publish'])) {
@@ -131,6 +129,7 @@
                 <h2 class="add-post">Title</h2>
                 <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
                 <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
+                <?php echo $check_required == true ? '<h5 class="text-danger">* required</h5>' : ''; ?>
               </div>
               <div class="card-body">
                 <input type="text" name="title" class="form-control input-lg">
@@ -138,10 +137,7 @@
             </div>
             <div class="card">
               <div class="card-header">
-                <!-- <input type="submit" value="Upload" name="upload_thumbnail" class="btn btn-default btn-sm">
-                <input type="file" name="thumbnail" class="input-display" id="thumbnail-input">
-                <button type="button" class="btn btn-default btn-sm" id="thumbnail-button">Choose File</button>
-                <span id="thumbnail-text">No file chosen!</span> -->
+                <?php echo $check_required == true ? '<h5 class="text-danger">* required</h5>' : ''; ?>
               </div>
               <div class="card-body">
                 <textarea name="content" id="" cols="30" rows="30" class="form-control"></textarea>
@@ -150,6 +146,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="add-post">Description</h3>
+                <?php echo $check_required == true ? '<h5 class="text-danger">* required</h5>' : ''; ?>
               </div>
               <div class="card-body">
                 <textarea name="description" id="" cols="30" rows="3" class="form-control"></textarea>
@@ -202,26 +199,6 @@
                   <input type="text" name="cate_name" class="form-control input-sm mar-top-bot" placeholder="Category Name">
                   <textarea name="cate_description" class="form-control input-sm mar-top-bot" placeholder="Category Description" cols="3" rows="3"></textarea>
                   <input type="submit" class="btn btn-default btn-sm" name="add_category" value="Add">
-                </div>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-header">
-                <h3 class="add-post">Featured Image</h3>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-xs-12">
-                    <img src="<?php echo $target != '' ? $target : ''; ?>" class="img-responsive" alt="">
-                  </div>
-                  <div class="col-xs-8">
-                    <input type="file" name="file_upload" id="image-input" class="input-display">
-                    <button type="button" id="image-button" class="btn btn-default btn-sm mar-top">Choose File</button>
-                    <span id="image-text" class="file-text">No file chosen!</span>
-                  </div>
-                  <div class="col-xs-4">
-                    <input type="submit" value="Upload" name="upload_image" class="btn btn-default btn-sm mar-top-bot">
-                  </div>
                 </div>
               </div>
             </div>

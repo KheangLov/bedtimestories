@@ -3,7 +3,12 @@
   include "share/constant.inc.php";
   session_start();
   $error = '';
+  $warning = '';
   $_SESSION['isLogin'] = false;
+
+  if(isset($_GET['permission']) && strtolower($_GET['permission']) === 'denied') {
+    $warning = "You don't have permission!";
+  }
 
   if(!empty($_SESSION['error'])) {
     $error = $_SESSION['error'];
@@ -26,6 +31,7 @@
       $result = mysqli_query($conn, $sql);
       if(mysqli_num_rows($result) > 0) {
         $data = $result->fetch_array();
+        $_SESSION['user_id'] = (string)$data['id'];
         $_SESSION['name'] = $data['fullname'];
         $_SESSION['role_name'] = $data['role_name'];
         if(strtolower($data["status"]) != 'active') {

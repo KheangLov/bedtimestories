@@ -1,6 +1,9 @@
 <?php
   include "../share/db-conn.inc.php";
   include "../share/constant.inc.php";
+  if(strtolower($_SESSION['role_name']) != strtolower(ADMIN)) {
+    header("Location: index.php?permission=denied");
+  }
   if(isset($_GET['delete'])) {
     $user_id = $_GET['delete'];
     $delete_sql = "DELETE FROM users WHERE id = $user_id";

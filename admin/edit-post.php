@@ -3,7 +3,11 @@
   $index = false;
   $profile = false;
   $user = false;
+  $cate = false;
   include "share/header.inc.php";
+  if(strtolower($_SESSION['role_name']) != ADMIN || strtolower($_SESSION['role_name']) != AUTHOR) {
+    header("Location: index.php?permission=denied");
+  }
   $msg = '';
   $error = '';
   $_SESSION['image'] = '';
@@ -11,108 +15,82 @@
   $_SESSION['thumbnail'] = '';
   $check_required = false;
   $post_id = $_GET['id'];
-  $post_sql = "SELECT stories.*, users.id AS users_id, categories.id AS cate_id, categories.name AS cate_name FROM stories INNER JOIN users ON stories.user_id = users.id INNER JOIN categories ON stories.category_id = categories.id WHERE stories.id = $post_id";
-  $post_result = mysqli_query($conn, $post_sql);
-  if(mysqli_num_rows($post_result) > 0) {
-    $data = $post_result->fetch_array();
-  }
-  // if(isset($_POST['upload_thumbnail'])) {
-  //   $_SESSION['thumbnail'] = $_FILES['thumbnail']['name'];
-  //   $thumb_tmpname = $_FILES['thumbnail']['tmp_name'];
-  //   $destination = "../assets/upload/thumbnails/" . $_SESSION['thumbnail'];
-  //   if(move_uploaded_file($thumb_tmpname, $destination)) {
-  //     $msg = "Thumbnail have been upload successfully!";
-  //   } else {
-  //     $error = "There was an error while uploading thumbnail!";
-  //   }
-  // }
-  // if(isset($_POST['upload_image'])) {
-  //   $_SESSION['image'] = $_FILES['file_upload']['name'];
-  //   $tmp_name = $_FILES['file_upload']['tmp_name'];
-  //   $target = "../assets/upload/images/" . $_SESSION['image'];
-  //   if(move_uploaded_file($tmp_name, $target)) {
-  //     $msg = "Feature image have been upload successfully!";
-  //   } else {
-  //     $error = "There was an error while uploading feature image!";
-  //   }
-  // }
-  if(isset($_POST['add_category'])) {
-    $cate_name = trim($_POST['cate_name']);
-    $cate_desc = trim($_POST['cate_description']);
-    if($cate_name != '') {
-      $check_cate_sql = "SELECT * FROM categories WHERE LOWER(name) = LOWER('$cate_name')";
-      $check_cate_result = mysqli_query($conn, $check_cate_sql);
-      if(mysqli_num_rows($check_cate_result) != 0) {
-        $error = 'Category already exist!';
-      } else {
-        $cate_sql = "INSERT INTO categories(name, description) VALUES('$cate_name', '$cate_desc')";
-        if($conn->query($cate_sql) === true) {
-          $msg = 'New category created successfully';
+  $check_id_sql = "SELECT * FROM stories WHERE id = $post_id LIMIT 1";
+  $check_id_result = mysqli_query($conn, $check_id_sql);
+  if(mysqli_num_rows($check_id_result) != 0) {
+    $post_sql = "SELECT stories.*, users.id AS users_id, categories.id AS cate_id, categories.name AS cate_name FROM stories INNER JOIN users ON stories.user_id = users.id INNER JOIN categories ON stories.category_id = categories.id WHERE stories.id = $post_id";
+    $post_result = mysqli_query($conn, $post_sql);
+    if(mysqli_num_rows($post_result) > 0) {
+      $data = $post_result->fetch_array();
+    }
+    if(isset($_POST['add_category'])) {
+      $cate_name = trim($_POST['cate_name']);
+      $cate_desc = trim($_POST['cate_description']);
+      if($cate_name != '') {
+        $check_cate_sql = "SELECT * FROM categories WHERE LOWER(name) = LOWER('$cate_name')";
+        $check_cate_result = mysqli_query($conn, $check_cate_sql);
+        if(mysqli_num_rows($check_cate_result) != 0) {
+          $error = 'Category already exist!';
         } else {
-          $error = "Error: " . $conn->error;
+          $cate_sql = "INSERT INTO categories(name, description) VALUES('$cate_name', '$cate_desc')";
+          if($conn->query($cate_sql) === true) {
+            $msg = 'New category created successfully';
+          } else {
+            $error = "Error: " . $conn->error;
+          }
         }
+      } else {
+        $error = 'Please input category name!';
       }
-    } else {
-      $error = 'Please input category name!';
     }
-  }
-  var_dump($_SESSION['image']);
-  var_dump($_SESSION['thumbnail']);
-  if(isset($_POST['save_draft'])) {
-    $post_title = trim($_POST['title']);
-    $post_content = $_POST['content'];
-    $post_desc = $_POST['description'];
-    $post_cate = trim($_POST['category']);
-    $post_status = strtolower($default_status);
-    $post_vis = strtolower($default_visibility);
-    $post_user = $data['users_id'];
-    // if($image != '') {
-    //   $post_image = $_SESSION['image'];
-    // } else {
-    //   $post_image = '';
-    // }
-    // if($thumbnail != '') {
-    //   $post_thumbnail = $_SESSION['thumbnail'];
-    // } else {
-    //   $post_thumbnail = '';
-    // }
-    $post_update = date("Y-m-d h:i:s");
-    $draft_post_sql = "UPDATE stories SET title = '$post_title', content = '$post_content', description = '$post_desc', status = '$post_status', visibility = '$post_vis', user_id = $post_user, category_id = $post_cate, updated_date = '$post_update' WHERE id = $post_id";
-    if($conn->query($draft_post_sql) === true) {
-      header("Location: post.php?post=draft_updated");
-    } else {
-      $error = "Error: " . $conn->error;
-    }
-  }
-  if(isset($_POST['save_publish'])) {
-    $post_title = trim($_POST['title']);
-    $post_content = $_POST['content'];
-    $post_desc = $_POST['description'];
-    if($post_title == '' || $post_content == '' || $post_desc == '') {
-      $check_required = true;
-    } else {
+    if(isset($_POST['save_draft'])) {
+      $post_title = trim($_POST['title']);
+      $post_content = $_POST['content'];
+      $post_desc = $_POST['description'];
       $post_cate = trim($_POST['category']);
-      $post_status = strtolower(PUBLISH);
-      $post_vis = strtolower(PUBLICVIS);
+      $post_status = strtolower($default_status);
+      $post_vis = strtolower($default_visibility);
       $post_user = $data['users_id'];
-      if($image != '') {
-        $post_image = $_SESSION['image'];
-      } else {
-        $post_image = '';
-      }
-      if($thumbnail != '') {
-        $post_thumbnail = $_SESSION['thumbnail'];
-      } else {
-        $post_thumbnail = '';
-      }
       $post_update = date("Y-m-d h:i:s");
-      $publish_post_sql = "UPDATE stories SET title = '$post_title', content = '$post_content', description = '$post_desc', image = '$post_image', status = '$post_status', visibility = '$post_vis', user_id = $post_user, category_id = $post_cate, updated_date = '$post_update' WHERE id = $post_id";
-      if($conn->query($publish_post_sql) === true) {
-        header("Location: post.php?post=publish_updated");
+      $draft_post_sql = "UPDATE stories SET title = '$post_title', content = '$post_content', description = '$post_desc', status = '$post_status', visibility = '$post_vis', user_id = $post_user, category_id = $post_cate, updated_date = '$post_update' WHERE id = $post_id";
+      if($conn->query($draft_post_sql) === true) {
+        header("Location: post.php?post=draft_updated");
       } else {
         $error = "Error: " . $conn->error;
       }
     }
+    if(isset($_POST['save_publish'])) {
+      $post_title = trim($_POST['title']);
+      $post_content = $_POST['content'];
+      $post_desc = $_POST['description'];
+      if($post_title == '' || $post_content == '' || $post_desc == '') {
+        $check_required = true;
+      } else {
+        $post_cate = trim($_POST['category']);
+        $post_status = strtolower(PUBLISH);
+        $post_vis = strtolower(PUBLICVIS);
+        $post_user = $data['users_id'];
+        if($image != '') {
+          $post_image = $_SESSION['image'];
+        } else {
+          $post_image = '';
+        }
+        if($thumbnail != '') {
+          $post_thumbnail = $_SESSION['thumbnail'];
+        } else {
+          $post_thumbnail = '';
+        }
+        $post_update = date("Y-m-d h:i:s");
+        $publish_post_sql = "UPDATE stories SET title = '$post_title', content = '$post_content', description = '$post_desc', image = '$post_image', status = '$post_status', visibility = '$post_vis', user_id = $post_user, category_id = $post_cate, updated_date = '$post_update' WHERE id = $post_id";
+        if($conn->query($publish_post_sql) === true) {
+          header("Location: post.php?post=publish_updated");
+        } else {
+          $error = "Error: " . $conn->error;
+        }
+      }
+    }
+  } else {
+    header("Location: post.php?post_id=wrong");
   }
 ?>
 
@@ -132,12 +110,6 @@
             </div>
             <div class="card">
               <div class="card-header">
-                <!-- <div id='preview'>
-                </div>
-                <input type="submit" value="Upload" name="upload_thumbnail" class="btn btn-default btn-sm" value="<?php echo $data['thumbnail']; ?>">
-                <input type="file" name="thumbnail" class="input-display" id="thumbnail-input">
-                <button type="button" class="btn btn-default btn-sm" id="thumbnail-button">Choose File</button>
-                <span id="thumbnail-text">No file chosen!</span> -->
               </div>
               <div class="card-body">
                 <textarea name="content" id="" cols="30" rows="30" class="form-control"><?php echo $data['content']; ?></textarea>
@@ -198,26 +170,6 @@
                   <input type="text" name="cate_name" class="form-control input-sm mar-top-bot" placeholder="Category Name">
                   <textarea name="cate_description" class="form-control input-sm mar-top-bot" placeholder="Category Description" cols="3" rows="3"></textarea>
                   <input type="submit" class="btn btn-default btn-sm" name="add_category" value="Add">
-                </div>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-header">
-                <h3 class="add-post">Featured Image</h3>
-              </div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-xs-12">
-                    <img src="<?php echo $target != '' ? $target : ''; ?>" class="img-responsive" alt="">
-                  </div>
-                  <div class="col-xs-8">
-                    <input type="file" name="file_upload" id="image-input" class="input-display">
-                    <button type="button" id="image-button" class="btn btn-default btn-sm mar-top">Choose File</button>
-                    <span id="image-text" class="file-text">No file chosen!</span>
-                  </div>
-                  <div class="col-xs-4">
-                    <input type="submit" value="Upload" name="upload_image" class="btn btn-default btn-sm mar-top-bot">
-                  </div>
                 </div>
               </div>
             </div>

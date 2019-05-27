@@ -214,10 +214,16 @@
       z-index: 9999;
       .author {
         a {
+          position: relative;
           color: $info;
           .img-profile {
             border-radius: 50%;
             height: 124px;
+            &.img-addit {
+              border: 5px solid #fff;
+              box-shadow: 2px 2px 22px rgba(2, 2, 2, 0.5);
+              position: relative;
+            }
           }
           .author-name {
             color: $info;
@@ -225,14 +231,18 @@
             font-weight: bold;
             margin: 15px 0;
           }
-          &:hover, &:focus {
-            color: $info;
-          }
         }
         .slug {
           margin-bottom: 15px;
           font-size: 16px;
           color: $gray-500;
+        }
+        &:hover, &:focus {
+          .btn-profile-wrapper {
+            .btn-upload-profile {
+              opacity: 1;
+            }
+          }
         }
       }
     }
