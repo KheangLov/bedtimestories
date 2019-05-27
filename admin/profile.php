@@ -3,6 +3,7 @@
   $index = false;
   $user = false;
   $post = false;
+  $cate = false;
   include "share/header.inc.php";
   $username = $_SESSION['name'];
   $user_sql = "SELECT users.*, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE LOWER(fullname) = LOWER('$username')";

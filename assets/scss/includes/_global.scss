@@ -123,3 +123,25 @@ input[type="file"] {
 .mar-top {
   margin-top: 15px;
 }
+
+.btn-profile-wrapper {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  .btn-upload-profile {
+    opacity: 0;
+    color: #fff;
+    border: 0px;
+    border-radius: 0;
+    height: 114px;
+    padding: 0 44px;
+    border-radius: 50%;
+    background-color: rgba(2, 2, 2, 0.5);
+    transition: all 0.3s ease-in-out;
+    .icon-profile-upload {
+      font-size: 24px;
+    }
+  }
+}

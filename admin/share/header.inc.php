@@ -24,49 +24,70 @@
 </head>
 <body>
   <div class="wrapper clearfix">
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar-main">
       <div class="sidebar-header text-center">
-        <h3 class="site-name"><?php echo BEDTIMESTORIES; ?></h3>
+        <img src="../assets/images/icon-logo.png" alt="" class="img-responsive img-display" id="sidebar-img">
+        <h3 class="site-name" id="sidebar-title"><?php echo BEDTIMESTORIES; ?></h3>
       </div>
       <ul class="nav nav-menu">
-        <li class="<?php echo $index === true ? 'active' : ''; ?>">
+        <li class="sidebar-li<?php echo $index === true ? ' active' : ''; ?>">
           <a href="index.php">
-            <i class="fa fa-tachometer"></i>Dashboard
+            <i class="fa fa-tachometer icon-script"></i>
+            <div class="sidebar-text-link">Dashboard</div>
           </a>
         </li>
-        <li class="<?php echo $profile === true ? 'active' : ''; ?>">
+        <li class="sidebar-li<?php echo $profile === true ? ' active' : ''; ?>">
           <a href="profile.php">
-            <i class="fa fa-user-circle"></i>Profile
+            <i class="fa fa-user-circle icon-script"></i>
+            <div class="sidebar-text-link">Profile</div>
           </a>
         </li>
-        <li class="<?php echo $user === true ? 'active' : ''; ?>">
-          <a href="user.php">
-            <i class="fa fa-user"></i>Users
-          </a>
-        </li>
-        <li class="<?php echo $post === true ? 'active' : ''; ?>">
-          <a href="post.php">
-            <i class="fa fa-pencil-square-o"></i>Posts
-          </a>
-        </li>
+        <?php
+          if(strtolower($_SESSION['role_name']) == ADMIN) :
+        ?>
+            <li class="sidebar-li<?php echo $user === true ? ' active' : ''; ?>">
+              <a href="user.php">
+                <i class="fa fa-user icon-script"></i>
+                <div class="sidebar-text-link">Users</div>
+              </a>
+            </li>
+        <?php    
+          endif;
+          if(strtolower($_SESSION['role_name']) == ADMIN || strtolower($_SESSION['role_name']) == AUTHOR) :
+        ?>
+            <li class="sidebar-li<?php echo $cate === true ? ' active' : ''; ?>">
+              <a href="category.php">
+                <i class="fa fa-table icon-script"></i>
+                <div class="sidebar-text-link">Categories</div>
+              </a>
+            </li>
+            <li class="sidebar-li<?php echo $post === true ? ' active' : ''; ?>">
+              <a href="post.php">
+                <i class="fa fa-pencil-square-o icon-script"></i>
+                <div class="sidebar-text-link">Posts</div>
+              </a>
+            </li>
+        <?php    
+          endif;
+        ?>
       </ul>
     </aside>
-    <div class="main-wrapper">
+    <div class="main-wrapper" id="site-wrapper">
       <nav class="navbar navbar-default navbar-main">
         <div class="container-fluid">
           <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">
-              <?php echo $index === true ? DASHBOARD : ($profile === true ? PROFILE : ($user === true ? USERS : ($post === true ? POSTS : ''))); ?>
+            <div class="btn-toggle-sidebar" id="toggle-sidebar" onclick="btnSidebarToggleIn()">
+              <i class="fa fa-bars"></i>
+            </div>
+            <div class="btn-toggle-sidebar btn-show-sidebar" id="long-sidebar" onclick="btnSidebarToggleOut()">
+              <i class="fa fa-ellipsis-v"></i>
+            </div>
+            <a class="navbar-brand float-left" href="#">
+              <?php echo $index === true ? DASHBOARD : ($profile === true ? PROFILE : ($user === true ? USERS : ($post === true ? POSTS : ($cate === true ? CATEGORIES : '')))); ?>
             </a>
           </div>
       
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell"></i> <span class="caret"></span></a>
@@ -82,20 +103,13 @@
                 </a>
                 <ul class="dropdown-menu card card-navbar">
                   <li><a href="../home.php"><strong>See Homepage</strong></a></li>
-                  <li><a href=""><?php echo ucfirst($_SESSION['name']); ?></a></li>
+                  <li role="separator" class="divider no-margin"></li>
+                  <li><a href="profile.php"><?php echo ucfirst($_SESSION['name']); ?></a></li>
                   <li><a href=""><?php echo ucfirst($_SESSION['role_name']); ?></a></li>
                   <li><a href="../logout.php">Log Out</a></li>
                 </ul>
               </li>
             </ul>
-            <form class="navbar-form navbar-right">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search">
-                <span class="input-group-btn">
-                  <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                </span>
-              </div>
-            </form>
           </div>
         </div>
       </nav>

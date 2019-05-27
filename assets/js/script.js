@@ -20,6 +20,53 @@ function nextUser(curPage) {
   return true;
 }
 
+let toggle = false;
+const btnSidebarOpen = document.getElementById("long-sidebar");
+const btnSidebarClose = document.getElementById("toggle-sidebar");
+const sidebarMain = document.getElementById("sidebar-main");
+const sidebarUlLi = document.getElementsByClassName("sidebar-li");
+const sidebarImg = document.getElementById("sidebar-img");
+const sidebarTitle = document.getElementById("sidebar-title");
+const sidebarTextLink = document.getElementsByClassName("sidebar-text-link");
+const sidebarFontAwesome = document.getElementsByClassName("icon-script");
+const mainWrapper = document.getElementById("site-wrapper");
+function btnSidebarToggleIn() {
+  sidebarMain.style.width = "90px";
+  btnSidebarOpen.style.display = "inline";
+  btnSidebarClose.style.display = "none";
+  sidebarImg.style.display = "inline";
+  sidebarTitle.style.display = "none";
+  for(i = 0; i < sidebarUlLi.length; i++) {
+    sidebarUlLi[i].style.marginLeft = "17px";
+  }
+  for(j = 0; j < sidebarTextLink.length; j++) {
+    sidebarTextLink[j].style.display = "none";
+  }
+  for(k = 0; k < sidebarFontAwesome.length; k++) {
+    sidebarFontAwesome[k].style.fontSize = "24px";
+  }
+  mainWrapper.style.width = "calc(100% - 90px)";
+  toggle = true;
+}
+function btnSidebarToggleOut() {
+  sidebarMain.style.width = "260px";
+  btnSidebarOpen.style.display = "none";
+  btnSidebarClose.style.display = "inline";
+  sidebarImg.style.display = "none";
+  sidebarTitle.style.display = "block";
+  for (i = 0; i < sidebarUlLi.length; i++) {
+    sidebarUlLi[i].style.marginLeft = "30px";
+  }
+  for (j = 0; j < sidebarTextLink.length; j++) {
+    sidebarTextLink[j].style.display = "inline";
+  }
+  for(k = 0; k < sidebarFontAwesome.length; k++) {
+    sidebarFontAwesome[k].style.fontSize = "18px";
+  }
+  mainWrapper.style.width = "calc(100% - 260px)";
+  toggle = false;
+}
+
 // File upload btn new post
 const fileInput = document.getElementById("image-input");
 const imageBtn = document.getElementById("image-button");
@@ -27,8 +74,20 @@ const imageText = document.getElementById("image-text");
 const thumbnailInput = document.getElementById("thumbnail-input");
 const thumbBtn = document.getElementById("thumbnail-button");
 const thumbText = document.getElementById("thumbnail-text");
-// const thumbnailUpload = document.getElementById("thumbnail-upload");
-// const btnAddThumbnail = document.getElementById("btn-add-thumbnail");
+const profileInput = document.getElementById("profile-input");
+const profileBtn = document.getElementById("profile-button");
+const profileText = document.getElementById("profile-text");
+
+profileBtn.addEventListener("click", () => {
+  profileInput.click();
+});
+profileInput.addEventListener("change", () => {
+  if(profileInput.value) {
+    profileText.innerHTML = profileInput.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+  } else {
+    profileText.innerHTML = "No file chosen!";
+  }
+});
 
 imageBtn.addEventListener("click", () => {
   fileInput.click();
@@ -51,9 +110,6 @@ thumbnailInput.addEventListener("change", () => {
     thumbText.innerHTML = "No file chosen!";
   }
 });
-btnAddThumbnail.addEventListener("click", () => {
-  thumbnailUpload.click();
-});
 
 // Post action
 function deletePost(postId) {
@@ -69,37 +125,10 @@ function banPost(postId) {
   }
 }
 
-// File upload btn edit post
-// const fileEdit = document.getElementById("image-edit");
-// const imageBtnEdit = document.getElementById("image-btn-edit");
-// const imageTextEdit = document.getElementById("image-text-edit");
-// const thumbnailEdit = document.getElementById("thumbnail-edit");
-// const thumbBtnEdit = document.getElementById("thumbnail-btn-edit");
-// const thumbTextEdit = document.getElementById("thumbnail-text-edit");
-// const thumbnailUploadEdit = document.getElementById("thumbnail-upload-edit");
-// const btnEditThumbnail = document.getElementById("btn-edit-thumbnail");
-
-// imageBtnEdit.addEventListener("click", () => {
-//   fileEdit.click();
-// });
-// fileEdit.addEventListener("change", () => {
-//   if(fileEdit.value) {
-//     imageTextEdit.innerHTML = fileEdit.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
-//   } else {
-//     imageTextEdit.innerHTML = "No file chosen!";
-//   }
-// });
-
-// thumbBtnEdit.addEventListener("click", () => {
-//   thumbnailEdit.click();
-// });
-// thumbnailEdit.addEventListener("change", () => {
-//   if(thumbnailEdit.value) {
-//     thumbTextEdit.innerHTML = thumbnailEdit.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
-//   } else {
-//     thumbTextEdit.innerHTML = "No file chosen!";
-//   }
-// });
-// btnEditThumbnail.addEventListener("click", () => {
-//   thumbnailEdit.click();
-// });
+// Category action
+function deleteCate(cateId) {
+  if(confirm("Are you sure you want to delete this category?")) {
+    window.location.href = 'action-category.php?delete=' + cateId + '';
+    return true;
+  }
+}
