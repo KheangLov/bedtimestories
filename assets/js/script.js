@@ -19,6 +19,14 @@ function nextUser(curPage) {
   window.location.href = 'user.php?page=' + (curPage + 1) + '';
   return true;
 }
+function prevCate(curPage) {
+  window.location.href = 'category.php?page=' + (curPage - 1) + '';
+  return true;
+}
+function nextCate(curPage) {
+  window.location.href = 'category.php?page=' + (curPage + 1) + '';
+  return true;
+}
 
 let toggle = false;
 const btnSidebarOpen = document.getElementById("long-sidebar");
@@ -132,27 +140,31 @@ if(profileBtn != null) {
   });
 }
 
-imageBtn.addEventListener("click", () => {
-  fileInput.click();
-});
-fileInput.addEventListener("change", () => {
-  if(fileInput.value) {
-    imageText.innerHTML = fileInput.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
-  } else {
-    imageText.innerHTML = "No file chosen!";
-  }
-});
+if(imageBtn != null) {
+  imageBtn.addEventListener("click", () => {
+    fileInput.click();
+  });
+  fileInput.addEventListener("change", () => {
+    if(fileInput.value) {
+      imageText.innerHTML = fileInput.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+    } else {
+      imageText.innerHTML = "No file chosen!";
+    }
+  });
+}
 
-thumbBtn.addEventListener("click", () => {
-  thumbnailInput.click();
-});
-thumbnailInput.addEventListener("change", () => {
-  if(thumbnailInput.value) {
-    thumbText.innerHTML = thumbnailInput.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
-  } else {
-    thumbText.innerHTML = "No file chosen!";
-  }
-});
+if(thumbBtn != null) {
+  thumbBtn.addEventListener("click", () => {
+    thumbnailInput.click();
+  });
+  thumbnailInput.addEventListener("change", () => {
+    if(thumbnailInput.value) {
+      thumbText.innerHTML = thumbnailInput.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+    } else {
+      thumbText.innerHTML = "No file chosen!";
+    }
+  });
+}
 
 // Post action
 function deletePost(postId) {
@@ -175,3 +187,72 @@ function deleteCate(cateId) {
     return true;
   }
 }
+
+// Remove readonly update profile
+const formInput = document.getElementsByClassName('input-rev-read');
+const btnUpdatePro = document.getElementById('btn-update-profile-no-readonly');
+const btnUpdateProReadOnly = document.getElementById('btn-update-profile-readonly');
+const btnProImg = document.getElementById('btn-upload-pro-img');
+const btnEditPro = document.getElementById('btn-editpro-display');
+const roleInput = document.getElementById('pro-role-input');
+const roleSelect = document.getElementById('role-select');
+const quoteInput = document.getElementById('quote-input');
+if(btnUpdatePro != null) {
+  btnUpdatePro.addEventListener("click", () => {
+    for(i=0; i<formInput.length; i++) {
+      formInput[i].removeAttribute('disabled');
+    }
+    btnEditPro.style.display = 'inline';
+    roleInput.style.display = 'none';
+    roleSelect.style.display = 'inline';
+    btnUpdatePro.style.display = 'none';
+    btnUpdateProReadOnly.style.display = 'inline';
+    btnProImg.removeAttribute('hidden');
+    quoteInput.removeAttribute('hidden');
+  });
+}
+if(btnUpdateProReadOnly != null) {
+  btnUpdateProReadOnly.addEventListener("click", () => {
+    for(j=0; j<formInput.length; j++) {
+      formInput[j].setAttribute('disabled', 'disabled');
+    }
+    btnEditPro.style.display = 'none';
+    roleInput.style.display = 'inline';
+    roleSelect.style.display = 'none';
+    btnUpdatePro.style.display = 'inline';
+    btnUpdateProReadOnly.style.display = 'none';
+    btnProImg.setAttribute('hidden', 'hidden');
+    quoteInput.setAttribute('hidden', 'hidden');
+  });
+}
+// if(btnEditPro != null) {
+//   btnEditPro.addEventListener("click", () => {
+//     for(k=0; k<formInput.length; k++) {
+//       formInput[k].setAttribute('readonly', 'readonly');
+//     }
+//     btnEditPro.style.display = 'none';
+//     roleInput.style.display = 'inline';
+//     roleSelect.style.display = 'none';
+//     btnUpdateProReadOnly.setAttribute("id", "btn-update-profile-no-readonly");
+//   });
+// }
+
+// const editCate = document.getElementById("edit-category");
+// const btnAddCate = document.getElementById("btn-add-cate");
+// const btnEditCate = document.getElementById("btn-edit-cate");
+// if(editCate != null) {
+//   editCate.addEventListener("click", () => {
+//     btnAddCate.setAttribute("id", "hide-edit-btn");
+//     btnEditCate.setAttribute("id", "show-edit-btn");
+//   });
+// }
+function numberOnly(evt) {
+  var ch = String.fromCharCode(evt.which);
+  if(!(/[0-9]/).test(ch)) {
+    evt.preventDefault();
+  }
+}
+
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});

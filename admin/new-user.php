@@ -162,7 +162,7 @@
                   <div class="col-sm-4">
                     <div class="form-group">
                       <label class="info-name">Phone</label>
-                      <input type="text" name="phone" class="form-control">
+                      <input type="text" name="phone" onkeypress="numberOnly(event)" class="form-control">
                     </div>
                   </div>
                   <div class="col-sm-6">

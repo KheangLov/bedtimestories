@@ -28,7 +28,7 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-sm-5">
-                  <i class="fa fa-globe fa-warning"></i>
+                  <i class="fa fa-users fa-infoo"></i>
                 </div>
                 <div class="col-sm-7 text-right">
                   <?php
@@ -53,7 +53,7 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-sm-5">
-                  <i class="fa fa-money fa-success"></i>
+                  <i class="fa fa-user fa-success"></i>
                 </div>
                 <div class="col-sm-7 text-right">
                   <?php
@@ -78,7 +78,7 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-sm-5">
-                  <i class="fa fa-times fa-danger"></i>
+                  <i class="fa fa-user fa-infoo"></i>
                 </div>
                 <div class="col-sm-7 text-right">
                   <?php
@@ -103,7 +103,7 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-sm-5">
-                  <i class="fa fa-heart-o fa-infoo"></i>
+                  <i class="fa fa-user fa-warn"></i>
                 </div>
                 <div class="col-sm-7 text-right">
                   <?php
@@ -158,12 +158,12 @@
                               <td class="img-row">
                                 <div class="img-wrapper">
                                   <a href="image-post.php?id=<?php echo $posts['id']; ?>">
-                                    <img src="<?php echo $posts['thumbnail'] != '' ? '../assets/upload/images/' . $posts['thumbnail'] : '../assets/upload/no-image.png' ; ?>" class="img-raised">
+                                    <img src="<?php echo $posts['thumbnail'] != '' ? '../assets/upload/thumbnails/' . $posts['thumbnail'] : '../assets/upload/no-image.png' ; ?>" class="img-raised">
                                   </a>
                                 </div>
                               </td>
                               <td>
-                                <a href="edit-post.php?<?php echo "id={$posts['id']}"; ?>">
+                                <a href="edit-post.php?<?php echo "id={$posts['id']}"; ?>" data-toggle="tooltip" data-placement="top" title="Edit">
                                   <strong><?php echo $posts['title']; ?></strong>
                                 </a>
                               </td>
@@ -171,11 +171,11 @@
                               <td><?php echo strtolower($posts['status']) == strtolower(PUBLISH) ? '<span class="label label-success">' . ucfirst($posts['status']) . '</span>' : (strtolower($posts['status']) == strtolower(DRAFT) ? '<span class="label label-danger">' . ucfirst($posts['status']) . '</span>' : (strtolower($posts['status']) == strtolower(BAN) ? '<span class="label label-warning">' . ucfirst($posts['status']) . '</span>' : '')); ?></td>
                               <td><?php echo strtolower($posts['visibility']) == strtolower(PRIVATEVIS) ? '<span class="label label-info">' . ucfirst($posts['visibility']) . '</span>' : (strtolower($posts['visibility']) == strtolower(PUBLICVIS) ? '<span class="label label-primary">' . ucfirst($posts['visibility']) . '</span>' : ''); ?></td>
                               <td class="td-actions">
-                                <a href="#" onClick="banPost(<?php echo $posts['id']; ?>)" class="btn btn-warning">
-                                  <i class="fa fa-ban"></i>
+                                <a href="#" onClick="banPost(<?php echo $posts['id']; ?>)" class="btn-icon btn-icon-warning" data-toggle="tooltip" data-placement="top" title="Ban">
+                                  <i class="ti-na"></i>
                                 </a>
-                                <a href="#" onClick="deletePost(<?php echo $posts['id']; ?>)" class="btn btn-danger">
-                                  <i class="fa fa-times"></i>
+                                <a href="#" onClick="deletePost(<?php echo $posts['id']; ?>)" class="btn-icon btn-icon-danger" data-toggle="tooltip" data-placement="top" title="Delete">
+                                  <i class="ti-close"></i>
                                 </a>
                               </td>
                             </tr>

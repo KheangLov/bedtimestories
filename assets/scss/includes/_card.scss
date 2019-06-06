@@ -93,7 +93,7 @@
       .fa {
         font-size: 50px;
       }
-      .fa-warning {
+      .fa-warn {
         color: $warning;
       }
       .fa-success {
@@ -104,6 +104,12 @@
       }
       .fa-infoo {
         color: $info;
+      }
+      .fa-default {
+        color: $default;
+      }
+      .fa-primary {
+        color: $primary;
       }
       .text {
         color: $gray-500;
@@ -143,8 +149,8 @@
         .img-row {
           .img-wrapper {
             background-color: $main-wrapper;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
 
             .img-raised {
@@ -211,6 +217,7 @@
       right: 0;
       bottom: 0;
       left: 0;
+      height: 100px;
       z-index: 9999;
       .author {
         a {
@@ -223,6 +230,8 @@
               border: 5px solid #fff;
               box-shadow: 2px 2px 22px rgba(2, 2, 2, 0.5);
               position: relative;
+              width: 124px;
+              background-color: #fff;
             }
           }
           .author-name {
@@ -236,13 +245,6 @@
           margin-bottom: 15px;
           font-size: 16px;
           color: $gray-500;
-        }
-        &:hover, &:focus {
-          .btn-profile-wrapper {
-            .btn-upload-profile {
-              opacity: 1;
-            }
-          }
         }
       }
     }
@@ -359,24 +361,10 @@
   }
 }
 
-.pagination-wrap {
-
-  .pagination {
-
-    .active {
-
-      a {
-        background-color: $sidebar-bg;
-        color: $white;
-        border-color: $sidebar-bg;
-      }
-    }
-
-    li {
-      
-      a {
-        color: $sidebar-bg;
-      }
+@media (max-width: 950px) {
+  .card {
+    &.card-tasks {
+      width: 783.6px;
     }
   }
 }

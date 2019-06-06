@@ -5,7 +5,7 @@
   bottom: 0;
   width: 260px;
   z-index: 999;
-  background-color: $sidebar-bg;
+  background-color: $gray-900;
   transition: all 0.3s ease-in-out;
   &.sidebar-small {
     display: none;
@@ -173,8 +173,16 @@
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 20px;
-  border: none;
+  border: 2px solid $default;
   box-shadow: 4px 4px 8px -4px rgba(0, 0, 0, 0.3);
+  .btn-label {
+    font-size: 13px;
+    margin-right: 3px;
+  }
+  &:hover, &:focus {
+    color: $default;
+    background-color: transparent;
+  }
 }
 
 @media (max-width: 1125px) {

@@ -5,7 +5,7 @@
   $post = false;
   $cate = false;
   include "share/header.inc.php";
-  if(strtolower($_SESSION['role_name']) != strtolower(ADMIN)) {
+  if(strtolower($_SESSION['role_name']) != ADMIN) {
     header("Location: index.php?permission=denied");
   }
   $msg = '';
@@ -24,9 +24,9 @@
     }
   } else if(isset($_GET['banned'])) {
     $banned = strtolower(trim($_GET['banned']));
-    if($banned === strtolower(SUCCESS)) {
+    if($banned === SUCCESS) {
       $msg = 'User have been banned!';
-    } else if($banned === strtolower(FAIL)) {
+    } else if($banned === FAIL) {
       $error = 'Fail to ban user!';
     }
   } else if(isset($_GET['updated'])) {
@@ -42,12 +42,17 @@
   $number_of_user = mysqli_num_rows($result);
   $per_page = PERPAGE;
   $first_page_result = ($get_page - 1) * $per_page;
-  $users_sql = "SELECT users.*, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id ORDER BY role_id, updated_date LIMIT $first_page_result, $per_page";
+  $users_sql = "SELECT users.*, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id ORDER BY FIELD(roles.name, 'admin', 'author', 'subscriber'), updated_date LIMIT $first_page_result, $per_page";
   $users_result = mysqli_query($conn, $users_sql);
 ?>
 
     <div class="content">
-      <a href="new-user.php" class="btn btn-default btn-addp">Add New</a>
+      <a href="new-user.php" class="btn btn-default btn-addp">
+        <span class="btn-label">
+          <i class="ti-plus"></i> 
+        </span>
+        Add New
+      </a>
       <?php
         if(isset($_GET['user_id']) && strtolower($_GET['user_id']) === 'wrong') :
       ?>
@@ -96,33 +101,33 @@
                             <td><?php echo strtolower($row['status']) == strtolower(ACTIVE) ? '<span class="label label-success">' . ucfirst($row['status']) . '</span>' : (strtolower($row['status']) == strtolower(INACTIVE) ? '<span class="label label-danger">' . ucfirst($row['status']) . '</span>' : (strtolower($row['status']) == strtolower(BAN) ? '<span class="label label-warning">' . ucfirst($row['status']) . '</span>' : '')); ?></td>
                             <td><span class="label label-default"><?php echo ucfirst($row['role_name']); ?></span></td>
                             <td class="td-actions">
-                              <a href="show-user.php?<?php echo "id={$row['id']}"; ?>" class="btn btn-primary">
-                                <i class="fa fa-list-alt"></i>
+                              <a href="show-user.php?<?php echo "id={$row['id']}"; ?>" class="btn-icon btn-icon-primary" data-toggle="tooltip" data-placement="top" title="View">
+                                <i class="ti-image"></i>
                               </a>
                               <?php
-                                $count_admin_sql = "SELECT COUNT(*) AS count_user, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE LOWER(roles.name) = 'admin'";
-                                $count_admin_result = mysqli_query($conn, $count_admin_sql);
-                                $count_admin = $count_admin_result->fetch_array();
-                                if($count_admin['count_user'] > 1 || strtolower($row['role_name']) != 'admin') :
+                                // $count_admin_sql = "SELECT COUNT(*) AS count_user, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE LOWER(roles.name) = 'admin'";
+                                // $count_admin_result = mysqli_query($conn, $count_admin_sql);
+                                // $count_admin = $count_admin_result->fetch_array();
+                                // if($count_admin['count_user'] > 1 || strtolower($row['role_name']) != ADMIN) :
                               ?>
-                                  <a href="edit-user.php?<?php echo "id={$row['id']}"; ?>" class="btn btn-info">
-                                    <i class="fa fa-pencil"></i>
-                                  </a>
+                              <a href="edit-user.php?<?php echo "id={$row['id']}"; ?>" class="btn-icon btn-icon-info" data-toggle="tooltip" data-placement="top" title="Edit">
+                                <i class="ti-pencil"></i>
+                              </a>
                               <?php
-                                endif;
-                                if(strtolower($row['role_name']) != 'admin' || strtolower($row['status']) != strtolower(ACTIVE)) :
+                                // endif;
+                                if((strtolower($row['role_name']) != SUPERADMIN && strtolower($row['role_name']) != ADMIN) || strtolower($row['status']) != strtolower(ACTIVE)) :
                               ?>
                                   <?php
                                     if(strtolower($row['status']) == strtolower(ACTIVE)) :
                                   ?>
-                                      <a href="#" onClick="banUser(<?php echo $row['id']; ?>)" class="btn btn-warning">
-                                        <i class="fa fa-ban"></i>
+                                      <a href="#" onClick="banUser(<?php echo $row['id']; ?>)" class="btn-icon btn-icon-warning" data-toggle="tooltip" data-placement="top" title="Ban">
+                                        <i class="ti-na"></i>
                                       </a>
                                   <?php
                                     endif;
                                   ?>
-                                <a href="#" onClick="deleteUser(<?php echo $row['id']; ?>)" class="btn btn-danger">
-                                  <i class="fa fa-times"></i>
+                                <a href="#" onClick="deleteUser(<?php echo $row['id']; ?>)" class="btn-icon btn-icon-danger" data-toggle="tooltip" data-placement="top" title="Delete">
+                                  <i class="ti-close"></i>
                                 </a>
                               <?php
                                 endif;

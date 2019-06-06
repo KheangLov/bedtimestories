@@ -1,34 +1,3 @@
-// // Bootstrap overrides for this template
-// .text-primary {
-//   color: $primary !important;
-// }
-
-// .btn {
-//   font-weight: 700;
-//   text-transform: uppercase;
-//   border: none;
-//   border-radius: 300px;
-//   @include sans-serif-font;
-// }
-
-// .btn-xl {
-//   padding: 1rem 2rem;
-// }
-
-// .btn-primary {
-//   background-color: $primary;
-//   border-color: $primary;
-//   &:hover,
-//   &:focus,
-//   &:active {
-//     color: $white;
-//     background-color: darken($primary, 5%) !important;
-//   }
-//   &:active,
-//   &:focus {
-//     box-shadow: 0 0 0 0.2rem rgba(240, 95, 64,.5) !important;
-//   }
-// }
 .navbar-default {
   .navbar-nav{
     li {
@@ -49,8 +18,8 @@
             padding: 10px 25px;
             color: $gray-700;
             &:hover, &:focus {
-              background-color: $gray-800;
-              color: $gray-200;
+              background-color: $default;
+              color: $white;
             }
           }
         }
@@ -97,14 +66,208 @@
 }
 
 .pagination {
+  border-radius: 10px;
   box-shadow: 0px 2px 8px -2px rgba(0, 0, 0, 0.3);
 }
 
 .pagination-wrap {
   .pagination {
+    li {
+      a {
+        color: $default;
+      }
+    }
+    li:first-child {
+      a {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+      }
+    }
+    li:last-child {
+      a {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+      }
+    }
     .active {
       a {
+        color: $white;
+        background-color: $default;
+        border-color: $default;
         box-shadow: 0px 2px 8px -2px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+
+.btn {
+  color: $white;
+  border-radius: 10px;
+  border: 2px solid;
+  transition: all 0.3s ease-in-out;
+  &:hover, &:focus {
+    background: transparent;
+    color: $white;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  }
+}
+.btn-default {
+  background-color: $default;
+  border-color: $default;
+  &:hover, &:focus {
+    color: $default;
+    border-color: $default;
+  }
+}
+.btn-primary {
+  background-color: $primary;
+  border-color: $primary;
+  &:hover, &:focus {
+    color: $primary;
+    border-color: $primary;
+  }
+}
+.btn-success {
+  background-color: $success;
+  border-color: $success;
+  &:hover, &:focus {
+    color: $success;
+    border-color: $success;
+  }
+}
+.btn-info {
+  background-color: $info;
+  border-color: $info;
+  &:hover, &:focus {
+    color: $info;
+    border-color: $info;
+  }
+}
+.btn-warning {
+  background-color: $warning;
+  border-color: $warning;
+  &:hover, &:focus {
+    color: $warning;
+    border-color: $warning;
+  }
+}
+.btn-danger {
+  background-color: $danger;
+  border-color: $danger;
+  &:hover, &:focus {
+    color: $danger;
+    border-color: $danger;
+  }
+}
+
+.label-default {
+  background-color: $default;
+}
+.label-primary {
+  background-color: $primary;
+}
+.label-success {
+  background-color: $success;
+}
+.label-info {
+  background-color: $info;
+}
+.label-warning {
+  background-color: $warning;
+}
+.label-danger {
+  background-color: $danger;
+}
+
+.form-control {
+  background-color: #F3F2EE;
+  border: 1px solid #e8e7e3;
+  border-radius: 4px;
+  color: $default;
+  font-size: 14px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  transition: all 300ms linear;
+  &:focus {
+    border: 1px solid $white;
+    background-color: $white;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}
+
+[class^="ti-"], [class*=" ti-"] {
+  font-weight: bold;
+}
+
+.btn-icon {
+  padding: 0px 7px;
+  &.btn-icon:first-child {
+    padding: 0px 7px 0px 0px;
+  }
+}
+.btn-icon-default {
+  color: $default;
+  &:hover, &:focus {
+    color: $default;
+    text-decoration: none;
+  }
+}
+.btn-icon-primary {
+  color: $primary;
+  &:hover, &:focus {
+    color: $primary;
+    text-decoration: none;
+  }
+}
+.btn-icon-info {
+  color: $info;
+  &:hover, &:focus {
+    color: $info;
+    text-decoration: none;
+  }
+}
+.btn-icon-success {
+  color: $success;
+  &:hover, &:focus {
+    color: $success;
+    text-decoration: none;
+  }
+}
+.btn-icon-warning {
+  color: $warning;
+  &:hover, &:focus {
+    color: $warning;
+    text-decoration: none;
+  }
+}
+.btn-icon-danger {
+  color: $danger;
+  &:hover, &:focus {
+    color: $danger;
+    text-decoration: none;
+  }
+}
+
+.table {
+  thead {
+    tr {
+      th {
+        padding: 12px;
+      }
+    }
+  }
+  tbody {
+    tr {
+      td {
+        padding: 12px;
+      }
+    }
+  }
+  tfoot {
+    tr {
+      th {
+        padding: 12px;
       }
     }
   }

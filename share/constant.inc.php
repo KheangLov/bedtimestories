@@ -21,6 +21,7 @@
 
   define("USER", "user");
   // System Roles
+  define("SUPERADMIN", "superadmin");
   define("ADMIN", "admin");
   define("AUTHOR", "author");
   define("SUBSCRIBER", "subscriber");

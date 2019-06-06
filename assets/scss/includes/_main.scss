@@ -7,7 +7,7 @@
 }
 
 .login-wrapper {
-  margin-top: 150px;
+  margin-top: 50px;
 
   .btn-getstarted {
     border-radius: 12px;
@@ -18,7 +18,7 @@
     text-transform: uppercase;
     border-color: $primary;
     opacity: 0.7;
-
+    transition: all 0.3s ease-in-out;
     &:hover, &:focus {
       color: $white;
       background-color: $primary;
@@ -91,6 +91,14 @@
   float: right;
 }
 
+.form-control {
+  transition: all 0.3s ease-in-out;
+}
+
+.input-rev-read {
+  transition: all 0.3s ease-in-out;
+}
+
 @media (max-width: 1125px) {
   .main-wrapper {
     position: relative;
@@ -103,7 +111,7 @@
     }
     .btn-show-sidebar {
       &#long-sidebar {
-      display: inline;
+      display: none;
       }
     }
   }

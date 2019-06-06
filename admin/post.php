@@ -40,7 +40,12 @@
 ?>
 
     <div class="content">
-      <a href="new-post.php" class="btn btn-default btn-addp">Add New</a>
+      <a href="new-post.php" class="btn btn-default btn-addp">
+        <span class="btn-label">
+          <i class="ti-plus"></i> 
+        </span>  
+        Add New
+      </a>
       <?php
         if(isset($_GET['post_id']) && strtolower($_GET['post_id']) === 'wrong') :
       ?>
@@ -93,9 +98,21 @@
                               </div>
                             </td>
                             <td>
-                              <a href="<?php echo $_posts['id'] == $_SESSION['user_id'] ? 'edit-post.php?id=' . $posts['id'] : ''; ?>">
-                                <strong><?php echo $posts['title']; ?></strong>
-                              </a>
+                              <?php
+                                if(strtolower($_SESSION['role_name']) === ADMIN) :
+                              ?>
+                                  <a href="edit-post.php?id=<?php echo $posts['id']; ?>" data-toggle="tooltip" data-placement="top" title="Edit">
+                                    <strong><?php echo $posts['title']; ?></strong>
+                                  </a>
+                              <?php
+                                else :
+                              ?>
+                                  <a href="<?php echo $posts['user_id'] == $_SESSION['user_id'] ? 'edit-post.php?id=' . $posts['id'] : ''; ?>" data-toggle="tooltip" data-placement="top" title="Edit">
+                                    <strong><?php echo $posts['title']; ?></strong>
+                                  </a>
+                              <?php
+                                endif;
+                              ?>
                             </td>
                             <td><?php echo $posts['cate_name']; ?></td>
                             <td><?php echo strtolower($posts['status']) == strtolower(PUBLISH) ? '<span class="label label-success">' . ucfirst($posts['status']) . '</span>' : (strtolower($posts['status']) == strtolower(DRAFT) ? '<span class="label label-danger">' . ucfirst($posts['status']) . '</span>' : (strtolower($posts['status']) == strtolower(BAN) ? '<span class="label label-warning">' . ucfirst($posts['status']) . '</span>' : '')); ?></td>
@@ -104,11 +121,11 @@
                               if($posts['user_id'] == $_SESSION['user_id'] || strtolower($_SESSION['role_name']) == ADMIN) :
                             ?>
                                 <td class="td-actions">
-                                  <a href="#" onClick="banPost(<?php echo $posts['id']; ?>)" class="btn btn-warning">
-                                    <i class="fa fa-ban"></i>
+                                  <a href="#" onClick="banPost(<?php echo $posts['id']; ?>)" class="btn-icon btn-icon-warning" data-toggle="tooltip" data-placement="top" title="Ban">
+                                    <i class="ti-na"></i>
                                   </a>
-                                  <a href="#" onClick="deletePost(<?php echo $posts['id']; ?>)" class="btn btn-danger">
-                                    <i class="fa fa-times"></i>
+                                  <a href="#" onClick="deletePost(<?php echo $posts['id']; ?>)" class="btn-icon btn-icon-danger" data-toggle="tooltip" data-placement="top" title="Delete">
+                                    <i class="ti-close"></i>
                                   </a>
                                 </td>
                             <?php
@@ -148,7 +165,7 @@
         <nav aria-label="Page navigation">
           <ul class="pagination">
             <li>
-              <a href="user.php?page=1" aria-label="Previous">
+              <a href="post.php?page=1" aria-label="Previous">
                 <i class="fa fa-angle-double-left"></i>
               </a>
             </li>

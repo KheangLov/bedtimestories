@@ -17,9 +17,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Admin Panel</title>
+  <title><?php echo BEDTIMESTORIES; ?> - Admin Panel</title>
   <link rel="shortcut icon" href="../assets/images/icon-logo.png" type="image/x-icon">
   <link rel="stylesheet" href="../assets/libraries/fontawesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../assets/libraries/themify-icons/themify-icons.css">
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>

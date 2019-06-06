@@ -125,6 +125,7 @@ input[type="file"] {
 }
 
 .btn-profile-wrapper {
+  height: 100px;
   position: absolute;
   top: 20px;
   right: 0;
@@ -143,5 +144,29 @@ input[type="file"] {
     .icon-profile-upload {
       font-size: 24px;
     }
+    &:hover, &:focus {
+      color: $white;
+      background-color: $default;
+      box-shadow: none;
+      opacity: 0.8;
+    }
+  }
+}
+
+#btn-editpro-display {
+  display: none;
+}
+
+#role-select {
+  display: none;
+}
+
+#btn-update-profile-readonly {
+  display: none;
+}
+
+@media (max-width: 950px) {
+  body {
+    overflow-x: hidden;
   }
 }

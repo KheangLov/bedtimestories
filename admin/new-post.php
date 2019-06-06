@@ -34,6 +34,38 @@
       $error = "There was an error while uploading feature image!";
     }
   }
+  if(isset($_FILES['image']) && $_FILES['image']['name'] != '') {
+    $uploadedImg = false;
+    $file_extens = array("jpg", "png", "jpeg", "gif");
+    $image = $_FILES['image']['name'];
+    $img_tmpname = $_FILES['image']['tmp_name'];
+    $img_size = $_FILES["image"]["size"];
+    $img_des = "../assets/upload/images/" . $image;
+    $img_type = strtolower(pathinfo($img_des, PATHINFO_EXTENSION));
+    if($img_size > 2000000) {
+      $error_img = "Image size is too large!";
+    } else {
+      if(!in_array($img_type, $file_extens)) {
+        $error_img = "Image's file extension is not valid!";
+      } else {
+        if(move_uploaded_file($img_tmpname, $img_des)) {
+          $upload_img_sql = "UPDATE stories SET image = '$image' WHERE id = $post_id";
+          if($conn->query($upload_img_sql) === true) {
+            $msg_img = "Feature image have been uploaded!";
+            $uploadedImg = true;
+          } else {
+            $error_img = "Feature image fail to upload!";
+            $uploadedImg = true;
+          }
+        } else {
+          $error_img = "Can't upload image!";
+        }
+      }
+    }
+    if($uploadedImg === true) {
+      header("Location: new-post.php?id={$post_id}");
+    }
+  }
   if(isset($_POST['add_category'])) {
     $cate_name = trim($_POST['cate_name']);
     $cate_desc = trim($_POST['cate_description']);
@@ -138,6 +170,9 @@
             <div class="card">
               <div class="card-header">
                 <?php echo $check_required == true ? '<h5 class="text-danger">* required</h5>' : ''; ?>
+                <input type="file" name="thumbnail" id="thumbnail-input" class="input-display">
+                <button type="button" id="thumbnail-button" class="btn btn-default btn-sm"><i class="fa fa-camera-retro"></i> Add Thumbnail</button>
+                <span id="thumbnail-text" class="file-text">No file chosen!</span>
               </div>
               <div class="card-body">
                 <textarea name="content" id="" cols="30" rows="30" class="form-control"></textarea>
@@ -199,6 +234,27 @@
                   <input type="text" name="cate_name" class="form-control input-sm mar-top-bot" placeholder="Category Name">
                   <textarea name="cate_description" class="form-control input-sm mar-top-bot" placeholder="Category Description" cols="3" rows="3"></textarea>
                   <input type="submit" class="btn btn-default btn-sm" name="add_category" value="Add">
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="add-post">Featured Image</h3>
+                <h4 class="text-danger"><?php echo $error_img != '' ? $error_img : ''; ?></h4>
+                <h4 class="text-success"><?php echo $msg_img != '' ? $error_img : ''; ?></h4>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <img src="../assets/upload/<?php echo $data['image'] != '' ? 'images/' . $data['image'] : 'no-image.png'; ?>" class="img-responsive" alt="">
+                  </div>
+                  <div class="col-xs-8">
+                    <input type="file" name="image" id="image-input" class="input-display">
+                    <button type="button" id="image-button" class="btn btn-default btn-sm mar-top">Choose File</button>
+                    <span id="image-text" class="file-text">No file chosen!</span>
+                  </div>
+                  <div class="col-xs-4">
+                  </div>
                 </div>
               </div>
             </div>

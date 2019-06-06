@@ -128,7 +128,7 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <input type="number" name="phone" class="form-control input-lg" placeholder="Phone">
+                  <input type="text" name="phone" class="form-control input-lg" onkeypress="numberOnly(event)" placeholder="Phone">
                 </div>
                 <div class="form-group">
                   <textarea name="address" cols="30" rows="3" placeholder="Address" class="form-control input-lg"></textarea>

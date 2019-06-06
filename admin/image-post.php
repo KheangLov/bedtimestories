@@ -26,8 +26,9 @@
       $data = $post_result->fetch_array();
     }
     if(isset($_POST['upload_image'])) {
-      $uploadImgOk = true;
-      $uploadThumbOk = true;
+      $uploadedImg = false;
+      $uploadedThumb = false;
+      $file_extens = array("jpg", "png", "jpeg", "gif");
       $image = $_FILES['image']['name'];
       $thumbnail = $_FILES['thumbnail']['name'];
       $img_tmpname = $_FILES['image']['tmp_name'];
@@ -38,37 +39,48 @@
       $thumb_des = "../assets/upload/thumbnails/" . $thumbnail;
       $img_type = strtolower(pathinfo($img_des, PATHINFO_EXTENSION));
       $thumb_type = strtolower(pathinfo($thumb_des, PATHINFO_EXTENSION));
-      if($img_size > 500000) {
-        $uploadImgOk = false;
-      }
-      if($thumb_size > 500000) {
-        $uploadThumbOk = false;
-      }
-      if(move_uploaded_file($thumb_tmpname, $thumb_des)) {
-        $uploadThumbOk = true;
+      if($img_size > 2000000) {
+        $error_img = "Image size is too large!";
       } else {
-        $uploadThumbOk = false;
-      }
-      if(move_uploaded_file($img_tmpname, $img_des)) {
-        $uploadImgOk = true;
-      } else {
-        $error = "There was an error while uploading feature image!";
-      }
-      if($uploadImgOk === true) {
-        $upload_img_sql = "UPDATE stories SET image = '$image' WHERE id = $post_id";
-        if($conn->query($upload_img_sql) === true) {
-          header("Location: post.php?images=uploaded");
+        if(!in_array($img_type, $file_extens)) {
+          $error_img = "Image's file extension is not valid!";
         } else {
-          header("Location: post.php?images=failed");
+          if(move_uploaded_file($img_tmpname, $img_des)) {
+            $upload_img_sql = "UPDATE stories SET image = '$image' WHERE id = $post_id";
+            if($conn->query($upload_img_sql) === true) {
+              $msg_img = "Feature image have been uploaded!";
+              $uploadedImg = true;
+            } else {
+              $error_img = "Feature image fail to upload!";
+              $uploadedImg = true;
+            }
+          } else {
+            $error_img = "Can't upload image!";
+          }
         }
       }
-      if($uploadThumbOk === true) {
-        $upload_thumb_sql = "UPDATE stories SET thumbnail = '$thumbnail' WHERE id = $post_id";
-        if($conn->query($upload_thumb_sql) === true) {
-          header("Location: post.php?images=uploaded");
+      if($thumb_size > 2000000) {
+        $error_thumb = "Files's size are too large!";
+      } else {
+        if(!in_array($thumb_type, $file_extens)) {
+          $error_thumb = "Image's file extension is not valid!";
         } else {
-          header("Location: post.php?images=failed");
+          if(move_uploaded_file($thumb_tmpname, $thumb_des)) {
+            $upload_thumb_sql = "UPDATE stories SET thumbnail = '$thumbnail' WHERE id = $post_id";
+            if($conn->query($upload_thumb_sql) === true) {
+              $msg_thumb = "Thumbnail image have been uploaded!";
+              $uploadedThumb = true;
+            } else {
+              $error_thumb = "Thumbnail image fail to upload!";
+              $uploadedThumb = true;
+            }
+          } else {
+            $error_thumb = "Can't upload thumbnail!";
+          }
         }
+      }
+      if($uploadedImg === true && $uploadedThumb === true) {
+        header("Location: image-post.php?id={$post_id}");
       }
     }
   } else {
@@ -83,8 +95,8 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="add-post">Thumbnail</h3>
-                  <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
-                  <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
+                <h4 class="text-danger"><?php echo $error_thumb != '' ? $error_thumb : ''; ?></h4>
+                <h4 class="text-success"><?php echo $msg_thumb != '' ? $error_thumb : ''; ?></h4>
               </div>
               <div class="card-body">
                 <div class="row">
@@ -106,6 +118,8 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="add-post">Featured Image</h3>
+                <h4 class="text-danger"><?php echo $error_img != '' ? $error_img : ''; ?></h4>
+                <h4 class="text-success"><?php echo $msg_img != '' ? $error_img : ''; ?></h4>
               </div>
               <div class="card-body">
                 <div class="row">

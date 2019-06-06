@@ -46,8 +46,18 @@
         $phone = $_POST['phone'];
         $about = $_POST['about'];
         $quote = $_POST['quote'];
+        if($_FILES['profile']['name'] != '') {
+          $profile = $_FILES['profile']['name'];
+          $pro_tmpname = $_FILES['profile']['tmp_name'];
+          $pro_des = "../assets/upload/profiles/" . $profile;
+          if(move_uploaded_file($pro_tmpname, $pro_des)) {
+            $msg = "Profile image have been upload successfully!";
+          } else {
+            $error = "There was an error while uploading profile image!";
+          }
+        }
         $updated_date = date("Y-m-d h:i:s");
-        $update = "UPDATE users SET firstname = '$firstname', lastname = '$lastname', fullname = '$fullname', email = '$email', role_id = $role, gender = '$gender', dob = '$dob', status = '$status', address = '$address', city = '$city', country = '$country', phone = '$phone', about = '$about', quote = '$quote', updated_date = '$updated_date' WHERE id = $user_id";
+        $update = "UPDATE users SET firstname = '$firstname', lastname = '$lastname', fullname = '$fullname', email = '$email', image = '$profile', role_id = $role, gender = '$gender', dob = '$dob', status = '$status', address = '$address', city = '$city', country = '$country', phone = '$phone', about = '$about', quote = '$quote', updated_date = '$updated_date' WHERE id = $user_id";
         if($conn->query($update) === true) {
           header("Location: user.php?updated=success");
         } else {
@@ -73,22 +83,6 @@
         $error = 'Wrong old password!';
       }
     }
-    if(isset($_POST['add_profile'])) {
-      $profile = $_FILES['profile']['name'];
-      $pro_tmpname = $_FILES['profile']['tmp_name'];
-      $pro_des = "../assets/upload/profiles/" . $profile;
-      if(move_uploaded_file($pro_tmpname, $pro_des)) {
-        $msg = "Profile image have been upload successfully!";
-        $upload_sql = "UPDATE users SET image = '$profile' WHERE id = $user_id";
-        if($conn->query($upload_sql) === true) {
-          $msg = "Profile image have been upload successfully!";
-        } else {
-          $error = "There was an error while uploading profile image!";
-        }
-      } else {
-        $error = "There was an error while uploading profile image!";
-      }
-    }
   } else {
     header("Location: user.php?user_id=wrong");
   }
@@ -96,20 +90,20 @@
 
     <div class="content">
       <div class="row">
-        <div class="col-sm-8">
-          <div class="card card-info">
-            <div class="card-header">
-              <ul class="nav nav-tabs">
-                <li class="active">
-                  <a data-toggle="tab" href="#edit-user">Edit Profile</a>
-                </li>
-                <li>
-                  <a data-toggle="tab" href="#edit-password">Change Password</a>
-                </li>
-              </ul>
-            </div>
-            <div class="card-body">
-              <form action="edit-user.php?<?php echo "id=$user_id"; ?>" method="post">
+        <form action="edit-user.php?<?php echo "id=$user_id"; ?>" method="post">
+          <div class="col-sm-8">
+            <div class="card card-info">
+              <div class="card-header">
+                <ul class="nav nav-tabs">
+                  <li class="active">
+                    <a data-toggle="tab" href="#edit-user">Edit Profile</a>
+                  </li>
+                  <li>
+                    <a data-toggle="tab" href="#edit-password">Change Password</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
                 <div class="row">
                   <div class="tab-content">
                     <div class="tab-pane fade card-body in active" id="edit-user">
@@ -134,19 +128,32 @@
                       <div class="col-sm-3">
                         <div class="form-group">
                           <label class="info-name">Role</label>
-                          <select name="role" class="form-control">
-                            <?php
-                              $role_sql = "SELECT * FROM roles";
-                              $role_result = mysqli_query($conn, $role_sql);
-                              if(mysqli_num_rows($role_result) > 0) :
-                                while($role = $role_result->fetch_assoc()) :
-                            ?>
-                                  <option value="<?php echo $role['id'] ?>" <?php echo strtolower($data['role_name']) == strtolower($role['name']) ? 'selected' : ''; ?>><?php echo ucfirst($role['name']); ?></option>
-                            <?php
-                                endwhile;
-                              endif;
-                            ?>
-                          </select>
+                          <?php
+                            $count_admin_sql = "SELECT COUNT(*) AS count_user, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE LOWER(roles.name) = 'admin'";
+                            $count_admin_result = mysqli_query($conn, $count_admin_sql);
+                            $count_admin = $count_admin_result->fetch_array();
+                            if($count_admin['count_user'] <= 1 && strtolower($data['role_name']) == ADMIN) :
+                          ?>
+                              <input type="text" name="role" class="form-control" value="<?php echo ucfirst($data['role_name']); ?>" disabled>
+                          <?php
+                            else :
+                          ?>
+                              <select name="role" class="form-control">
+                                <?php
+                                  $role_sql = "SELECT * FROM roles";
+                                  $role_result = mysqli_query($conn, $role_sql);
+                                  if(mysqli_num_rows($role_result) > 0) :
+                                    while($role = $role_result->fetch_assoc()) :
+                                ?>
+                                      <option value="<?php echo $role['id'] ?>" <?php echo strtolower($data['role_name']) == strtolower($role['name']) ? 'selected' : ''; ?>><?php echo ucfirst($role['name']); ?></option>
+                                <?php
+                                    endwhile;
+                                  endif;
+                                ?>
+                              </select>
+                          <?php
+                            endif;
+                          ?>
                         </div>
                       </div>
                       <div class="col-sm-3">
@@ -194,7 +201,7 @@
                       <div class="col-sm-4">
                         <div class="form-group">
                           <label class="info-name">Phone</label>
-                          <input type="text" name="phone" class="form-control" value="<?php echo $data['phone']; ?>">
+                          <input type="text" name="phone" class="form-control" onkeypress="numberOnly(event)" value="<?php echo $data['phone']; ?>">
                         </div>
                       </div>
                       <div class="col-sm-6">
@@ -240,33 +247,29 @@
                     </div>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="card card-profile">
-            <!-- <div class="card-header">
-              <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
-              <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
-            </div> -->
-            <div class="card-body text-center">
-              <form action="edit-user.php?id=<?php echo $user_id; ?>" method="post" enctype="multipart/form-data">
+          <div class="col-sm-4">
+            <div class="card card-profile">
+              <div class="card-body text-center">
                 <div class="author">
                   <a href="#" class="profile-upload">
                     <img src="../assets/upload/profiles/<?php echo $data['image'] != '' ? $data['image'] : 'user-avatar-placeholder.png'; ?>" class="img-profile img-addit">
                   </a>
                   <div class="btn-profile-wrapper">
                     <input type="file" name="profile" id="profile-input" class="input-display">
-                    <button type="button" id="profile-button" class="btn btn-default btn-upload-profile"><i class="fa fa-camera icon-profile-upload"></i></button>
+                    <button type="button" id="profile-button" class="btn btn-default btn-upload-profile" data-toggle="tooltip" data-placement="top" title="Upload Profile"><i class="fa fa-camera icon-profile-upload"></i></button>
                   </div>
                   <span id="profile-text" class="file-text mar-top-bot">No file chosen!</span>
-                  <input type="submit" name="add_profile" class="btn btn-primary btn-sm" value="Upload">
+                  <!-- <input type="submit" name="add_profile" class="btn btn-primary btn-sm" value="Upload"> -->
                 </div>
-              </form>
+                <!-- <form action="edit-user.php?id=<?php // echo $user_id; ?>" method="post" enctype="multipart/form-data">
+                </form> -->
+              </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
     
