@@ -5,11 +5,13 @@
   $user = false;
   $cate = false;
   include "share/header.inc.php";
-  if(strtolower($_SESSION['role_name']) != ADMIN || strtolower($_SESSION['role_name']) != AUTHOR) {
+  if(strtolower($_SESSION['role_name']) != ADMIN && strtolower($_SESSION['role_name']) != AUTHOR) {
     header("Location: index.php?permission=denied");
   }
-  $msg = '';
-  $error = '';
+  $msg_img = '';
+  $error_img = '';
+  $msg_thumb = '';
+  $error_thumb = '';
   $image = '';
   $target = '';
   $thumbnail = '';
@@ -24,27 +26,49 @@
       $data = $post_result->fetch_array();
     }
     if(isset($_POST['upload_image'])) {
+      $uploadImgOk = true;
+      $uploadThumbOk = true;
       $image = $_FILES['image']['name'];
       $thumbnail = $_FILES['thumbnail']['name'];
       $img_tmpname = $_FILES['image']['tmp_name'];
       $thumb_tmpname = $_FILES['thumbnail']['tmp_name'];
+      $img_size = $_FILES["image"]["size"];
+      $thumb_size = $_FILES["thumbnail"]["size"];
       $img_des = "../assets/upload/images/" . $image;
       $thumb_des = "../assets/upload/thumbnails/" . $thumbnail;
+      $img_type = strtolower(pathinfo($img_des, PATHINFO_EXTENSION));
+      $thumb_type = strtolower(pathinfo($thumb_des, PATHINFO_EXTENSION));
+      if($img_size > 500000) {
+        $uploadImgOk = false;
+      }
+      if($thumb_size > 500000) {
+        $uploadThumbOk = false;
+      }
+      if(move_uploaded_file($thumb_tmpname, $thumb_des)) {
+        $uploadThumbOk = true;
+      } else {
+        $uploadThumbOk = false;
+      }
       if(move_uploaded_file($img_tmpname, $img_des)) {
-        $msg = "Feature image have been upload successfully!";
+        $uploadImgOk = true;
       } else {
         $error = "There was an error while uploading feature image!";
       }
-      if(move_uploaded_file($thumb_tmpname, $thumb_des)) {
-        $msg = "Thumbnail have been upload successfully!";
-      } else {
-        $error = "There was an error while uploading thumbnail!";
+      if($uploadImgOk === true) {
+        $upload_img_sql = "UPDATE stories SET image = '$image' WHERE id = $post_id";
+        if($conn->query($upload_img_sql) === true) {
+          header("Location: post.php?images=uploaded");
+        } else {
+          header("Location: post.php?images=failed");
+        }
       }
-      $upload_sql = "UPDATE stories SET image = '$image', thumbnail = '$thumbnail' WHERE id = $post_id";
-      if($conn->query($upload_sql) === true) {
-        header("Location: post.php?images=uploaded");
-      } else {
-        header("Location: post.php?images=failed");
+      if($uploadThumbOk === true) {
+        $upload_thumb_sql = "UPDATE stories SET thumbnail = '$thumbnail' WHERE id = $post_id";
+        if($conn->query($upload_thumb_sql) === true) {
+          header("Location: post.php?images=uploaded");
+        } else {
+          header("Location: post.php?images=failed");
+        }
       }
     }
   } else {
@@ -59,6 +83,8 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="add-post">Thumbnail</h3>
+                  <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
+                  <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
               </div>
               <div class="card-body">
                 <div class="row">

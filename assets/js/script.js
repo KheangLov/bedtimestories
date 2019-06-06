@@ -66,6 +66,47 @@ function btnSidebarToggleOut() {
   mainWrapper.style.width = "calc(100% - 260px)";
   toggle = false;
 }
+btnSidebarOpen.addEventListener("load", () => {
+  if(toggle === true) {
+    function btnSidebarToggleIn() {
+      sidebarMain.style.width = "90px";
+      btnSidebarOpen.style.display = "inline";
+      btnSidebarClose.style.display = "none";
+      sidebarImg.style.display = "inline";
+      sidebarTitle.style.display = "none";
+      for(i = 0; i < sidebarUlLi.length; i++) {
+        sidebarUlLi[i].style.marginLeft = "17px";
+      }
+      for(j = 0; j < sidebarTextLink.length; j++) {
+        sidebarTextLink[j].style.display = "none";
+      }
+      for(k = 0; k < sidebarFontAwesome.length; k++) {
+        sidebarFontAwesome[k].style.fontSize = "24px";
+      }
+      mainWrapper.style.width = "calc(100% - 90px)";
+      toggle = true;
+    }
+  } else {
+    function btnSidebarToggleOut() {
+      sidebarMain.style.width = "260px";
+      btnSidebarOpen.style.display = "none";
+      btnSidebarClose.style.display = "inline";
+      sidebarImg.style.display = "none";
+      sidebarTitle.style.display = "block";
+      for (i = 0; i < sidebarUlLi.length; i++) {
+        sidebarUlLi[i].style.marginLeft = "30px";
+      }
+      for (j = 0; j < sidebarTextLink.length; j++) {
+        sidebarTextLink[j].style.display = "inline";
+      }
+      for(k = 0; k < sidebarFontAwesome.length; k++) {
+        sidebarFontAwesome[k].style.fontSize = "18px";
+      }
+      mainWrapper.style.width = "calc(100% - 260px)";
+      toggle = false;
+    }
+  }
+});
 
 // File upload btn new post
 const fileInput = document.getElementById("image-input");
@@ -78,16 +119,18 @@ const profileInput = document.getElementById("profile-input");
 const profileBtn = document.getElementById("profile-button");
 const profileText = document.getElementById("profile-text");
 
-profileBtn.addEventListener("click", () => {
-  profileInput.click();
-});
-profileInput.addEventListener("change", () => {
-  if(profileInput.value) {
-    profileText.innerHTML = profileInput.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
-  } else {
-    profileText.innerHTML = "No file chosen!";
-  }
-});
+if(profileBtn != null) {
+  profileBtn.addEventListener("click", () => {
+    profileInput.click();
+  });
+  profileInput.addEventListener("change", () => {
+    if(profileInput.value) {
+      profileText.innerHTML = profileInput.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+    } else {
+      profileText.innerHTML = "No file chosen!";
+    }
+  });
+}
 
 imageBtn.addEventListener("click", () => {
   fileInput.click();

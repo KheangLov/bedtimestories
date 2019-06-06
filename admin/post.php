@@ -5,7 +5,7 @@
   $user = false;
   $cate = false;
   include "share/header.inc.php";
-  if(strtolower($_SESSION['role_name']) != ADMIN || strtolower($_SESSION['role_name']) != AUTHOR) {
+  if(strtolower($_SESSION['role_name']) != ADMIN && strtolower($_SESSION['role_name']) != AUTHOR) {
     header("Location: index.php?permission=denied");
   }
   $msg = '';
@@ -88,7 +88,7 @@
                             <td class="img-row">
                               <div class="img-wrapper">
                                 <a href="image-post.php?id=<?php echo $posts['id']; ?>">
-                                  <img src="<?php echo $posts['thumbnail'] != '' ? '../assets/upload/images/' . $posts['thumbnail'] : '../assets/upload/no-image.png' ; ?>" class="img-raised">
+                                  <img src="<?php echo $posts['thumbnail'] != '' ? '../assets/upload/thumbnails/' . $posts['thumbnail'] : '../assets/upload/no-image.png' ; ?>" class="img-raised">
                                 </a>
                               </div>
                             </td>

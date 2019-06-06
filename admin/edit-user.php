@@ -10,8 +10,14 @@
   }
   $error = '';
   $msg = '';
+  $profile = '';
+  $pro_tmpname = '';
+  $pro_des = '';
   $check_required = false;
-  $user_id = $_GET['id'];
+  $user_id = null;
+  if(isset($_GET['id'])) {
+    $user_id = $_GET['id'];
+  }
   $check_id_sql = "SELECT * FROM users WHERE id = $user_id LIMIT 1";
   $check_id_result = mysqli_query($conn, $check_id_sql);
   if(mysqli_num_rows($check_id_result) != 0) {
@@ -67,6 +73,22 @@
         $error = 'Wrong old password!';
       }
     }
+    if(isset($_POST['add_profile'])) {
+      $profile = $_FILES['profile']['name'];
+      $pro_tmpname = $_FILES['profile']['tmp_name'];
+      $pro_des = "../assets/upload/profiles/" . $profile;
+      if(move_uploaded_file($pro_tmpname, $pro_des)) {
+        $msg = "Profile image have been upload successfully!";
+        $upload_sql = "UPDATE users SET image = '$profile' WHERE id = $user_id";
+        if($conn->query($upload_sql) === true) {
+          $msg = "Profile image have been upload successfully!";
+        } else {
+          $error = "There was an error while uploading profile image!";
+        }
+      } else {
+        $error = "There was an error while uploading profile image!";
+      }
+    }
   } else {
     header("Location: user.php?user_id=wrong");
   }
@@ -85,8 +107,6 @@
                   <a data-toggle="tab" href="#edit-password">Change Password</a>
                 </li>
               </ul>
-              <!-- <h4 class="text-danger"><?php //echo $error != '' ? $error : ''; ?></h4>
-              <h4 class="text-success"><?php //echo $msg != '' ? $msg : ''; ?></h4> -->
             </div>
             <div class="card-body">
               <form action="edit-user.php?<?php echo "id=$user_id"; ?>" method="post">
@@ -188,7 +208,7 @@
                           <label class="info-name">Quote</label>
                           <textarea name="quote" class="form-control" rows="3"><?php echo $data['quote']; ?></textarea>
                           <div class="text-right btn-wrap">
-                            <a href="" class="btn btn-danger btn-mar">Cancel</a>
+                            <a href="user.php" class="btn btn-danger btn-mar">Cancel</a>
                             <input type="submit" name="edit" class="btn btn-info btn-mar" value="Edit">
                           </div>
                         </div>
@@ -212,7 +232,7 @@
                           <label class="info-name">Confirm Password</label>
                           <input type="password" name="con_password" class="form-control">
                           <div class="text-right btn-wrap">
-                            <a href="" class="btn btn-danger btn-mar">Cancel</a>
+                            <a href="user.php" class="btn btn-danger btn-mar">Cancel</a>
                             <input type="submit" name="change_password" class="btn btn-info btn-mar" value="Change Password">
                           </div>
                         </div>
@@ -226,17 +246,22 @@
         </div>
         <div class="col-sm-4">
           <div class="card card-profile">
+            <!-- <div class="card-header">
+              <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
+              <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
+            </div> -->
             <div class="card-body text-center">
-              <form action="edit-user.php" method="post">
+              <form action="edit-user.php?id=<?php echo $user_id; ?>" method="post" enctype="multipart/form-data">
                 <div class="author">
                   <a href="#" class="profile-upload">
-                    <img src="../assets/images/user-avatar-placeholder.png" class="img-profile img-addit" alt="user-avatar-placeholder">
+                    <img src="../assets/upload/profiles/<?php echo $data['image'] != '' ? $data['image'] : 'user-avatar-placeholder.png'; ?>" class="img-profile img-addit">
                   </a>
                   <div class="btn-profile-wrapper">
                     <input type="file" name="profile" id="profile-input" class="input-display">
                     <button type="button" id="profile-button" class="btn btn-default btn-upload-profile"><i class="fa fa-camera icon-profile-upload"></i></button>
                   </div>
                   <span id="profile-text" class="file-text mar-top-bot">No file chosen!</span>
+                  <input type="submit" name="add_profile" class="btn btn-primary btn-sm" value="Upload">
                 </div>
               </form>
             </div>

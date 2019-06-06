@@ -5,7 +5,7 @@
   $user = false;
   $cate = false;
   include "share/header.inc.php";
-  if(strtolower($_SESSION['role_name']) != ADMIN || strtolower($_SESSION['role_name']) != AUTHOR) {
+  if(strtolower($_SESSION['role_name']) != ADMIN && strtolower($_SESSION['role_name']) != AUTHOR) {
     header("Location: index.php?permission=denied");
   }
   $msg = '';

@@ -1,7 +1,7 @@
 <?php
   include "../share/db-conn.inc.php";
   include "../share/constant.inc.php";
-  if(strtolower($_SESSION['role_name']) != ADMIN || strtolower($_SESSION['role_name']) != AUTHOR) {
+  if(strtolower($_SESSION['role_name']) != ADMIN && strtolower($_SESSION['role_name']) != AUTHOR) {
     header("Location: index.php?permission=denied");
   }
   if(isset($_GET['delete'])) {
