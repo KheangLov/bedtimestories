@@ -4,6 +4,7 @@
   $profile = false;
   $post = false;
   $cate = false;
+  ob_start();
   include "share/header.inc.php";
   if(strtolower($_SESSION['role_name']) != strtolower(ADMIN)) {
     header("Location: index.php?permission=denied");

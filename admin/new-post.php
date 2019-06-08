@@ -240,14 +240,14 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="add-post">Featured Image</h3>
-                <h4 class="text-danger"><?php echo $error_img != '' ? $error_img : ''; ?></h4>
-                <h4 class="text-success"><?php echo $msg_img != '' ? $error_img : ''; ?></h4>
+                <!-- <h4 class="text-danger"><?php //echo $error_img != '' ? $error_img : ''; ?></h4> -->
+                <!-- <h4 class="text-success"><?php //echo $msg_img != '' ? $error_img : ''; ?></h4> -->
               </div>
               <div class="card-body">
                 <div class="row">
-                  <div class="col-xs-12">
-                    <img src="../assets/upload/<?php echo $data['image'] != '' ? 'images/' . $data['image'] : 'no-image.png'; ?>" class="img-responsive" alt="">
-                  </div>
+                  <!-- <div class="col-xs-12">
+                    <img src="../assets/upload/<?php //echo $data['image'] != '' ? 'images/' . $data['image'] : 'no-image.png'; ?>" class="img-responsive" alt="">
+                  </div> -->
                   <div class="col-xs-8">
                     <input type="file" name="image" id="image-input" class="input-display">
                     <button type="button" id="image-button" class="btn btn-default btn-sm mar-top">Choose File</button>

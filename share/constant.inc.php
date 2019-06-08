@@ -43,4 +43,8 @@
 
   // Post time
   define("IMMEDIATELY", "immediately");
+
+  // Post update status
+  define("PUS_PUBLISH", "publish_updated");
+  define("PUS_DRAFT", "draft_updated");
 ?>

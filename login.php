@@ -42,7 +42,6 @@
             $_SESSION['success_mess'] = true;
             header("Location:admin/index.php");
           } else {
-            echo $data['password'];
             $error = 'Wrong password!';
           }
         }

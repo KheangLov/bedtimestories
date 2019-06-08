@@ -4,6 +4,7 @@
   $index = false;
   $profile = false;
   $user = false;
+  ob_start();
   include "share/header.inc.php";
   if(strtolower($_SESSION['role_name']) != ADMIN && strtolower($_SESSION['role_name']) != AUTHOR) {
     header("Location: index.php?permission=denied");
@@ -11,6 +12,20 @@
   $msg = '';
   $error = '';
   $cate_id = '';
+  if(isset($_GET['id']) && $_GET['id'] != '') {
+    $cate_id = $_GET['id'];
+    $check_id_sql = "SELECT * FROM categories WHERE id = $cate_id LIMIT 1";
+    $check_id_result = mysqli_query($conn, $check_id_sql);
+    if(mysqli_num_rows($check_id_result) != 0) {
+      $edit_sql = "SELECT * FROM categories WHERE id = $cate_id";
+      $edit_result = mysqli_query($conn, $edit_sql);
+      if(mysqli_num_rows($edit_result) > 0) {
+        $edit = $edit_result->fetch_array();
+      }
+    } else {
+      header("Location: category.php?cate_id=wrong");
+    }
+  }
   if(isset($_POST['add_cate'])) {
     if($_POST['name'] != '') {
       $cate_name = trim($_POST['name']);
@@ -34,29 +49,16 @@
     $cate_desc = trim($_POST['description']);
     $check_cate_sql = "SELECT * FROM categories WHERE LOWER('name') = LOWER('$cate_name') AND id != $cate_id";
     $check_cate_result = mysqli_query($conn, $check_cate_sql);
-    if(mysqli_num_rows($check_cate_result) != 0) {
+    if(mysqli_num_rows($check_cate_result) > 0) {
         $error = 'Category already existed!'; 
     } else {
       $update_cate = "UPDATE categories SET name = '$cate_name', description = '$cate_desc' WHERE id = $cate_id";
       if($conn->query($update_cate) === true) {
         header("Location: category.php?updated=success");
       } else {
-        header("Location: category.php?updated=fail");
+        $error = "Error: " . $conn->error;
+        // header("Location: category.php?updated=fail");
       }
-    }
-  }
-  if(isset($_GET['id']) && $_GET['id'] != '') {
-    $cate_id = $_GET['id'];
-    $check_id_sql = "SELECT * FROM categories WHERE id = $cate_id LIMIT 1";
-    $check_id_result = mysqli_query($conn, $check_id_sql);
-    if(mysqli_num_rows($check_id_result) != 0) {
-      $edit_sql = "SELECT * FROM categories WHERE id = $cate_id";
-      $edit_result = mysqli_query($conn, $edit_sql);
-      if(mysqli_num_rows($edit_result) > 0) {
-        $edit = $edit_result->fetch_array();
-      }
-    } else {
-      header("Location: category.php?cate_id=wrong");
     }
   }
   if(isset($_GET['page'])) {
@@ -75,9 +77,10 @@
     $updated = strtolower(trim($_GET['updated']));
     if($updated === strtolower(SUCCESS)) {
       $msg = 'Category have been updated!';
-    } else {
-      $error = 'Fail to update category!';
     }
+    // } else {
+    //   $error = 'Fail to update category!';
+    // }
   } else if(isset($_GET['inserted'])) {
     $updated = strtolower(trim($_GET['inserted']));
     if($updated === strtolower(SUCCESS)) {

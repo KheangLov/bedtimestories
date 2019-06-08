@@ -4,6 +4,7 @@
   $profile = false;
   $user = false;
   $cate = false;
+  ob_start();
   include "share/header.inc.php";
   if(strtolower($_SESSION['role_name']) != ADMIN && strtolower($_SESSION['role_name']) != AUTHOR) {
     header("Location: index.php?permission=denied");
@@ -176,8 +177,8 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="add-post">Featured Image</h3>
-                <h4 class="text-danger"><?php echo $error_img != '' ? $error_img : ''; ?></h4>
-                <h4 class="text-success"><?php echo $msg_img != '' ? $error_img : ''; ?></h4>
+                <!-- <h4 class="text-danger"><?php //echo $error_img != '' ? $error_img : ''; ?></h4> -->
+                <!-- <h4 class="text-success"><?php //echo $msg_img != '' ? $error_img : ''; ?></h4> -->
               </div>
               <div class="card-body">
                 <div class="row">

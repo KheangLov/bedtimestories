@@ -22,10 +22,12 @@
     } else if($deleted === strtolower(FAIL)) {
       $error = 'Fail to delete post!';
     }
-  } else if(isset($_GET['updated'])) {
-    $updated = strtolower(trim($_GET['updated']));
-    if($updated === strtolower(SUCCESS)) {
-      $msg = 'Post have been updated!';
+  } else if(isset($_GET['post'])) {
+    $updated = strtolower(trim($_GET['post']));
+    if($updated === strtolower(PUS_PUBLISH)) {
+      $msg = 'Post have been published!';
+    } else if($updated === strtolower(PUS_DRAFT)) {
+      $msg = 'Post have been drafted!';
     } else {
       $error = 'Fail to update post!';
     }
