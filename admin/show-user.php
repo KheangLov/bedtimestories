@@ -28,7 +28,7 @@
                 <div class="card-body text-center">
                   <div class="author">
                     <a href="#">
-                      <img src="../assets/images/user-avatar-placeholder.png" class="img-profile" alt="user-avatar-placeholder">
+                    <img src="../assets/upload/profiles/<?php echo $data['image'] != '' ? $data['image'] : 'user-avatar-placeholder.png'; ?>" class="img-profile img-addit">
                       <p class="author-name"><?php echo ucfirst($data['firstname']) . ' ' . ucfirst($data['lastname']); ?></p>
                     </a>
                     <p class="slug"><?php echo '@' . $data['lastname']; ?></p>

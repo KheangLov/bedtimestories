@@ -10,6 +10,7 @@
     header("Location:../login.php");
   }
   $_SESSION['isLogin'] == false;
+  $userId = $_SESSION['user_id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -105,8 +106,15 @@
                 <ul class="dropdown-menu card card-navbar">
                   <li><a href="../home.php"><strong>See Homepage</strong></a></li>
                   <li role="separator" class="divider no-margin"></li>
-                  <li><a href="profile.php"><?php echo ucfirst($_SESSION['name']); ?></a></li>
-                  <li><a href=""><?php echo ucfirst($_SESSION['role_name']); ?></a></li>
+                  <?php
+                    $get_user_sql = "SELECT users.*, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE users.id = $userId";
+                    $get_user_result = mysqli_query($conn, $get_user_sql);
+                    if(mysqli_num_rows($get_user_result) > 0) {
+                      $get_user = $get_user_result->fetch_array();
+                    }
+                  ?>
+                  <li><a href="profile.php"><?php echo ucfirst($get_user['fullname']); ?></a></li>
+                  <li><a href=""><?php echo ucfirst($get_user['role_name']); ?></a></li>
                   <li><a href="../logout.php">Log Out</a></li>
                 </ul>
               </li>

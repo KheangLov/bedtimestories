@@ -48,9 +48,9 @@
         $about = $_POST['about'];
         $quote = $_POST['quote'];
         if($_FILES['profile']['name'] != '') {
-          $profile = $_FILES['profile']['name'];
+          $profile_pic = $_FILES['profile']['name'];
           $pro_tmpname = $_FILES['profile']['tmp_name'];
-          $pro_des = "../assets/upload/profiles/" . $profile;
+          $pro_des = "../assets/upload/profiles/" . $profile_pic;
           if(move_uploaded_file($pro_tmpname, $pro_des)) {
             $msg = "Profile image have been upload successfully!";
           } else {
@@ -58,7 +58,7 @@
           }
         }
         $updated_date = date("Y-m-d h:i:s");
-        $update = "UPDATE users SET firstname = '$firstname', lastname = '$lastname', fullname = '$fullname', email = '$email', image = '$profile', role_id = $role, gender = '$gender', dob = '$dob', status = '$status', address = '$address', city = '$city', country = '$country', phone = '$phone', about = '$about', quote = '$quote', updated_date = '$updated_date' WHERE id = $user_id";
+        $update = "UPDATE users SET firstname = '$firstname', lastname = '$lastname', fullname = '$fullname', email = '$email', image = '$profile_pic', role_id = $role, gender = '$gender', dob = '$dob', status = '$status', address = '$address', city = '$city', country = '$country', phone = '$phone', about = '$about', quote = '$quote', updated_date = '$updated_date' WHERE id = $user_id";
         if($conn->query($update) === true) {
           header("Location: user.php?updated=success");
         } else {
@@ -91,7 +91,7 @@
 
     <div class="content">
       <div class="row">
-        <form action="edit-user.php?<?php echo "id=$user_id"; ?>" method="post">
+        <form action="edit-user.php?<?php echo "id=$user_id"; ?>" method="post" enctype="multipart/form-data">
           <div class="col-sm-8">
             <div class="card card-info">
               <div class="card-header">

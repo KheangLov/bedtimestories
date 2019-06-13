@@ -4,14 +4,14 @@
   $user = false;
   $post = false;
   $cate = false;
+  ob_start();
   include "share/header.inc.php";
-  $username = $_SESSION['name'];
-  $user_sql = "SELECT users.*, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE LOWER(fullname) = LOWER('$username')";
+  $user_id = $_SESSION['user_id'];
+  $user_sql = "SELECT users.*, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE users.id = $user_id";
   $user_result = mysqli_query($conn, $user_sql);
   if(mysqli_num_rows($user_result) > 0) {
     $data = $user_result->fetch_array();
   }
-  $user_id = $data['id'];
   if(isset($_POST['edit_pro'])) {
     $firstname = trim($_POST['firstname']);
     $lastname = trim($_POST['lastname']);
@@ -30,19 +30,29 @@
       $phone = $_POST['phone'];
       $about = $_POST['about'];
       $quote = $_POST['quote'];
+      if($_FILES['profile']['name'] != null) {
+        $profile_pic = $_FILES['profile']['name'];
+        $pro_tmpname = $_FILES['profile']['tmp_name'];
+        $pro_des = "../assets/upload/profiles/" . $profile_pic;
+        if(move_uploaded_file($pro_tmpname, $pro_des)) {
+          $msg = "Profile image have been upload successfully!";
+        } else {
+          $error = "There was an error while uploading profile image!";
+        }
+      }
       $updated_date = date("Y-m-d h:i:s");
-      $update = "UPDATE users SET firstname = '$firstname', lastname = '$lastname', fullname = '$fullname', email = '$email', gender = '$gender', dob = '$dob', address = '$address', city = '$city', country = '$country', phone = '$phone', about = '$about', quote = '$quote', updated_date = '$updated_date' WHERE id = $user_id";
+      $update = "UPDATE users SET firstname = '$firstname', lastname = '$lastname', fullname = '$fullname', email = '$email', image = '$profile_pic', gender = '$gender', dob = '$dob', address = '$address', city = '$city', country = '$country', phone = '$phone', about = '$about', quote = '$quote', updated_date = '$updated_date' WHERE id = $user_id";
       if($conn->query($update) === true) {
-        header("Location: user.php?updated=success");
+        header("Location: profile.php?updated=success");
       } else {
-        header("Location: user.php?updated=fail");
+        header("Location: profile.php?updated=fail");
       }
     }
   }
 ?>
 
     <div class="content">
-      <form action="profile.php" method="post">
+      <form action="profile.php" method="post" enctype="multipart/form-data">
         <div class="row">
           <div class="col-sm-4">
             <div class="card card-profile">

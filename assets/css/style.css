@@ -6345,6 +6345,9 @@ input[type="file"].input-display {
       box-shadow: none;
       opacity: 0.8; }
 
+.input-mar {
+  margin-top: 10px; }
+
 #btn-editpro-display {
   display: none; }
 
@@ -6745,6 +6748,18 @@ input[type="file"].input-display {
   padding: 12px; }
 .table tfoot tr th {
   padding: 12px; }
+
+.alert-info {
+  background-color: #51cbce; }
+
+.alert-success {
+  background-color: #6bd098; }
+
+.alert-danger {
+  background-color: #EB5E28; }
+
+.alert-warning {
+  background-color: #F3BB45; }
 
 .sidebar {
   position: fixed;

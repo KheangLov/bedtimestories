@@ -1,3 +1,19 @@
+$(document).ready(function(){
+  // AJAX search
+  $("#search-text").keyup(function() {
+    var search =$(this).val();
+    $.ajax({
+      url: 'search.php',
+      method: 'post',
+      data: {query: search},
+      success: function(response) {
+        $('#table-data').html(response);
+      }
+    });
+  });
+  $('[data-toggle="tooltip"]').tooltip();
+});
+
 // User actions
 function deleteUser(userId) {
   if(confirm("Are you sure you want to delete this user?")) {
@@ -252,7 +268,3 @@ function numberOnly(evt) {
     evt.preventDefault();
   }
 }
-
-$(document).ready(function(){
-  $('[data-toggle="tooltip"]').tooltip();
-});

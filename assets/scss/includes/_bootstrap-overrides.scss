@@ -272,3 +272,16 @@
     }
   }
 }
+
+.alert-info {
+  background-color: $info;
+}
+.alert-success {
+  background-color: $success;
+}
+.alert-danger {
+  background-color: $danger;
+}
+.alert-warning {
+  background-color: $warning;
+}

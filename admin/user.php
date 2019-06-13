@@ -42,7 +42,7 @@
   $number_of_user = mysqli_num_rows($result);
   $per_page = PERPAGE;
   $first_page_result = ($get_page - 1) * $per_page;
-  $users_sql = "SELECT users.*, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id ORDER BY FIELD(roles.name, 'admin', 'author', 'subscriber'), updated_date LIMIT $first_page_result, $per_page";
+  $users_sql = "SELECT users.*, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id ORDER BY FIELD(roles.name, 'admin', 'author', 'subscriber') ASC, updated_date DESC LIMIT $first_page_result, $per_page";
   $users_result = mysqli_query($conn, $users_sql);
 ?>
 
@@ -68,12 +68,21 @@
             <div class="col-sm-12">
               <div class="card card-tasks">
                 <div class="card-header">
-                  <h2 class="add-post">All Users</h2>
-                  <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
-                  <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
+                  <div class="row">
+                    <div class="col-sm-8">
+                      <h2 class="add-post">All Users</h2>
+                      <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
+                      <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <input type="text" name="search" id="search-text" class="form-control input-lg input-mar" placeholder="Search">
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="card-body">
-                  <table class="table table-striped">
+                  <table class="table table-striped" id="table-data">
                     <thead>
                       <tr>
                         <th>#</th>
@@ -104,28 +113,19 @@
                               <a href="show-user.php?<?php echo "id={$row['id']}"; ?>" class="btn-icon btn-icon-primary" data-toggle="tooltip" data-placement="top" title="View">
                                 <i class="ti-image"></i>
                               </a>
-                              <?php
-                                // $count_admin_sql = "SELECT COUNT(*) AS count_user, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE LOWER(roles.name) = 'admin'";
-                                // $count_admin_result = mysqli_query($conn, $count_admin_sql);
-                                // $count_admin = $count_admin_result->fetch_array();
-                                // if($count_admin['count_user'] > 1 || strtolower($row['role_name']) != ADMIN) :
-                              ?>
                               <a href="edit-user.php?<?php echo "id={$row['id']}"; ?>" class="btn-icon btn-icon-info" data-toggle="tooltip" data-placement="top" title="Edit">
                                 <i class="ti-pencil"></i>
                               </a>
                               <?php
-                                // endif;
-                                if((strtolower($row['role_name']) != SUPERADMIN && strtolower($row['role_name']) != ADMIN) || strtolower($row['status']) != strtolower(ACTIVE)) :
+                                if(strtolower($row['role_name']) != ADMIN || strtolower($row['status']) != strtolower(ACTIVE)) :
+                                  if(strtolower($row['status']) == strtolower(ACTIVE)) :
                               ?>
-                                  <?php
-                                    if(strtolower($row['status']) == strtolower(ACTIVE)) :
-                                  ?>
-                                      <a href="#" onClick="banUser(<?php echo $row['id']; ?>)" class="btn-icon btn-icon-warning" data-toggle="tooltip" data-placement="top" title="Ban">
-                                        <i class="ti-na"></i>
-                                      </a>
-                                  <?php
-                                    endif;
-                                  ?>
+                                    <a href="#" onClick="banUser(<?php echo $row['id']; ?>)" class="btn-icon btn-icon-warning" data-toggle="tooltip" data-placement="top" title="Ban">
+                                      <i class="ti-na"></i>
+                                    </a>
+                                <?php
+                                  endif;
+                                ?>
                                 <a href="#" onClick="deleteUser(<?php echo $row['id']; ?>)" class="btn-icon btn-icon-danger" data-toggle="tooltip" data-placement="top" title="Delete">
                                   <i class="ti-close"></i>
                                 </a>
