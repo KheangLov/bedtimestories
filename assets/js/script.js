@@ -1,7 +1,7 @@
 $(document).ready(function(){
   // AJAX search
   $("#search-text").keyup(function() {
-    var search =$(this).val();
+    var search = $(this).val();
     $.ajax({
       url: 'search.php',
       method: 'post',
@@ -213,6 +213,7 @@ const btnEditPro = document.getElementById('btn-editpro-display');
 const roleInput = document.getElementById('pro-role-input');
 const roleSelect = document.getElementById('role-select');
 const quoteInput = document.getElementById('quote-input');
+const quoteText = document.getElementById('quote');
 if(btnUpdatePro != null) {
   btnUpdatePro.addEventListener("click", () => {
     for(i=0; i<formInput.length; i++) {
@@ -225,6 +226,7 @@ if(btnUpdatePro != null) {
     btnUpdateProReadOnly.style.display = 'inline';
     btnProImg.removeAttribute('hidden');
     quoteInput.removeAttribute('hidden');
+    quoteText.setAttribute('hidden', 'hidden');
   });
 }
 if(btnUpdateProReadOnly != null) {
@@ -239,6 +241,7 @@ if(btnUpdateProReadOnly != null) {
     btnUpdateProReadOnly.style.display = 'none';
     btnProImg.setAttribute('hidden', 'hidden');
     quoteInput.setAttribute('hidden', 'hidden');
+    quoteText.removeAttribute('hidden');
   });
 }
 // if(btnEditPro != null) {

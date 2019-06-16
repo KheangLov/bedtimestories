@@ -74,7 +74,7 @@
               </div>
               <div class="card-footer text-center">
                 <hr>
-                <p class="text-profile">
+                <p class="text-profile" id="quote">
                   <?php echo $data['quote'] != '' ? '"' . $data['quote'] . '"' : ''; ?>
                 </p>
                 <div class="form-group" id="quote-input" hidden>

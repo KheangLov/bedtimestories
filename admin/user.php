@@ -4,6 +4,7 @@
   $profile = false;
   $post = false;
   $cate = false;
+  ob_start();
   include "share/header.inc.php";
   if(strtolower($_SESSION['role_name']) != ADMIN) {
     header("Location: index.php?permission=denied");
@@ -12,6 +13,9 @@
   $error = '';
   if(isset($_GET['page'])) {
     $get_page = $_GET['page'];
+    if($get_page < 1) {
+      header("Location: user.php?page=1");
+    }
   } else {
     $get_page = 1;
   }
@@ -175,6 +179,9 @@
             <?php
               endif;
               $number_of_page = ceil($number_of_user / $per_page);
+              if($get_page > $number_of_page) {
+                header("Location: user.php?page=$number_of_page");
+              }
               // var_dump($number_of_page);
               for($page=1; $page<=$number_of_page; $page++) :
             ?>
