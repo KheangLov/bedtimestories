@@ -30,6 +30,22 @@
       $phone = $_POST['phone'];
       $about = $_POST['about'];
       $quote = $_POST['quote'];
+      
+      $updated_date = date("Y-m-d h:i:s");
+      $update = "UPDATE users SET 
+        `firstname` = '$firstname', 
+        `lastname` = '$lastname', 
+        `fullname` = '$fullname', 
+        `email` = '$email',  
+        `gender` = '$gender', 
+        `dob` = '$dob', 
+        `address` = '$address', 
+        city = '$city', 
+        `country` = '$country', 
+        `phone` = '$phone', 
+        `about` = '$about',  
+        updated_date = '$updated_date'" ;
+
       if($_FILES['profile']['name'] != null) {
         $profile_pic = $_FILES['profile']['name'];
         $pro_tmpname = $_FILES['profile']['tmp_name'];
@@ -39,9 +55,14 @@
         } else {
           $error = "There was an error while uploading profile image!";
         }
+
+        $update .= ",`image` = '$profile_pic'";
       }
-      $updated_date = date("Y-m-d h:i:s");
-      $update = "UPDATE users SET firstname = '$firstname', lastname = '$lastname', fullname = '$fullname', email = '$email', image = '$profile_pic', gender = '$gender', dob = '$dob', address = '$address', city = '$city', country = '$country', phone = '$phone', about = '$about', quote = '$quote', updated_date = '$updated_date' WHERE id = $user_id";
+      if($quote != null){
+        $update .= ",`quote` = '$quote'";
+      }
+
+      $update .= " WHERE `id` = $user_id" ;
       if($conn->query($update) === true) {
         header("Location: profile.php?updated=success");
       } else {
