@@ -3,13 +3,42 @@ $(document).ready(function(){
   $("#search-text").keyup(function() {
     var search = $(this).val();
     $.ajax({
-      url: 'search.php',
+      url: 'search-user.php',
       method: 'post',
       data: {query: search},
       success: function(response) {
         $('#table-data').html(response);
       }
     });
+  });
+  $("#search-category").keyup(function() {
+    var search = $(this).val();
+    $.ajax({
+      url: 'search-category.php',
+      method: 'post',
+      data: {query: search},
+      success: function(response) {
+        $('#table-category').html(response);
+      }
+    });
+  });
+  $("#search-post").keyup(function() {
+    var search = $(this).val();
+    var role_name = $("#user_role").val();
+    var id = $("#user_id").val();
+    $.ajax({
+      url: 'search-post.php',
+      method: 'post',
+      data: {query: search, role: role_name, id: id},
+      success: function(response) {
+        $('#table-post').html(response);
+      }
+    });
+  });
+  $('.name_inline_edit').editable({
+    mode: 'inline',
+    url: 'inline-edit.php',
+    title: 'Enter name'
   });
   $('[data-toggle="tooltip"]').tooltip();
 });

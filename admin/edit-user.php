@@ -58,8 +58,29 @@
           }
         }
         $updated_date = date("Y-m-d h:i:s");
-        $update = "UPDATE users SET firstname = '$firstname', lastname = '$lastname', fullname = '$fullname', email = '$email', image = '$profile_pic', role_id = $role, gender = '$gender', dob = '$dob', status = '$status', address = '$address', city = '$city', country = '$country', phone = '$phone', about = '$about', quote = '$quote', updated_date = '$updated_date' WHERE id = $user_id";
-        if($conn->query($update) === true) {
+        $update = "UPDATE users SET 
+          firstname = '$firstname',
+          lastname = '$lastname',
+          fullname = '$fullname',
+          email = '$email',
+          role_id = $role,
+          gender = '$gender',
+          dob = '$dob',
+          status = '$status',
+          address = '$address',
+          city = '$city',
+          country = '$country',
+          phone = '$phone',
+          about = '$about',
+          updated_date = '$updated_date'";
+        if($profile_pic != '') {
+          $update .= ", image = '$profile_pic'";
+        }
+        if($quote != '') {
+          $update .= ", quote = '$quote'";
+        }
+        $update .= " WHERE id = $user_id";
+        if($conn->query($update)) {
           header("Location: user.php?updated=success");
         } else {
           header("Location: user.php?updated=fail");

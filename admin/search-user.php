@@ -35,7 +35,7 @@
         $i++;
         $output .= "
         <tr>
-          <td>" . $i . "</td>
+          <td><strong>" . $i . "</strong></td>
           <td><strong>" . ucfirst($row['fullname']) . "</strong></td>
           <td>" . $row['email'] . "</td>
           <td>";
@@ -70,7 +70,7 @@
           $output .=
             "
               <a href=\"#\" onClick=\"deleteUser(" . $row['id'] . ")\" class=\"btn-icon btn-icon-danger\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete\">
-                <i class=\"ti-close\"></i>
+                <i class=\"ti-trash\"></i>
               </a>
             ";
         }

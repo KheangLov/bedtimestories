@@ -18,20 +18,13 @@
     } else if($_POST['confirm_pass'] == '') {
       $check_required = true;
     } else {
-      $firstname = trim($_POST['firstname']);
-      $lastname = trim($_POST['lastname']);
-      $fullname = trim($_POST['firstname']) . trim($_POST['lastname']);
-      $email = trim($_POST['email']);
-      $gender = trim($_POST['gender']);
       if(trim($_POST['password']) === trim($_POST['confirm_pass'])) {
+        $firstname = trim($_POST['firstname']);
+        $lastname = trim($_POST['lastname']);
+        $fullname = trim($_POST['firstname']) . trim($_POST['lastname']);
+        $email = trim($_POST['email']);
+        $gender = trim($_POST['gender']);
         $password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT);
-        $phone = trim($_POST['phone']);
-        $dob = $_POST['dob'];
-        $address = $_POST['address'];
-        $city = $_POST['city'];
-        $country = $_POST['country'];
-        $about = $_POST['about'];
-        $quote = $_POST['quote'];
         $status = INACTIVE;
         $default_role = SUBSCRIBER;
         $role_sql = "SELECT * FROM roles WHERE LOWER(name) = '$default_role' LIMIT 1";
@@ -42,16 +35,25 @@
         }
         $created_date = date("Y-m-d h:i:s");
         $updated_date = date("Y-m-d h:i:s");
-        $sql = "SELECT * FROM users WHERE LOWER(fullname) = LOWER('$fullname')";
+        $sql = "SELECT * FROM users WHERE LOWER(fullname) = LOWER('$fullname') OR email = '$email'";
         $result = mysqli_query($conn, $sql);
         if(mysqli_num_rows($result) != 0) {
           $error = 'User already exist!';
         } else {
           if($role != '' && $status != '') {
-            $stmt = "INSERT INTO users(firstname, lastname, fullname, email, gender, password, phone, dob, address, city, country, about, quote, role_id, status, created_date, updated_date) 
-            VALUES('$firstname', '$lastname', '$fullname', '$email', '$gender', '$password', '$phone', '$dob', '$address', '$city', '$country', '$about', '$quote', $role, '$status', '$created_date', '$updated_date')";
-            if($conn->query($stmt) === true) {
-              $msg = 'New record created successfully';
+            $vkey = md5(time().$fullname);
+            $verified = 0;
+            $stmt = "INSERT INTO users(firstname, lastname, fullname, email, gender, password, role_id, status, vkey, verified, created_date, updated_date) 
+            VALUES('$firstname', '$lastname', '$fullname', '$email', '$gender', '$password', $role, '$status', '$vkey', $verified, '$created_date', '$updated_date')";
+            if($conn->query($stmt)) {
+              $to = $email;
+              $subject = 'Email verification';
+              $message = "<a href=\"http://bedtimestories.devs/verify.php?vkey={$vkey}\">Verify Account</a>";
+              $headers = "From: lovsokheang@gmail.com \r\n";
+              $headers .= "MIME-Version: 1.0 \r\n";
+              $headers .= "Content-type:text/html; charset=UTF-8 \r\n";
+              mail($to, $subject, $message, $headers);
+              $msg = 'New record created, please check your email to verified!';
             } else {
               $error = "Error: " . $conn->error;
             }
@@ -77,7 +79,7 @@
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <div class="container">
+  <div class="container con-wrapper">
     <div class="login-wrapper">
       <div class="row">
         <div class="col-md-offset-3 col-md-6">
@@ -93,61 +95,68 @@
                 <div class="form-group">
                   <div class="row">
                     <div class="col-xs-6 col-half-padd-right">
-                      <?php echo $check_required == true ? '<h5 class="text-danger">* required</h5>' : ''; ?>
-                      <input type="text" name="firstname" class="form-control input-lg" placeholder="First Name">
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <label class="info-name">Firstname</label>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                          <?php echo $check_required == true ? '<span class="text-danger">* required</span>' : ''; ?>
+                        </div>
+                      </div>
+                      <input type="text" name="firstname" class="form-control input-lg">
                     </div>
                     <div class="col-xs-6 col-half-padd-left">
-                      <?php echo $check_required == true ? '<h5 class="text-danger">* required</h5>' : ''; ?>
-                      <input type="text" name="lastname" class="form-control input-lg" placeholder="Last Name">
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <label class="info-name">Lastname</label>
+                        </div>
+                        <div class="col-sm-6 text-right">
+                          <?php echo $check_required == true ? '<span class="text-danger">* required</span>' : ''; ?>
+                        </div>
+                      </div>
+                      <input type="text" name="lastname" class="form-control input-lg">
                     </div>
                   </div>
                 </div>
                 <div class="form-group">
-                  <?php echo $check_required== true ? '<h5 class="text-danger">* required</h5>' : ''; ?>
-                  <input type="email" name="email" class="form-control input-lg" placeholder="Email">
+                <div class="row">
+                    <div class="col-sm-6">
+                      <label class="info-name">Email</label>
+                    </div>
+                    <div class="col-sm-6 text-right">
+                      <?php echo $check_required == true ? '<span class="text-danger">* required</span>' : ''; ?>
+                    </div>
+                  </div>
+                  <input type="email" name="email" class="form-control input-lg">
                 </div>
                 <div class="form-group">
-                  <?php echo $check_required == true ? '<h5 class="text-danger">* required</h5>' : ''; ?>
-                  <input type="password" name="password" class="form-control input-lg" placeholder="Password">
-                </div>
-                <div class="form-group">
-                  <?php echo $check_required == true ? '<h5 class="text-danger">* required</h5>' : ''; ?>
-                  <input type="password" name="confirm_pass" class="form-control input-lg" placeholder="Confirm Password">
+                  <label class="info-name">Gender</label>
+                  <select name="gender" class="form-control input-lg">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
                 </div>
                 <div class="form-group">
                   <div class="row">
-                    <div class="col-xs-6 col-half-padd-right">
-                      <select name="gender" class="form-control input-lg">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                      </select>
+                    <div class="col-sm-6">
+                      <label class="info-name">Password</label>
                     </div>
-                    <div class="col-xs-6 col-half-padd-left">
-                      <input type="date" name="dob" class="form-control input-lg">
+                    <div class="col-sm-6 text-right">
+                      <?php echo $check_required == true ? '<span class="text-danger">* required</span>' : ''; ?>
                     </div>
                   </div>
-                </div>
-                <div class="form-group">
-                  <input type="text" name="phone" class="form-control input-lg" onkeypress="numberOnly(event)" placeholder="Phone">
-                </div>
-                <div class="form-group">
-                  <textarea name="address" cols="30" rows="3" placeholder="Address" class="form-control input-lg"></textarea>
+                  <input type="password" name="password" class="form-control input-lg">
                 </div>
                 <div class="form-group">
                   <div class="row">
-                    <div class="col-xs-6 col-half-padd-right">
-                      <input type="text" name="city" placeholder="City" class="form-control input-lg">
+                    <div class="col-sm-6">
+                      <label class="info-name">Confirm Password</label>
                     </div>
-                    <div class="col-xs-6 col-half-padd-left">
-                      <input type="text" name="country" placeholder="Country" class="form-control input-lg">
+                    <div class="col-sm-6 text-right">
+                      <?php echo $check_required == true ? '<span class="text-danger">* required</span>' : ''; ?>
                     </div>
                   </div>
-                </div>
-                <div class="form-group">
-                  <textarea name="about" cols="30" rows="3" placeholder="About" class="form-control input-lg"></textarea>
-                </div>
-                <div class="form-group">
-                  <input type="text" name="quote" class="form-control input-lg" placeholder="Quote">
+                  <input type="password" name="confirm_pass" class="form-control input-lg">
                 </div>
                 <input type="submit" name="register" class="btn btn-default btn-lg btn-block btn-getstarted" value="Register">
                 <div class="row">

@@ -80,12 +80,12 @@
                     </div>
                     <div class="col-sm-4">
                       <div class="form-group">
-                        <input type="text" name="search" id="search-text" class="form-control input-lg input-mar" placeholder="Search">
+                        <input type="text" name="search" id="search-text" class="form-control input-mar" placeholder="Search">
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body table-responsive">
                   <table class="table table-striped" id="table-data">
                     <thead>
                       <tr>
@@ -108,8 +108,14 @@
                           $i++;
                       ?>
                           <tr>
-                            <td><?php echo $i; ?></td>
-                            <td><strong><?php echo ucfirst($row['fullname']); ?></strong></td>
+                            <td><strong><?php echo $i; ?></strong></td>
+                            <td>
+                              <strong>
+                                <a href="" class="name_inline_edit" data-name="fullname" data-type="text" data-pk="<?php echo $row['id'] ?>" data-title="Enter name">
+                                  <?php echo ucfirst($row['fullname']); ?>
+                                </a>
+                              </strong>
+                            </td>
                             <td><?php echo $row['email']; ?></td>
                             <td><?php echo strtolower($row['status']) == strtolower(ACTIVE) ? '<span class="label label-success">' . ucfirst($row['status']) . '</span>' : (strtolower($row['status']) == strtolower(INACTIVE) ? '<span class="label label-danger">' . ucfirst($row['status']) . '</span>' : (strtolower($row['status']) == strtolower(BAN) ? '<span class="label label-warning">' . ucfirst($row['status']) . '</span>' : '')); ?></td>
                             <td><span class="label label-default"><?php echo ucfirst($row['role_name']); ?></span></td>
@@ -131,7 +137,7 @@
                                   endif;
                                 ?>
                                 <a href="#" onClick="deleteUser(<?php echo $row['id']; ?>)" class="btn-icon btn-icon-danger" data-toggle="tooltip" data-placement="top" title="Delete">
-                                  <i class="ti-close"></i>
+                                  <i class="ti-trash"></i>
                                 </a>
                               <?php
                                 endif;

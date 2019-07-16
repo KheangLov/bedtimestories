@@ -2,8 +2,8 @@
   .navbar-nav{
     li {
       .dropdown-menu {
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
         border: none;
         padding: 0;
         z-index: 99999;
@@ -12,8 +12,8 @@
           margin: 0;
         }
         li{
-          border-top-left-radius: 12px;
-          border-top-right-radius: 12px;
+          border-top-left-radius: 4px;
+          border-top-right-radius: 4px;
           a {
             padding: 10px 25px;
             color: $gray-700;
@@ -25,25 +25,25 @@
         }
         li:first-child {
           a {
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
           }
           &:hover, &:focus {
             a {
-              border-top-left-radius: 12px;
-              border-top-right-radius: 12px;
+              border-top-left-radius: 4px;
+              border-top-right-radius: 4px;
             }
           }
         }
         li:last-child {
           a {
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
           }
           &:hover, &:focus {
             a {
-              border-bottom-left-radius: 12px;
-              border-bottom-right-radius: 12px;
+              border-bottom-left-radius: 4px;
+              border-bottom-right-radius: 4px;
             }
           }
         }
@@ -66,7 +66,7 @@
 }
 
 .pagination {
-  border-radius: 10px;
+  border-radius: 4px;
   box-shadow: 0px 2px 8px -2px rgba(0, 0, 0, 0.3);
 }
 
@@ -79,14 +79,14 @@
     }
     li:first-child {
       a {
-        border-top-left-radius: 10px;
-        border-bottom-left-radius: 10px;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
       }
     }
     li:last-child {
       a {
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
       }
     }
     .active {
@@ -102,13 +102,14 @@
 
 .btn {
   color: $white;
-  border-radius: 10px;
+  border-radius: 4px;
   border: 2px solid;
   transition: all 0.3s ease-in-out;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0,0,0,.12);
   &:hover, &:focus {
     background: transparent;
     color: $white;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0,0,0,.12);
   }
 }
 .btn-default {
@@ -160,6 +161,10 @@
   }
 }
 
+.label {
+  border-radius: 2px;
+  box-shadow: 2px 2px 4px -2px rgba(0, 0, 0, 0.2);
+}
 .label-default {
   background-color: $default;
 }
@@ -182,7 +187,7 @@
 .form-control {
   background-color: #F3F2EE;
   border: 1px solid #e8e7e3;
-  border-radius: 4px;
+  border-radius: 3px;
   color: $default;
   font-size: 14px;
   -webkit-box-shadow: none;

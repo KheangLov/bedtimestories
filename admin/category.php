@@ -148,11 +148,21 @@
                 <div class="col-sm-8">
                   <div class="card card-tasks">
                     <div class="card-header">
-                      <h2 class="add-post">All Categories</h2>
-                      <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
+                      <div class="row">
+                        <div class="col-sm-8">
+                          <h2 class="add-post">All Categories</h2>
+                          <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
+                          <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="form-group">
+                            <input type="text" name="search" id="search-category" class="form-control input-mar" placeholder="Search">
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div class="card-body">
-                      <table class="table table-striped">
+                      <table class="table table-striped" id="table-category">
                         <thead>
                           <tr>
                             <th>#</th>
@@ -172,7 +182,7 @@
                               $i++;
                           ?>
                               <tr>
-                                <td><?php echo $i; ?></td>
+                                <td><strong><?php echo $i; ?></strong></td>
                                 <td><strong><?php echo $cates['name']; ?></strong></td>
                                 <td><?php echo $cates['description']; ?></td>
                                 <td class="td-actions">
@@ -180,7 +190,7 @@
                                     <i class="ti-pencil"></i>
                                   </a>
                                   <a href="#" onClick="deleteCate(<?php echo $cates['id']; ?>)" class="btn-icon btn-icon-danger" data-toggle="tooltip" data-placement="top" title="Delete">
-                                    <i class="ti-close"></i>
+                                    <i class="ti-trash"></i>
                                   </a>
                                 </td>
                               </tr>

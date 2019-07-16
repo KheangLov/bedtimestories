@@ -63,12 +63,23 @@
             <div class="col-sm-12">
               <div class="card card-tasks">
                 <div class="card-header">
-                  <h2 class="add-post">All Posts</h2>
-                  <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
-                  <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
+                  <div class="row">
+                    <div class="col-sm-8">
+                      <h2 class="add-post">All Posts</h2>
+                      <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
+                      <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
+                    </div>
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <input type="text" name="search" id="search-post" class="form-control input-mar" placeholder="Search">
+                        <input type="hidden" name="role_name" id="user_role" value="<?php echo $_SESSION['role_name'] ?>">
+                        <input type="hidden" name="user_id" id="user_id" value="<?php echo $_SESSION['user_id'] ?>">
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="card-body">
-                  <table class="table table-striped">
+                  <table class="table table-striped" id="table-post">
                     <thead>
                       <tr>
                         <th>#</th>
@@ -91,7 +102,7 @@
                           $i++;
                       ?>
                           <tr>
-                            <td><?php echo $i; ?></td>
+                            <td><strong><?php echo $i; ?></strong></td>
                             <td class="img-row">
                               <div class="img-wrapper">
                                 <a href="image-post.php?id=<?php echo $posts['id']; ?>">
@@ -127,7 +138,7 @@
                                     <i class="ti-na"></i>
                                   </a>
                                   <a href="#" onClick="deletePost(<?php echo $posts['id']; ?>)" class="btn-icon btn-icon-danger" data-toggle="tooltip" data-placement="top" title="Delete">
-                                    <i class="ti-close"></i>
+                                    <i class="ti-trash"></i>
                                   </a>
                                 </td>
                             <?php

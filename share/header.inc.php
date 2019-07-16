@@ -27,7 +27,8 @@
       <div class="container">
         <div class="navbar-header">
           <a href="<?php //echo $stories == true ? '../' : ''; ?>index.php" class="navbar-brand">
-            <img src="<?php //echo $stories == true ? '../' : ''; ?>assets/images/icon-logo.png" alt="Bedtimestories" class="brand-image"> Bedtimestories
+            <img src="<?php //echo $stories == true ? '../' : ''; ?>assets/images/icon-logo.png" alt="Bedtimestories" class="brand-image">
+            <span class="nav-title">Bedtimestories</span>
           </a>
         </div>
         <ul class="nav navbar-nav navbar-right">

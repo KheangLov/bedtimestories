@@ -20,6 +20,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title><?php echo BEDTIMESTORIES; ?> - Admin Panel</title>
   <link rel="shortcut icon" href="../assets/images/icon-logo.png" type="image/x-icon">
+  <link rel="stylesheet" href="../assets/libraries/bootstrap3-editable/css/bootstrap-editable.css">
   <link rel="stylesheet" href="../assets/libraries/fontawesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="../assets/libraries/themify-icons/themify-icons.css">
   <link rel="stylesheet" href="../assets/css/style.css">

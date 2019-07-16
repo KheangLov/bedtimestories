@@ -2,6 +2,7 @@
   $index = true;
   $home = false;
   $about = false;
+  $stories = false;
   include "share/header.inc.php";
   include "share/explore.inc.php";
 ?>
