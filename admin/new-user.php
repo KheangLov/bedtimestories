@@ -4,6 +4,8 @@
   $profile = false;
   $post = false;
   $cate = false;
+  $page = false;
+  ob_start();
   include "share/header.inc.php";
   if(strtolower($_SESSION['role_name']) != strtolower(ADMIN)) {
     header("Location: index.php?permission=denied");
@@ -11,8 +13,9 @@
   $error = '';
   $msg = '';
   $check_required = false;
+  date_default_timezone_set('Asia/Bangkok');
   if(isset($_POST['add_user'])) {
-    if($_POST['firstname'] == '' || $_POST['lastname'] == '' || $_POST['email'] == '' || $_POST['password'] == '' || $_POST['con_password'] == '' || $_POST['address'] == '') {
+    if($_POST['firstname'] == '' || $_POST['lastname'] == '' || $_POST['email'] == '' || $_POST['password'] == '' || $_POST['con_password'] == '') {
       $check_required = true;
     } else {
       $firstname = trim($_POST['firstname']);
@@ -71,31 +74,31 @@
                 <div class="row">
                   <div class="col-sm-4">
                     <div class="form-group">
-                      <label class="info-name">Firstname</label>
+                      <label class="info-name">Firstname <?php echo $check_required == true ? '<span class="text-danger">* required</span>' : ''; ?></label>
                       <input type="text" name="firstname" class="form-control">
                     </div>
                   </div>
                   <div class="col-sm-4">
                     <div class="form-group">
-                      <label class="info-name">Lastname</label>
+                      <label class="info-name">Lastname <?php echo $check_required == true ? '<span class="text-danger">* required</span>' : ''; ?></label>
                       <input type="text" name="lastname" class="form-control">
                     </div>
                   </div>
                   <div class="col-sm-4">
                     <div class="form-group">
-                      <label class="info-name">Email Address</label>
+                      <label class="info-name">Email Address <?php echo $check_required == true ? '<span class="text-danger">* required</span>' : ''; ?></label>
                       <input type="email" name="email" class="form-control">
                     </div>
                   </div>
                   <div class="col-sm-6">
                     <div class="form-group">
-                      <label class="info-name">Password</label>
+                      <label class="info-name">Password <?php echo $check_required == true ? '<span class="text-danger">* required</span>' : ''; ?></label>
                       <input type="password" name="password" class="form-control">
                     </div>
                   </div>
                   <div class="col-sm-6">
                     <div class="form-group">
-                      <label class="info-name">Confirm Password</label>
+                      <label class="info-name">Confirm Password <?php echo $check_required == true ? '<span class="text-danger">* required</span>' : ''; ?></label>
                       <input type="password" name="con_password" class="form-control">
                     </div>
                   </div>

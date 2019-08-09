@@ -4,6 +4,8 @@
   $profile = false;
   $user = false;
   $cate = false;
+  $page = false;
+  ob_start();
   include "share/header.inc.php";
   if(strtolower($_SESSION['role_name']) != ADMIN && strtolower($_SESSION['role_name']) != AUTHOR) {
     header("Location: index.php?permission=denied");
@@ -20,52 +22,22 @@
   $username = $_SESSION['name'];
   $get_user_sql = "SELECT * FROM users WHERE LOWER(fullname) = LOWER('$username')";
   $get_user_result = mysqli_query($conn, $get_user_sql);
+  $img_name_arr = [];
+  $img_size_arr = [];
+  $img_type_arr = [];
   if(mysqli_num_rows($get_user_result) > 0) {
     $get_user = $get_user_result->fetch_array();
     $post_user = $get_user['id'];
   }
-  if(isset($_POST['upload_image'])) {
-    $image = $_FILES['file_upload']['name'];
-    $tmp_name = $_FILES['file_upload']['tmp_name'];
-    $target = "../assets/upload/images/" . $image;
-    if(move_uploaded_file($tmp_name, $target)) {
-      $msg = "Feature image have been upload successfully!";
+  date_default_timezone_set('Asia/Bangkok');
+  if(isset($_POST['img'])) {
+    if($_POST['img'] == 'uploaded') {
+      $msg = "Feature image have been uploaded!";
     } else {
-      $error = "There was an error while uploading feature image!";
+      $error = "Feature image fail to upload!";
     }
   }
-  if(isset($_FILES['image']) && $_FILES['image']['name'] != '') {
-    $uploadedImg = false;
-    $file_extens = array("jpg", "png", "jpeg", "gif");
-    $image = $_FILES['image']['name'];
-    $img_tmpname = $_FILES['image']['tmp_name'];
-    $img_size = $_FILES["image"]["size"];
-    $img_des = "../assets/upload/images/" . $image;
-    $img_type = strtolower(pathinfo($img_des, PATHINFO_EXTENSION));
-    if($img_size > 2000000) {
-      $error_img = "Image size is too large!";
-    } else {
-      if(!in_array($img_type, $file_extens)) {
-        $error_img = "Image's file extension is not valid!";
-      } else {
-        if(move_uploaded_file($img_tmpname, $img_des)) {
-          $upload_img_sql = "UPDATE stories SET image = '$image' WHERE id = $post_id";
-          if($conn->query($upload_img_sql) === true) {
-            $msg_img = "Feature image have been uploaded!";
-            $uploadedImg = true;
-          } else {
-            $error_img = "Feature image fail to upload!";
-            $uploadedImg = true;
-          }
-        } else {
-          $error_img = "Can't upload image!";
-        }
-      }
-    }
-    if($uploadedImg === true) {
-      header("Location: new-post.php?id={$post_id}");
-    }
-  }
+
   if(isset($_POST['add_category'])) {
     $cate_name = trim($_POST['cate_name']);
     $cate_desc = trim($_POST['cate_description']);
@@ -86,6 +58,7 @@
       $error = 'Please input category name!';
     }
   }
+
   if(isset($_POST['save_draft'])) {
     $post_title = trim($_POST['title']);
     if($post_title != '') {
@@ -95,11 +68,45 @@
       $post_status = strtolower($default_status);
       $post_vis = strtolower($default_visibility);
       $post_user = $get_user['id'];
-      if($image != '') {
-        $post_image = $image;
+
+      $file_extens = array("jpg", "png", "jpeg", "gif");
+      $thumbnail = $_FILES['thumbnail']['name'];
+      $thumb_tmpname = $_FILES['thumbnail']['tmp_name'];
+      $thumb_size = $_FILES["thumbnail"]["size"];
+      $thumb_des = "../assets/upload/thumbnails/" . $thumbnail;
+      $thumb_type = strtolower(pathinfo($thumb_des, PATHINFO_EXTENSION));
+      if($thumb_size > 2000000) {
+        $error_thumb = "File's size is too large!";
       } else {
-        $post_image = '';
+        if(!in_array($thumb_type, $file_extens)) {
+          $error_thumb = "Image's file extension is not valid!";
+        } else {
+          move_uploaded_file($thumb_tmpname, $thumb_des);
+        }
       }
+
+      if(!empty(array_filter($_FILES['images']['name']))) {
+        $file_extens = array("jpg", "png", "jpeg", "gif");
+        foreach($_FILES['images']['name'] as $key=>$val) {
+          $img_name = $_FILES['images']['name'][$key];
+          $img_tmpname = $_FILES["images"]["tmp_name"][$key];
+          $img_size = $_FILES["images"]["size"][$key];
+          $img_des = "../assets/upload/images/" . $img_name;
+          $img_type = strtolower(pathinfo($img_des, PATHINFO_EXTENSION));
+          if(!in_array($img_type, $file_extens)) {
+            $error = "Image's file extension is not valid!";
+          } else {
+            if(move_uploaded_file($img_tmpname, $img_des)) {
+              array_push($img_name_arr, $img_name);
+              array_push($img_size_arr, $img_size);
+              array_push($img_type_arr, $img_type);
+            } else {
+              $error = "Can't upload image!";
+            }
+          }
+        }
+      }
+
       if($thumbnail != '') {
         $post_thumbnail = $thumbnail;
       } else {
@@ -107,9 +114,31 @@
       }
       $post_create = date("Y-m-d h:i:s");
       $post_update = date("Y-m-d h:i:s");
-      $draft_post_sql = "INSERT INTO stories(title, content, description, image, status, visibility, user_id, category_id, created_date, updated_date)
-                        VALUES('$post_title', '$post_content', '$post_desc', '$post_image', '$post_status', '$post_vis', $post_user, $post_cate, '$post_create', '$post_update')";
+      $draft_post_sql = "INSERT INTO stories(title, thumbnail, content, description, status, visibility, user_id, category_id, created_date, updated_date)
+                        VALUES('$post_title', '$post_thumbnail', '$post_content', '$post_desc', '$post_status', '$post_vis', $post_user, $post_cate, '$post_create', '$post_update')";
       if($conn->query($draft_post_sql) === true) {
+        $story_id = 0;
+        $get_story_sql = "SELECT * FROM stories ORDER BY id DESC LIMIT 1";
+        $story_result = mysqli_query($conn, $get_story_sql);
+        if(mysqli_num_rows($story_result) > 0) {
+          $story_data = $story_result->fetch_array();
+          $story_id = $story_data['id'];
+        }
+        if(count($img_name_arr) > 0) {
+          for($i=0; $i<count($img_name_arr); $i++) 
+          {
+            $uploaded_date = date("Y-m-d h:i:s");
+            $updated_date = date("Y-m-d h:i:s");
+            var_dump('Name: ' . $img_name_arr[$i] . $img_size_arr[$i] . $img_type_arr[$i]);
+            $upload_img_sql = "INSERT INTO images(name, size, type, story_id, uploaded_date, updated_date)
+              VALUES('$img_name_arr[$i]', $img_size_arr[$i], '$img_type_arr[$i]', $story_id, '$uploaded_date', '$updated_date')";
+            if($conn->query($upload_img_sql)) {
+              header("Location: new-post.php?img=uploaded");
+            } else {
+              header("Location: new-post.php?img=failed");
+            }
+          }
+        }
         header("Location: post.php?post=draft");
       } else {
         $error = "Error: " . $conn->error;
@@ -122,18 +151,54 @@
     $post_title = trim($_POST['title']);
     $post_content = $_POST['content'];
     $post_desc = $_POST['description'];
-    if($post_title == '' || $post_content == '' || $post_desc == '') {
+    if($post_title == '' || $post_content == '') {
       $check_required = true;
     } else {
       $post_cate = trim($_POST['category']);
       $post_status = strtolower(PUBLISH);
       $post_vis = strtolower(PUBLICVIS);
       $post_user = $get_user['id'];
-      if($image != '') {
-        $post_image = $image;
-      } else {
-        $post_image = '';
+
+      if(!empty($_FILES['thumbnail']['name'])) {
+        $file_extens = array("jpg", "png", "jpeg", "gif");
+        $thumbnail = $_FILES['thumbnail']['name'];
+        $thumb_tmpname = $_FILES['thumbnail']['tmp_name'];
+        $thumb_size = $_FILES["thumbnail"]["size"];
+        $thumb_des = "../assets/upload/thumbnails/" . $thumbnail;
+        $thumb_type = strtolower(pathinfo($thumb_des, PATHINFO_EXTENSION));
+        if($thumb_size > 2000000) {
+          $error_thumb = "File's size is too large!";
+        } else {
+          if(!in_array($thumb_type, $file_extens)) {
+            $error_thumb = "Image's file extension is not valid!";
+          } else {
+            move_uploaded_file($thumb_tmpname, $thumb_des);
+          }
+        }
       }
+
+      if(!empty(array_filter($_FILES['images']['name']))) {
+        $file_extens = array("jpg", "png", "jpeg", "gif");
+        foreach($_FILES['images']['name'] as $key=>$val) {
+          $img_name = $_FILES['images']['name'][$key];
+          $img_tmpname = $_FILES["images"]["tmp_name"][$key];
+          $img_size = $_FILES["images"]["size"][$key];
+          $img_des = "../assets/upload/images/" . $img_name;
+          $img_type = strtolower(pathinfo($img_des, PATHINFO_EXTENSION));
+          if(!in_array($img_type, $file_extens)) {
+            $error = "Image's file extension is not valid!";
+          } else {
+            if(move_uploaded_file($img_tmpname, $img_des)) {
+              array_push($img_name_arr, $img_name);
+              array_push($img_size_arr, $img_size);
+              array_push($img_type_arr, $img_type);
+            } else {
+              $error = "Can't upload image!";
+            }
+          }
+        }
+      }
+
       if($thumbnail != '') {
         $post_thumbnail = $thumbnail;
       } else {
@@ -141,15 +206,43 @@
       }
       $post_create = date("Y-m-d h:i:s");
       $post_update = date("Y-m-d h:i:s");
-      $publish_post_sql = "INSERT INTO stories(title, content, description, image, thumbnail, status, visibility, user_id, category_id, created_date, updated_date)
-                        VALUES('$post_title', '$post_content', '$post_desc', '$post_image', '$post_thumbnail', '$post_status', '$post_vis', $post_user, $post_cate, '$post_create', '$post_update')";
+      $publish_post_sql = "INSERT INTO stories(title, content, description, thumbnail, status, visibility, user_id, category_id, created_date, updated_date)
+                        VALUES('$post_title', '$post_content', '$post_desc', '$post_thumbnail', '$post_status', '$post_vis', $post_user, $post_cate, '$post_create', '$post_update')";
       if($conn->query($publish_post_sql) === true) {
+        $story_id = 0;
+        $get_story_sql = "SELECT * FROM stories ORDER BY id DESC LIMIT 1";
+        $story_result = mysqli_query($conn, $get_story_sql);
+        if(mysqli_num_rows($story_result) > 0) {
+          $story_data = $story_result->fetch_array();
+          $story_id = $story_data['id'];
+        }
+        if(count($img_name_arr) > 0) {
+          for($i=0; $i<count($img_name_arr); $i++) 
+          {
+            $uploaded_date = date("Y-m-d h:i:s");
+            $updated_date = date("Y-m-d h:i:s");
+            var_dump('Name: ' . $img_name_arr[$i] . $img_size_arr[$i] . $img_type_arr[$i]);
+            $upload_img_sql = "INSERT INTO images(name, size, type, story_id, uploaded_date, updated_date)
+              VALUES('$img_name_arr[$i]', $img_size_arr[$i], '$img_type_arr[$i]', $story_id, '$uploaded_date', '$updated_date')";
+            if($conn->query($upload_img_sql)) {
+              header("Location: new-post.php?img=uploaded");
+            } else {
+              header("Location: new-post.php?img=failed");
+            }
+          }
+        }
         header("Location: post.php?post=publish");
       } else {
         $error = "Error: " . $conn->error;
       }
     }
   }
+  // if(count($img_name_arr) > 0) {
+  //   for($i=0; $i<count($img_name_arr); $i++) 
+  //   {
+  //     var_dump('Name: ' . $img_name_arr[$i] . $img_size_arr[$i] . $img_type_arr[$i]);
+  //   }
+  // }
 ?>
 
     <div class="content">
@@ -164,7 +257,7 @@
                 <?php echo $check_required == true ? '<h5 class="text-danger">* required</h5>' : ''; ?>
               </div>
               <div class="card-body">
-                <input type="text" name="title" class="form-control input-lg">
+                <input type="text" name="title" id="post_title" class="form-control input-lg">
               </div>
             </div>
             <div class="card">
@@ -175,7 +268,7 @@
                 <span id="thumbnail-text" class="file-text">No file chosen!</span>
               </div>
               <div class="card-body">
-                <textarea name="content" id="" cols="30" rows="30" class="form-control"></textarea>
+                <textarea name="content" id="post_content" cols="30" rows="30" class="form-control"></textarea>
               </div>
             </div>
             <div class="card">
@@ -184,7 +277,7 @@
                 <?php echo $check_required == true ? '<h5 class="text-danger">* required</h5>' : ''; ?>
               </div>
               <div class="card-body">
-                <textarea name="description" id="" cols="30" rows="3" class="form-control"></textarea>
+                <textarea name="description" id="post_description" cols="30" rows="3" class="form-control"></textarea>
               </div>
             </div>
           </div>
@@ -249,9 +342,10 @@
                     <img src="../assets/upload/<?php //echo $data['image'] != '' ? 'images/' . $data['image'] : 'no-image.png'; ?>" class="img-responsive" alt="">
                   </div> -->
                   <div class="col-xs-8">
-                    <input type="file" name="image" id="image-input" class="input-display">
+                    <input type="file" name="images[]" id="image-input" class="input-display" multiple>
                     <button type="button" id="image-button" class="btn btn-default btn-sm mar-top">Choose File</button>
                     <span id="image-text" class="file-text">No file chosen!</span>
+                    <input type="submit" name="upload_image" class="btn btn-default btn-sm" id="btn_images_upload" value="Upload">
                   </div>
                   <div class="col-xs-4">
                   </div>

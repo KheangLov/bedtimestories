@@ -4,6 +4,7 @@
   $profile = false;
   $user = false;
   $cate = false;
+  $page = false;
   ob_start();
   include "share/header.inc.php";
   if(strtolower($_SESSION['role_name']) != ADMIN && strtolower($_SESSION['role_name']) != AUTHOR) {
@@ -11,6 +12,7 @@
   }
   $msg = '';
   $error = '';
+  $thumb = '';
   $_SESSION['image'] = '';
   $target = '';
   $_SESSION['thumbnail'] = '';
@@ -19,11 +21,16 @@
   $check_id_sql = "SELECT * FROM stories WHERE id = $post_id LIMIT 1";
   $check_id_result = mysqli_query($conn, $check_id_sql);
   if(mysqli_num_rows($check_id_result) != 0) {
-    $post_sql = "SELECT stories.*, users.id AS users_id, categories.id AS cate_id, categories.name AS cate_name FROM stories INNER JOIN users ON stories.user_id = users.id INNER JOIN categories ON stories.category_id = categories.id WHERE stories.id = $post_id";
+    $post_sql = "SELECT stories.*, users.id AS users_id, categories.id AS cate_id, categories.name AS cate_name 
+      FROM stories 
+      INNER JOIN users ON stories.user_id = users.id 
+      INNER JOIN categories ON stories.category_id = categories.id 
+      WHERE stories.id = $post_id";
     $post_result = mysqli_query($conn, $post_sql);
     if(mysqli_num_rows($post_result) > 0) {
       $data = $post_result->fetch_array();
     }
+    $thumb = $data['thumbnail'];
     if(isset($_POST['add_category'])) {
       $cate_name = trim($_POST['cate_name']);
       $cate_desc = trim($_POST['cate_description']);
@@ -45,15 +52,39 @@
       }
     }
     if(isset($_POST['save_draft'])) {
+      if(!empty($_FILES['thumbnail']['name'])) {
+        $file_extens = array("jpg", "png", "jpeg", "gif");
+        $thumb = $_FILES['thumbnail']['name'];
+        $thumb_tmpname = $_FILES['thumbnail']['tmp_name'];
+        $thumb_size = $_FILES["thumbnail"]["size"];
+        $thumb_des = "../assets/upload/thumbnails/" . $thumb;
+        $thumb_type = strtolower(pathinfo($thumb_des, PATHINFO_EXTENSION));
+        if($thumb_size > 2000000) {
+          $error_thumb = "File's size is too large!";
+        } else {
+          if(!in_array($thumb_type, $file_extens)) {
+            $error_thumb = "Image's file extension is not valid!";
+          } else {
+            move_uploaded_file($thumb_tmpname, $thumb_des);
+          }
+        }
+      }
+
       $post_title = trim($_POST['title']);
       $post_content = $_POST['content'];
       $post_desc = $_POST['description'];
       $post_cate = trim($_POST['category']);
-      $post_status = strtolower($default_status);
-      $post_vis = strtolower($default_visibility);
+      $post_status = strtolower(DRAFT);
+      $post_vis = trim($_POST['visibility']);
       $post_user = $data['users_id'];
       $post_update = date("Y-m-d h:i:s");
-      $draft_post_sql = "UPDATE stories SET title = '$post_title', content = '$post_content', description = '$post_desc', status = '$post_status', visibility = '$post_vis', user_id = $post_user, category_id = $post_cate, updated_date = '$post_update' WHERE id = $post_id";
+      $draft_post_sql = "UPDATE stories 
+        SET title = '$post_title', content = '$post_content', description = '$post_desc', 
+        status = '$post_status', visibility = '$post_vis', user_id = $post_user, 
+        category_id = $post_cate, updated_date = '$post_update',
+        thumbnail = '$thumb'
+        WHERE id = $post_id";
+      
       if($conn->query($draft_post_sql) === true) {
         header("Location: post.php?post=draft_updated");
       } else {
@@ -69,20 +100,41 @@
       } else {
         $post_cate = trim($_POST['category']);
         $post_status = strtolower(PUBLISH);
-        $post_vis = strtolower(PUBLICVIS);
+        $post_vis = trim($_POST['visibility']);
         $post_user = $data['users_id'];
-        if($image != '') {
-          $post_image = $_SESSION['image'];
-        } else {
-          $post_image = '';
+        if(!empty($_FILES['thumbnail']['name'])) {
+          $file_extens = array("jpg", "png", "jpeg", "gif");
+          $thumb = $_FILES['thumbnail']['name'];
+          $thumb_tmpname = $_FILES['thumbnail']['tmp_name'];
+          $thumb_size = $_FILES["thumbnail"]["size"];
+          $thumb_des = "../assets/upload/thumbnails/" . $thumb;
+          $thumb_type = strtolower(pathinfo($thumb_des, PATHINFO_EXTENSION));
+          if($thumb_size > 2000000) {
+            $error_thumb = "File's size is too large!";
+          } else {
+            if(!in_array($thumb_type, $file_extens)) {
+              $error_thumb = "Image's file extension is not valid!";
+            } else {
+              move_uploaded_file($thumb_tmpname, $thumb_des);
+            }
+          }
         }
-        if($thumbnail != '') {
-          $post_thumbnail = $_SESSION['thumbnail'];
-        } else {
-          $post_thumbnail = '';
-        }
+        // if($image != '') {
+        //   $post_image = $_SESSION['image'];
+        // } else {
+        //   $post_image = '';
+        // }
+        // if($thumbnail != '') {
+        //   $post_thumbnail = $_SESSION['thumbnail'];
+        // } else {
+        //   $post_thumbnail = '';
+        // }
         $post_update = date("Y-m-d h:i:s");
-        $publish_post_sql = "UPDATE stories SET title = '$post_title', content = '$post_content', description = '$post_desc', image = '$post_image', status = '$post_status', visibility = '$post_vis', user_id = $post_user, category_id = $post_cate, updated_date = '$post_update' WHERE id = $post_id";
+        $publish_post_sql = "UPDATE stories 
+          SET title = '$post_title', content = '$post_content', description = '$post_desc', 
+          status = '$post_status', visibility = '$post_vis', user_id = $post_user, 
+          category_id = $post_cate, updated_date = '$post_update', thumbnail = '$thumb'
+          WHERE id = $post_id";
         if($conn->query($publish_post_sql) === true) {
           header("Location: post.php?post=publish_updated");
         } else {
@@ -96,7 +148,7 @@
 ?>
 
     <div class="content">
-      <form action="edit-post.php?id=<?php echo $post_id; ?>" id="post-form" method="post" enctype="multipart/form-data">
+      <form action="edit-post.php?id=<?php echo $data['id']; ?>" method="post" enctype="multipart/form-data">
         <div class="row">
           <div class="col-sm-9">
             <div class="card">
@@ -111,6 +163,9 @@
             </div>
             <div class="card">
               <div class="card-header">
+                <input type="file" name="thumbnail" id="thumbnail-input" class="input-display">
+                <button type="button" id="thumbnail-button" class="btn btn-default btn-sm"><i class="fa fa-camera-retro"></i> Add Thumbnail</button>
+                <span id="thumbnail-text" class="file-text">No file chosen!</span>
               </div>
               <div class="card-body">
                 <textarea name="content" id="" cols="30" rows="30" class="form-control"><?php echo $data['content']; ?></textarea>
@@ -131,9 +186,21 @@
                 <h3 class="add-post">Publish</h3>
               </div>
               <div class="card-body">
-                <span class="status"><i class="fa fa-thermometer-full"></i>Status: <strong><?php echo ucfirst($data['status']); ?></strong></span>
-                <span class="status"><i class="fa fa-eye"></i>Visibility: <strong><?php echo ucfirst($data['visibility']); ?></strong></span>
-                <span class="status"><i class="fa fa-calendar"></i>Publish: <strong><?php echo ucfirst($data['updated_date']); ?></strong></span>
+                <span class="status">
+                  <i class="fa fa-thermometer-full"></i>Status: <strong><?php echo ucfirst($data['status']); ?></strong>
+                  <!-- <select name="status" class="form-control input-sm">
+                    <option value="publish"<?php echo strtolower($data['status']) === PUBLISH ? ' selected' : ''; ?>>Publish</option>
+                    <option value="draft"<?php echo strtolower($data['status']) === DRAFT ? ' selected' : ''; ?>>Draft</option>
+                  </select> -->
+                </span>
+                <span class="status">
+                  <i class="fa fa-eye"></i>Visibility: <strong id="post_visibility"><?php // echo ucfirst($data['visibility']); ?></strong>
+                  <select name="visibility" class="form-control input-sm">
+                    <option value="public"<?php echo strtolower($data['visibility']) === PUBLICVIS ? ' selected' : ''; ?>>Public</option>
+                    <option value="private"<?php echo strtolower($data['visibility']) === PRIVATEVIS ? ' selected' : ''; ?>>Private</option>
+                  </select>
+                </span>
+                <span class="status"><i class="fa fa-calendar"></i>Publish: <strong><?php echo date('Y-m-d', strtotime($data['updated_date'])); ?></strong></span>
                 <div class="btn-wrap text-right">
                   <div class="row">
                     <div class="col-sm-6 text-left">
@@ -158,7 +225,7 @@
                     if(mysqli_num_rows($get_cate_result) > 0) :
                       while($categories = $get_cate_result->fetch_assoc()) :
                   ?>
-                        <option value="<?php echo $categories['id']; ?>"><?php echo ucfirst($categories['name']); ?></option>
+                        <option value="<?php echo $categories['id']; ?>"<?php echo $data['cate_name'] == $categories['name'] ? ' selected' : ''; ?>><?php echo ucfirst($categories['name']); ?></option>
                   <?php
                       endwhile;
                     endif;
@@ -174,19 +241,16 @@
                 </div>
               </div>
             </div>
-            <div class="card">
+            <!-- <div class="card">
               <div class="card-header">
                 <h3 class="add-post">Featured Image</h3>
-                <!-- <h4 class="text-danger"><?php //echo $error_img != '' ? $error_img : ''; ?></h4> -->
-                <!-- <h4 class="text-success"><?php //echo $msg_img != '' ? $error_img : ''; ?></h4> -->
               </div>
               <div class="card-body">
                 <div class="row">
                   <div class="col-xs-12">
-                    <img src="../assets/upload/<?php echo $data['image'] != '' ? 'images/' . $data['image'] : 'no-image.png'; ?>" class="img-responsive" alt="">
                   </div>
-                  <div class="col-xs-8">
-                    <input type="file" name="image" id="image-input" class="input-display">
+                  <div class="col-xs-8">                
+                    <input type="file" name="images[]" id="image-input" class="input-display" multiple>
                     <button type="button" id="image-button" class="btn btn-default btn-sm mar-top">Choose File</button>
                     <span id="image-text" class="file-text">No file chosen!</span>
                   </div>
@@ -194,7 +258,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </form>

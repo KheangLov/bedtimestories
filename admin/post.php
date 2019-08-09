@@ -4,6 +4,7 @@
   $profile = false;
   $user = false;
   $cate = false;
+  $page = false;
   include "share/header.inc.php";
   if(strtolower($_SESSION['role_name']) != ADMIN && strtolower($_SESSION['role_name']) != AUTHOR) {
     header("Location: index.php?permission=denied");
@@ -24,9 +25,9 @@
     }
   } else if(isset($_GET['post'])) {
     $updated = strtolower(trim($_GET['post']));
-    if($updated === strtolower(PUS_PUBLISH)) {
+    if($updated === strtolower(PUS_PUBLISH) || $updated === strtolower(PUBLISH)) {
       $msg = 'Post have been published!';
-    } else if($updated === strtolower(PUS_DRAFT)) {
+    } else if($updated === strtolower(PUS_DRAFT) || $updated === strtolower(DRAFT)) {
       $msg = 'Post have been drafted!';
     } else {
       $error = 'Fail to update post!';
@@ -37,17 +38,29 @@
   $number_of_post = mysqli_num_rows($result);
   $per_page = PERPAGE;
   $first_page_result = ($get_page - 1) * $per_page;
-  $posts_sql = "SELECT stories.*, categories.name AS cate_name FROM stories INNER JOIN categories ON stories.category_id = categories.id LIMIT $first_page_result, $per_page";
+  $posts_sql = "SELECT stories.*, categories.name AS cate_name FROM stories INNER JOIN categories ON stories.category_id = categories.id ORDER BY updated_date DESC LIMIT $first_page_result, $per_page";
   $posts_result = mysqli_query($conn, $posts_sql);
 ?>
 
     <div class="content">
-      <a href="new-post.php" class="btn btn-default btn-addp">
-        <span class="btn-label">
-          <i class="ti-plus"></i> 
-        </span>  
-        Add New
-      </a>
+      <div class="row">
+        <div class="col-sm-6">
+          <a href="new-post.php" class="btn btn-default btn-addp">
+            <span class="btn-label">
+              <i class="ti-plus"></i> 
+            </span>  
+            Add New
+          </a>
+        </div>
+        <div class="col-sm-6 text-right">
+          <!-- <a href="images.php" class="btn btn-default btn-addp">
+            <span class="btn-label">
+              <i class="ti-gallery"></i> 
+            </span>  
+            Images
+          </a> -->
+        </div>
+      </div>
       <?php
         if(isset($_GET['post_id']) && strtolower($_GET['post_id']) === 'wrong') :
       ?>
@@ -105,7 +118,7 @@
                             <td><strong><?php echo $i; ?></strong></td>
                             <td class="img-row">
                               <div class="img-wrapper">
-                                <a href="image-post.php?id=<?php echo $posts['id']; ?>">
+                                <a href="#">
                                   <img src="<?php echo $posts['thumbnail'] != '' ? '../assets/upload/thumbnails/' . $posts['thumbnail'] : '../assets/upload/no-image.png' ; ?>" class="img-raised">
                                 </a>
                               </div>

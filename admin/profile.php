@@ -4,6 +4,7 @@
   $user = false;
   $post = false;
   $cate = false;
+  $page = false;
   ob_start();
   include "share/header.inc.php";
   $user_id = $_SESSION['user_id'];

@@ -49,7 +49,7 @@
           <td><strong>" . $i . "</strong></td>
           <td class=\"img-row\">
             <div class=\"img-wrapper\">
-              <a href=\"image-post.php?id=" . $row['id'] . "\">
+              <a href=\"#\">
                 <img src=\"";
         if($row['thumbnail'] != '') {
           $output .= "../assets/upload/thumbnails/" . $row['thumbnail'];

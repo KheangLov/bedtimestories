@@ -8,6 +8,7 @@
   $user = false;
   $post = false;
   $cate = false;
+  $page = false;
   include "share/header.inc.php";
 ?>
 
@@ -132,70 +133,72 @@
               <span class="sub-header">Stories</span>
             </div>
             <div class="card-body">
-            <table class="table">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Thumbnail</th>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Status</th>
-                        <th>Visibility</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <?php
-                        $i = 0;
-                        $posts_sql = "SELECT stories.*, categories.name AS cate_name FROM stories INNER JOIN categories ON stories.category_id = categories.id ORDER BY stories.updated_date LIMIT 5";
-                        $posts_result = mysqli_query($conn, $posts_sql);
-                        if(mysqli_num_rows($posts_result) > 0) :
-                          while($posts = $posts_result->fetch_assoc()) :
-                            $i++;
-                      ?>
-                            <tr>
-                              <td><?php echo $i; ?></td>
-                              <td class="img-row">
-                                <div class="img-wrapper">
-                                  <a href="image-post.php?id=<?php echo $posts['id']; ?>">
-                                    <img src="<?php echo $posts['thumbnail'] != '' ? '../assets/upload/thumbnails/' . $posts['thumbnail'] : '../assets/upload/no-image.png' ; ?>" class="img-raised">
-                                  </a>
-                                </div>
-                              </td>
-                              <td>
-                                <a href="edit-post.php?<?php echo "id={$posts['id']}"; ?>" data-toggle="tooltip" data-placement="top" title="Edit">
-                                  <strong><?php echo $posts['title']; ?></strong>
-                                </a>
-                              </td>
-                              <td><?php echo $posts['cate_name']; ?></td>
-                              <td><?php echo strtolower($posts['status']) == strtolower(PUBLISH) ? '<span class="label label-success">' . ucfirst($posts['status']) . '</span>' : (strtolower($posts['status']) == strtolower(DRAFT) ? '<span class="label label-danger">' . ucfirst($posts['status']) . '</span>' : (strtolower($posts['status']) == strtolower(BAN) ? '<span class="label label-warning">' . ucfirst($posts['status']) . '</span>' : '')); ?></td>
-                              <td><?php echo strtolower($posts['visibility']) == strtolower(PRIVATEVIS) ? '<span class="label label-info">' . ucfirst($posts['visibility']) . '</span>' : (strtolower($posts['visibility']) == strtolower(PUBLICVIS) ? '<span class="label label-primary">' . ucfirst($posts['visibility']) . '</span>' : ''); ?></td>
-                              <td class="td-actions">
-                                <a href="#" onClick="banPost(<?php echo $posts['id']; ?>)" class="btn-icon btn-icon-warning" data-toggle="tooltip" data-placement="top" title="Ban">
-                                  <i class="ti-na"></i>
-                                </a>
-                                <a href="#" onClick="deletePost(<?php echo $posts['id']; ?>)" class="btn-icon btn-icon-danger" data-toggle="tooltip" data-placement="top" title="Delete">
-                                  <i class="ti-close"></i>
-                                </a>
-                              </td>
-                            </tr>
-                      <?php
-                          endwhile;
-                        endif;
-                      ?>
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <th>#</th>
-                        <th>Thumbnail</th>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Status</th>
-                        <th>Visibility</th>
-                        <th>Action</th>
-                      </tr>
-                    </tfoot>
-                  </table>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Thumbnail</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Visibility</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                    $i = 0;
+                    $posts_sql = "SELECT stories.*, categories.name AS cate_name 
+                      FROM stories INNER JOIN categories ON stories.category_id = categories.id 
+                      ORDER BY stories.updated_date DESC LIMIT 5";
+                    $posts_result = mysqli_query($conn, $posts_sql);
+                    if(mysqli_num_rows($posts_result) > 0) :
+                      while($posts = $posts_result->fetch_assoc()) :
+                        $i++;
+                  ?>
+                        <tr>
+                          <td><strong><?php echo $i; ?></strong></td>
+                          <td class="img-row">
+                            <div class="img-wrapper">
+                              <a href="image-post.php?id=<?php echo $posts['id']; ?>">
+                                <img src="<?php echo $posts['thumbnail'] != '' ? '../assets/upload/thumbnails/' . $posts['thumbnail'] : '../assets/upload/no-image.png' ; ?>" class="img-raised">
+                              </a>
+                            </div>
+                          </td>
+                          <td>
+                            <a href="edit-post.php?<?php echo "id={$posts['id']}"; ?>" data-toggle="tooltip" data-placement="top" title="Edit">
+                              <strong><?php echo $posts['title']; ?></strong>
+                            </a>
+                          </td>
+                          <td><?php echo $posts['cate_name']; ?></td>
+                          <td><?php echo strtolower($posts['status']) == strtolower(PUBLISH) ? '<span class="label label-success">' . ucfirst($posts['status']) . '</span>' : (strtolower($posts['status']) == strtolower(DRAFT) ? '<span class="label label-danger">' . ucfirst($posts['status']) . '</span>' : (strtolower($posts['status']) == strtolower(BAN) ? '<span class="label label-warning">' . ucfirst($posts['status']) . '</span>' : '')); ?></td>
+                          <td><?php echo strtolower($posts['visibility']) == strtolower(PRIVATEVIS) ? '<span class="label label-info">' . ucfirst($posts['visibility']) . '</span>' : (strtolower($posts['visibility']) == strtolower(PUBLICVIS) ? '<span class="label label-primary">' . ucfirst($posts['visibility']) . '</span>' : ''); ?></td>
+                          <td class="td-actions">
+                            <a href="#" onClick="banPost(<?php echo $posts['id']; ?>)" class="btn-icon btn-icon-warning" data-toggle="tooltip" data-placement="top" title="Ban">
+                              <i class="ti-na"></i>
+                            </a>
+                            <a href="#" onClick="deletePost(<?php echo $posts['id']; ?>)" class="btn-icon btn-icon-danger" data-toggle="tooltip" data-placement="top" title="Delete">
+                              <i class="ti-close"></i>
+                            </a>
+                          </td>
+                        </tr>
+                  <?php
+                      endwhile;
+                    endif;
+                  ?>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th>#</th>
+                    <th>Thumbnail</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Visibility</th>
+                    <th>Action</th>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
             <div class="card-footer">
               <hr>

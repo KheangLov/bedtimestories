@@ -7,6 +7,7 @@
   define("LOGIN", "Login");
   define("REGISTER", "Register");
   define("CATEGORIES", "Categories");
+  define("PAGES", "Pages");
 
   // DB Status
   define("ACTIVE", "active");
@@ -47,4 +48,14 @@
   // Post update status
   define("PUS_PUBLISH", "publish_updated");
   define("PUS_DRAFT", "draft_updated");
+
+  // Pages
+  define("POSTED", "posted");
+  define("SHOW", "show");
+  define("HIDE", "hide");
+
+  //Facebook API config
+  define("FB_APP_ID", "373794453282051");
+  define("FB_APP_SECRET", "2ab955faa493496926f4a10467a61106");
+  define("FB_REDIRECT_URL", "http://bedtimestories.devs/");
 ?>

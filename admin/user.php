@@ -4,6 +4,7 @@
   $profile = false;
   $post = false;
   $cate = false;
+  $page = false;
   ob_start();
   include "share/header.inc.php";
   if(strtolower($_SESSION['role_name']) != ADMIN) {
@@ -111,9 +112,13 @@
                             <td><strong><?php echo $i; ?></strong></td>
                             <td>
                               <strong>
+                                <?php echo ucfirst($row['fullname']);
+                                /*
                                 <a href="" class="name_inline_edit" data-name="fullname" data-type="text" data-pk="<?php echo $row['id'] ?>" data-title="Enter name">
                                   <?php echo ucfirst($row['fullname']); ?>
                                 </a>
+                                */ 
+                                ?>
                               </strong>
                             </td>
                             <td><?php echo $row['email']; ?></td>

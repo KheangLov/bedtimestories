@@ -1,36 +1,44 @@
-$(document).ready(function(){
+$(document).ready(function () {
   // AJAX search
-  $("#search-text").keyup(function() {
+  $("#search-text").keyup(function () {
     var search = $(this).val();
     $.ajax({
       url: 'search-user.php',
       method: 'post',
-      data: {query: search},
-      success: function(response) {
+      data: {
+        query: search
+      },
+      success: function (response) {
         $('#table-data').html(response);
       }
     });
   });
-  $("#search-category").keyup(function() {
+  $("#search-category").keyup(function () {
     var search = $(this).val();
     $.ajax({
       url: 'search-category.php',
       method: 'post',
-      data: {query: search},
-      success: function(response) {
+      data: {
+        query: search
+      },
+      success: function (response) {
         $('#table-category').html(response);
       }
     });
   });
-  $("#search-post").keyup(function() {
+  $("#search-post").keyup(function () {
     var search = $(this).val();
     var role_name = $("#user_role").val();
     var id = $("#user_id").val();
     $.ajax({
       url: 'search-post.php',
       method: 'post',
-      data: {query: search, role: role_name, id: id},
-      success: function(response) {
+      data: {
+        query: search,
+        role: role_name,
+        id: id
+      },
+      success: function (response) {
         $('#table-post').html(response);
       }
     });
@@ -40,34 +48,104 @@ $(document).ready(function(){
     url: 'inline-edit.php',
     title: 'Enter name'
   });
+  $('#multiple_upload').change(function () {
+    var tmppath = URL.createObjectURL(event.target.files[0]);
+    var files = $(this)[0].files;
+    console.log(files);
+    $('#btn_images_upload').css('display', 'block');
+    $('#btn_images_upload').on('click', function () {
+      // for(var i = 0; i < files.length; i++) {
+      //   var type = files[i]['type'].substr((files[i]['type'].search("/") + 1));
+      //   console.log(type);
+      //   $.ajax({
+      //     url: 'image-upload.php',
+      //     medthod: 'post',
+      //     data: {name: files[i]['name'], size: files[i]['size'], type: type},
+      //     success: function(response) {
+      //       $('#image_data').html(response);
+      //     }
+      //   });
+      // }
+    });
+  });
+  $('#image-input').change(function () {
+    $('#btn_images_upload').css('display', 'block');
+    $('#btn_images_upload').on('click', function () {
+      var title = $('#post_title').val();
+      var content = $('#post_content').val();
+      var description = $('#post_description').val();
+      $.ajax({
+        url: 'new-post.php',
+        method: 'post',
+        data: {
+          title: title,
+          content: content,
+          description: description
+        },
+        success: function (response) {
+          console.log(response);
+        }
+      });
+    });
+  });
+  $('#post_visibility').on('click', function () {
+    $(this).css('display', 'none');
+    $('#post_select_visibility').css('display', 'block');
+  });
+  $('#post_select_visibility').on('blur', function () {
+    var visibility = $(this).val();
+    $(this).css('display', 'none');
+    $('#post_visibility').css('display', 'inline');
+    $('#post_visibility').text() = visibility;
+  })
+  $('#add_page_btn').on('click', function () {
+    var name = $('#page_btn_name').val();
+    var link = $('#page_btn_link').val();
+    $.ajax({
+      url: 'page-button.php',
+      method: 'post',
+      data: {
+        name: name,
+        link: link
+      },
+      success: function (response) {
+        console.log(response);
+      }
+    });
+  });
   $('[data-toggle="tooltip"]').tooltip();
 });
 
 // User actions
 function deleteUser(userId) {
-  if(confirm("Are you sure you want to delete this user?")) {
+  if (confirm("Are you sure you want to delete this user?")) {
     window.location.href = 'action-user.php?delete=' + userId + '';
     return true;
   }
 }
+
 function banUser(userId) {
-  if(confirm("Are you sure you want to ban this user?")) {
+  if (confirm("Are you sure you want to ban this user?")) {
     window.location.href = 'action-user.php?ban=' + userId + '';
     return true;
   }
 }
+
 function prevUser(curPage) {
   window.location.href = 'user.php?page=' + (curPage - 1) + '';
   return true;
 }
+
 function nextUser(curPage) {
   window.location.href = 'user.php?page=' + (curPage + 1) + '';
   return true;
 }
+
 function prevCate(curPage) {
   window.location.href = 'category.php?page=' + (curPage - 1) + '';
   return true;
 }
+
 function nextCate(curPage) {
   window.location.href = 'category.php?page=' + (curPage + 1) + '';
   return true;
@@ -83,24 +161,26 @@ const sidebarTitle = document.getElementById("sidebar-title");
 const sidebarTextLink = document.getElementsByClassName("sidebar-text-link");
 const sidebarFontAwesome = document.getElementsByClassName("icon-script");
 const mainWrapper = document.getElementById("site-wrapper");
+
 function btnSidebarToggleIn() {
   sidebarMain.style.width = "90px";
   btnSidebarOpen.style.display = "inline";
   btnSidebarClose.style.display = "none";
   sidebarImg.style.display = "inline";
   sidebarTitle.style.display = "none";
-  for(i = 0; i < sidebarUlLi.length; i++) {
+  for (i = 0; i < sidebarUlLi.length; i++) {
     sidebarUlLi[i].style.marginLeft = "17px";
   }
-  for(j = 0; j < sidebarTextLink.length; j++) {
+  for (j = 0; j < sidebarTextLink.length; j++) {
     sidebarTextLink[j].style.display = "none";
   }
-  for(k = 0; k < sidebarFontAwesome.length; k++) {
+  for (k = 0; k < sidebarFontAwesome.length; k++) {
     sidebarFontAwesome[k].style.fontSize = "24px";
   }
   mainWrapper.style.width = "calc(100% - 90px)";
   toggle = true;
 }
+
 function btnSidebarToggleOut() {
   sidebarMain.style.width = "260px";
   btnSidebarOpen.style.display = "none";
@@ -113,27 +193,27 @@ function btnSidebarToggleOut() {
   for (j = 0; j < sidebarTextLink.length; j++) {
     sidebarTextLink[j].style.display = "inline";
   }
-  for(k = 0; k < sidebarFontAwesome.length; k++) {
+  for (k = 0; k < sidebarFontAwesome.length; k++) {
     sidebarFontAwesome[k].style.fontSize = "18px";
   }
   mainWrapper.style.width = "calc(100% - 260px)";
   toggle = false;
 }
 btnSidebarOpen.addEventListener("load", () => {
-  if(toggle === true) {
+  if (toggle === true) {
     function btnSidebarToggleIn() {
       sidebarMain.style.width = "90px";
       btnSidebarOpen.style.display = "inline";
       btnSidebarClose.style.display = "none";
       sidebarImg.style.display = "inline";
       sidebarTitle.style.display = "none";
-      for(i = 0; i < sidebarUlLi.length; i++) {
+      for (i = 0; i < sidebarUlLi.length; i++) {
         sidebarUlLi[i].style.marginLeft = "17px";
       }
-      for(j = 0; j < sidebarTextLink.length; j++) {
+      for (j = 0; j < sidebarTextLink.length; j++) {
         sidebarTextLink[j].style.display = "none";
       }
-      for(k = 0; k < sidebarFontAwesome.length; k++) {
+      for (k = 0; k < sidebarFontAwesome.length; k++) {
         sidebarFontAwesome[k].style.fontSize = "24px";
       }
       mainWrapper.style.width = "calc(100% - 90px)";
@@ -152,7 +232,7 @@ btnSidebarOpen.addEventListener("load", () => {
       for (j = 0; j < sidebarTextLink.length; j++) {
         sidebarTextLink[j].style.display = "inline";
       }
-      for(k = 0; k < sidebarFontAwesome.length; k++) {
+      for (k = 0; k < sidebarFontAwesome.length; k++) {
         sidebarFontAwesome[k].style.fontSize = "18px";
       }
       mainWrapper.style.width = "calc(100% - 260px)";
@@ -172,12 +252,16 @@ const profileInput = document.getElementById("profile-input");
 const profileBtn = document.getElementById("profile-button");
 const profileText = document.getElementById("profile-text");
 
-if(profileBtn != null) {
+const multiUpload = document.getElementById("multiple_upload");
+const multiUploadBtn = document.getElementById("multiple_upload_button");
+const multiUploadText = document.getElementById("multiple_upload_text");
+
+if (profileBtn != null) {
   profileBtn.addEventListener("click", () => {
     profileInput.click();
   });
   profileInput.addEventListener("change", () => {
-    if(profileInput.value) {
+    if (profileInput.value) {
       profileText.innerHTML = profileInput.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
     } else {
       profileText.innerHTML = "No file chosen!";
@@ -185,12 +269,12 @@ if(profileBtn != null) {
   });
 }
 
-if(imageBtn != null) {
+if (imageBtn != null) {
   imageBtn.addEventListener("click", () => {
     fileInput.click();
   });
   fileInput.addEventListener("change", () => {
-    if(fileInput.value) {
+    if (fileInput.value) {
       imageText.innerHTML = fileInput.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
     } else {
       imageText.innerHTML = "No file chosen!";
@@ -198,12 +282,12 @@ if(imageBtn != null) {
   });
 }
 
-if(thumbBtn != null) {
+if (thumbBtn != null) {
   thumbBtn.addEventListener("click", () => {
     thumbnailInput.click();
   });
   thumbnailInput.addEventListener("change", () => {
-    if(thumbnailInput.value) {
+    if (thumbnailInput.value) {
       thumbText.innerHTML = thumbnailInput.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
     } else {
       thumbText.innerHTML = "No file chosen!";
@@ -211,15 +295,29 @@ if(thumbBtn != null) {
   });
 }
 
+if (multiUploadBtn != null) {
+  multiUploadBtn.addEventListener("click", () => {
+    multiUpload.click();
+  });
+  multiUpload.addEventListener("change", () => {
+    if (multiUpload.value) {
+      multiUploadText.innerHTML = multiUpload.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+    } else {
+      multiUploadText.innerHTML = "No file chosen!";
+    }
+  });
+}
+
 // Post action
 function deletePost(postId) {
-  if(confirm("Are you sure you want to delete this post?")) {
+  if (confirm("Are you sure you want to delete this post?")) {
     window.location.href = 'action-post.php?delete=' + postId + '';
     return true;
   }
 }
+
 function banPost(postId) {
-  if(confirm("Are you sure you want to ban this post?")) {
+  if (confirm("Are you sure you want to ban this post?")) {
     window.location.href = 'action-post.php?ban=' + postId + '';
     return true;
   }
@@ -227,8 +325,45 @@ function banPost(postId) {
 
 // Category action
 function deleteCate(cateId) {
-  if(confirm("Are you sure you want to delete this category?")) {
+  if (confirm("Are you sure you want to delete this category?")) {
     window.location.href = 'action-category.php?delete=' + cateId + '';
+    return true;
+  }
+}
+
+// Image action
+function deleteImage(imgId) {
+  if (confirm("Are you sure you want to delete this image?")) {
+    window.location.href = 'action-image.php?delete=' + imgId + '';
+    return true;
+  }
+}
+
+// Page type action
+function deletePageType(pId) {
+  if (confirm("Are you sure you want to delete this page type?")) {
+    window.location.href = 'action-pagetype.php?delete=' + pId + '';
+    return true;
+  }
+}
+
+function deletePage(pId) {
+  if (confirm("Are you sure you want to delete this page?")) {
+    window.location.href = 'action-page.php?delete=' + pId + '';
+    return true;
+  }
+}
+
+function deletePagePost(pId) {
+  if (confirm("Are you sure you want to delete this page post?")) {
+    window.location.href = 'action-pagepost.php?delete=' + pId + '';
+    return true;
+  }
+}
+
+function deletePageButton(pId) {
+  if (confirm("Are you sure you want to delete this page button?")) {
+    window.location.href = 'action-pagebutton.php?delete=' + pId + '';
     return true;
   }
 }
@@ -243,9 +378,9 @@ const roleInput = document.getElementById('pro-role-input');
 const roleSelect = document.getElementById('role-select');
 const quoteInput = document.getElementById('quote-input');
 const quoteText = document.getElementById('quote');
-if(btnUpdatePro != null) {
+if (btnUpdatePro != null) {
   btnUpdatePro.addEventListener("click", () => {
-    for(i=0; i<formInput.length; i++) {
+    for (i = 0; i < formInput.length; i++) {
       formInput[i].removeAttribute('disabled');
     }
     btnEditPro.style.display = 'inline';
@@ -258,9 +393,9 @@ if(btnUpdatePro != null) {
     quoteText.setAttribute('hidden', 'hidden');
   });
 }
-if(btnUpdateProReadOnly != null) {
+if (btnUpdateProReadOnly != null) {
   btnUpdateProReadOnly.addEventListener("click", () => {
-    for(j=0; j<formInput.length; j++) {
+    for (j = 0; j < formInput.length; j++) {
       formInput[j].setAttribute('disabled', 'disabled');
     }
     btnEditPro.style.display = 'none';
@@ -296,7 +431,7 @@ if(btnUpdateProReadOnly != null) {
 // }
 function numberOnly(evt) {
   var ch = String.fromCharCode(evt.which);
-  if(!(/[0-9]/).test(ch)) {
+  if (!(/[0-9]/).test(ch)) {
     evt.preventDefault();
   }
 }

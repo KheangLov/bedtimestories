@@ -100,6 +100,19 @@
   transition: all 0.3s ease-in-out;
 }
 
+.lbl-ppost-btn {
+  font-size: 16px;
+}
+
+.btn-icon.btn-ppost-btn:first-child {
+  font-size: 12px;
+  padding: 0px 0px 0px 5px;
+}
+
+#post_select_visibility {
+  display: none;
+}
+
 @media (max-width: 1125px) {
   .main-wrapper {
     position: relative;
@@ -112,7 +125,7 @@
     }
     .btn-show-sidebar {
       &#long-sidebar {
-      display: none;
+        display: none;
       }
     }
   }

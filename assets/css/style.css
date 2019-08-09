@@ -6439,7 +6439,7 @@ input[type="file"].input-display {
   .single-post .main-content .content {
     background-color: #fff;
     border-radius: 4px;
-    padding: 30px 50px;
+    padding: 25px;
     box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.3); }
     .single-post .main-content .content .story-title {
       font-size: 38px;
@@ -6451,10 +6451,10 @@ input[type="file"].input-display {
       font-weight: 600;
       color: #495057;
       opacity: 0.8;
-      margin-bottom: 30px; }
+      margin-bottom: 25px; }
     .single-post .main-content .content .img-radius {
       border-radius: 0;
-      margin-bottom: 30px; }
+      margin-bottom: 25px; }
     .single-post .main-content .content .more-margin {
       margin-bottom: 30px; }
     .single-post .main-content .content .stories {
@@ -6996,6 +6996,16 @@ input[type="file"].input-display {
 .input-rev-read {
   transition: all 0.3s ease-in-out; }
 
+.lbl-ppost-btn {
+  font-size: 16px; }
+
+.btn-icon.btn-ppost-btn:first-child {
+  font-size: 12px;
+  padding: 0px 0px 0px 5px; }
+
+#post_select_visibility {
+  display: none; }
+
 @media (max-width: 1125px) {
   .main-wrapper {
     position: relative;
@@ -7017,6 +7027,11 @@ input[type="file"].input-display {
     .card .card-header .add-post {
       font-weight: bold;
       font-size: 28px;
+      margin-top: 10px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4); }
+    .card .card-header .page-name {
+      font-weight: bold;
+      font-size: 20px;
       margin-top: 10px;
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4); }
   .card .card-body {
@@ -7294,27 +7309,37 @@ input[type="file"].input-display {
   .bg .nav-custom {
     margin-top: 60px;
     margin-bottom: 30px; }
-    .bg .nav-custom li {
-      padding: 15px 0; }
-      .bg .nav-custom li a {
-        padding: 0 30px;
-        border-left: 3px solid transparent; }
-        .bg .nav-custom li a .inner-theader {
+    .bg .nav-custom li.post-tab {
+      padding: 15px 0;
+      border-left: 3px solid transparent;
+      transition: all 0.3s ease-in-out; }
+      .bg .nav-custom li.post-tab a {
+        padding: 0 30px; }
+        .bg .nav-custom li.post-tab a .inner-theader {
           font-size: 22px;
           font-weight: 700;
           color: #463853;
           margin: 0 0 15px 0; }
-        .bg .nav-custom li a .inner-ttext {
+        .bg .nav-custom li.post-tab a .inner-ttext {
           font-size: 18px;
           font-weight: 600;
           color: #998DA0;
           line-height: 25px; }
-      .bg .nav-custom li.active a {
-        color: #998DA0;
-        background: transparent;
-        border-left-color: #8E51C7;
-        border-radius: 0;
-        padding: 0 30px; }
+      .bg .nav-custom li.post-tab.active {
+        border-left-color: #8E51C7; }
+        .bg .nav-custom li.post-tab.active a {
+          color: #998DA0;
+          background: transparent;
+          border-radius: 0;
+          padding: 0 30px; }
+        .bg .nav-custom li.post-tab.active:hover, .bg .nav-custom li.post-tab.active:focus {
+          text-decoration: none;
+          background-color: transparent;
+          border-radius: 0; }
+      .bg .nav-custom li.post-tab:hover, .bg .nav-custom li.post-tab:focus {
+        text-decoration: none;
+        background-color: #eeeeee;
+        border-radius: 4px; }
   .bg .app-store .img-appstore {
     width: 35%; }
   .bg .story-link {
@@ -7362,6 +7387,42 @@ input[type="file"].input-display {
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover; }
+
+.custom-row {
+  padding: 0 7.5px; }
+
+.custom-col {
+  padding: 0;
+  margin-top: 12px; }
+
+.custom-img {
+  position: relative;
+  width: 285px;
+  height: 170px;
+  margin: 0 auto;
+  border-radius: 4px;
+  border: 3px solid white;
+  box-shadow: 0px 0px 4px rgba(2, 2, 2, 0.4); }
+
+#btn_images_upload {
+  display: none; }
+
+.btn-img {
+  position: absolute;
+  top: 3px;
+  left: 10px;
+  width: 280px;
+  height: 164px;
+  opacity: 0;
+  border: 0px;
+  border-radius: 0;
+  font-size: 55px;
+  background-color: rgba(2, 2, 2, 0.5);
+  transition: all 0.3s ease-in-out; }
+  .btn-img:hover, .btn-img:focus {
+    opacity: 0.8;
+    background-color: #66615B;
+    color: #fff; }
 
 .bg-white .inner-join .join-text {
   font-size: 18px;

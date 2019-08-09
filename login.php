@@ -34,7 +34,7 @@
       $error = "Please insert password!";
     }
     else {
-      $sql = "SELECT users.*, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE email = '$email' LIMIT 1";
+      $sql = "SELECT users.*, roles.name AS role_name FROM users INNER JOIN roles ON users.role_id = roles.id WHERE email = '$email' AND status = 'active' LIMIT 1";
       $result = mysqli_query($conn, $sql);
       if(mysqli_num_rows($result) > 0) {
         $data = $result->fetch_array();
@@ -71,7 +71,7 @@
           }
         }
       } else {
-        $error = 'Wrong username!';
+        $error = 'Wrong email or user is not Active, please contact Admin!';
       }
     }
   }
@@ -111,7 +111,14 @@
                   <input type="password" name="password" class="form-control input-lg">
                   <input type="checkbox" name="check" class="check-box"> Remember me
                 </div>
-                <button class="btn btn-default btn-lg btn-block btn-getstarted" type="submit" name="login">Login</button>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <button class="btn btn-default btn-lg btn-block btn-getstarted" type="submit" name="login">Login</button>
+                  </div>
+                  <!-- <div class="col-sm-6">
+                    <a href="facebook-login.php" class="btn btn-default btn-lg btn-block btn-getstarted">Facebook</a>
+                  </div> -->
+                </div>
                 <div class="row">
                   <div class="col-sm-6">
                   </div>

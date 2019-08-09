@@ -54,6 +54,12 @@
                 <div class="sidebar-text-link">Users</div>
               </a>
             </li>
+            <li class="sidebar-li<?php echo $page === true ? ' active' : ''; ?>">
+              <a href="page.php">
+                <i class="fa fa-columns icon-script"></i>
+                <div class="sidebar-text-link">Pages</div>
+              </a>
+            </li>
         <?php    
           endif;
           if(strtolower($_SESSION['role_name']) == ADMIN || strtolower($_SESSION['role_name']) == AUTHOR) :
@@ -85,12 +91,18 @@
             <div class="btn-toggle-sidebar btn-show-sidebar" id="long-sidebar" onclick="btnSidebarToggleOut()">
               <i class="fa fa-ellipsis-v"></i>
             </div>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
             <a class="navbar-brand float-left" href="#">
-              <?php echo $index === true ? DASHBOARD : ($profile === true ? PROFILE : ($user === true ? USERS : ($post === true ? POSTS : ($cate === true ? CATEGORIES : '')))); ?>
+              <?php echo $index === true ? DASHBOARD : ($profile === true ? PROFILE : ($user === true ? USERS : ($post === true ? POSTS : ($cate === true ? CATEGORIES : ($page === true ? PAGES : ''))))); ?>
             </a>
           </div>
       
-          <div class="collapse navbar-collapse">
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell"></i> <span class="caret"></span></a>

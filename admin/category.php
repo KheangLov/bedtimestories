@@ -4,6 +4,7 @@
   $index = false;
   $profile = false;
   $user = false;
+  $page = false;
   ob_start();
   include "share/header.inc.php";
   if(strtolower($_SESSION['role_name']) != ADMIN && strtolower($_SESSION['role_name']) != AUTHOR) {
