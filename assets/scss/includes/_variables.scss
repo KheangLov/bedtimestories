@@ -13,14 +13,21 @@ $gray-800: #343a40 !default;
 $gray-900: #212529 !default;
 $black: #000 !default;
 
+$default: #66615B !default;
 $primary: #8E51C7 !default;
-$warning: #fbc658 !default;
+$warning: #F3BB45 !default;
 $success: #6bd098 !default;
-$danger: #ef8157 !default;
+$danger: #EB5E28 !default;
 $info: #51cbce !default;
-$box-shadow: rgba(0,0,0,.15);
+
+$text-info: #429cb6 !default;
+$text-success: #54b07d !default;
+$text-danger: #c84513 !default;
+$text-warning: #f0a810 !default;
+
+$box-shadow: rgba(0,0,0,.3);
 $sidebar-bg: #343a40;
-$main-wrapper: #f4f3ef;
+$main-wrapper: #eaeaea;
 $border-dd: #dddddd;
 $border-42:#4DB2EC;
 $shadow-bg: #dfdfdf;
@@ -35,3 +42,4 @@ $google-plus: #d81313;
 $home-title: #463853;
 $home-text: #998DA0;
 $btn-bcolor: #8847c4;
+$dropdown-menu: #f5f5f5;

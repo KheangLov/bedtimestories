@@ -42,8 +42,9 @@
             <h2 class="menu-header">Company</h2>
             <ul class="list-unstyled">
               <li><a href="<?php echo $stories == true ? '../' : ''; ?>aboutus.php">About Us</a></li>
-              <li><a href="<?php echo $stories == true ? '../' : ''; ?>register.php">Register</a></li>
-              <li><a href="<?php echo $stories == true ? '../' : ''; ?>login.php">Log In</a></li>
+              <li><a href="<?php echo $stories == true ? '../' : ''; ?>admin/index.php">Admin Site</a></li>
+              <!-- <li><a href="<?php // echo $stories == true ? '../' : ''; ?>register.php">Register</a></li>
+              <li><a href="<?php // echo $stories == true ? '../' : ''; ?>login.php">Log In</a></li> -->
             </ul>
           </div>
         </div>

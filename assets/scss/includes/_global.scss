@@ -5,6 +5,13 @@ html {
   height: 100%;
 }
 
+.container.con-wrapper {
+  height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 body {
   @include serif-font;
 }
@@ -101,4 +108,76 @@ input[type="radio"], input[type="checkbox"] {
 
 .col-half-padd-left {
   padding-left: 7.5px;
+}
+
+.mar-top-bot {
+  margin: 15px 0;
+}
+
+input[type="file"] {
+  &.input-display {
+    display: none;
+  }
+}
+
+.file-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mar-top {
+  margin-top: 15px;
+}
+
+.btn-profile-wrapper {
+  height: 100px;
+  position: absolute;
+  top: 20px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  .btn-upload-profile {
+    opacity: 0;
+    color: #fff;
+    border: 0px;
+    border-radius: 0;
+    height: 114px;
+    padding: 0 44px;
+    border-radius: 50%;
+    background-color: rgba(2, 2, 2, 0.5);
+    transition: all 0.3s ease-in-out;
+    .icon-profile-upload {
+      font-size: 24px;
+    }
+    &:hover, &:focus {
+      color: $white;
+      background-color: $default;
+      box-shadow: none;
+      opacity: 0.8;
+    }
+  }
+}
+
+.input-mar {
+  margin-top: 10px;
+}
+
+#btn-editpro-display {
+  display: none;
+}
+
+#role-select {
+  display: none;
+}
+
+#btn-update-profile-readonly {
+  display: none;
+}
+
+@media (max-width: 950px) {
+  body {
+    overflow-x: hidden;
+  }
 }

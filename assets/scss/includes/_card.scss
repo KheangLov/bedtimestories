@@ -1,6 +1,6 @@
 .card {
   background-color: $white;
-  border-radius: 12px;
+  border-radius: 6px;
   box-shadow: 0 6px 10px -4px $box-shadow;
   margin-bottom: 30px;
   .card-header {
@@ -8,6 +8,16 @@
 
     .add-post {
       font-weight: bold;
+      font-size: 28px;
+      margin-top: 10px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    }
+
+    .page-name {
+      font-weight: bold;
+      font-size: 20px;
+      margin-top: 10px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
     }
   }
   .card-body {
@@ -77,6 +87,7 @@
     padding: 0 15px 15px 15px;
 
     .add-cat {
+      cursor: pointer;
       font-size: 16px;
       font-weight: 600;
       text-decoration: underline;
@@ -92,7 +103,7 @@
       .fa {
         font-size: 50px;
       }
-      .fa-warning {
+      .fa-warn {
         color: $warning;
       }
       .fa-success {
@@ -103,6 +114,12 @@
       }
       .fa-infoo {
         color: $info;
+      }
+      .fa-default {
+        color: $default;
+      }
+      .fa-primary {
+        color: $primary;
       }
       .text {
         color: $gray-500;
@@ -142,8 +159,8 @@
         .img-row {
           .img-wrapper {
             background-color: $main-wrapper;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
 
             .img-raised {
@@ -180,9 +197,6 @@
         font-size: 14px;
       }
     }
-    .card-body {
-
-    }
     .card-footer {
       .fa-work {
         margin-right: 5px;
@@ -199,8 +213,8 @@
       background-color: $black;
       position: relative;
       overflow: hidden;
-      border-top-left-radius: 12px;
-      border-top-right-radius: 12px;
+      border-top-left-radius: 6px;
+      border-top-right-radius: 6px;
       border-bottom-right-radius: 0px;
       border-bottom-left-radius: 0px;
     }
@@ -210,22 +224,28 @@
       right: 0;
       bottom: 0;
       left: 0;
+      height: 100px;
       z-index: 9999;
       .author {
         a {
+          position: relative;
           color: $info;
           .img-profile {
             border-radius: 50%;
             height: 124px;
+            &.img-addit {
+              border: 5px solid #fff;
+              box-shadow: 2px 2px 22px rgba(2, 2, 2, 0.5);
+              position: relative;
+              width: 124px;
+              background-color: #fff;
+            }
           }
           .author-name {
             color: $info;
             font-size: 24px;
             font-weight: bold;
             margin: 15px 0;
-          }
-          &:hover, &:focus {
-            color: $info;
           }
         }
         .slug {
@@ -348,24 +368,10 @@
   }
 }
 
-.pagination-wrap {
-
-  .pagination {
-
-    .active {
-
-      a {
-        background-color: $sidebar-bg;
-        color: $white;
-        border-color: $sidebar-bg;
-      }
-    }
-
-    li {
-      
-      a {
-        color: $sidebar-bg;
-      }
+@media (max-width: 950px) {
+  .card {
+    &.card-tasks {
+      width: 783.6px;
     }
   }
 }

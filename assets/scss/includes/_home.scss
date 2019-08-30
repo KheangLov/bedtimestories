@@ -30,7 +30,7 @@
     }
 
     .btn {
-      border-radius: 12px;
+      border-radius: 4px;
     }
 
     .btn-bcolor {
@@ -102,12 +102,13 @@
     margin-top: 60px;
     margin-bottom: 30px;
 
-    li {
+    li.post-tab {
       padding: 15px 0;
+      border-left: 3px solid transparent;
+      transition: all 0.3s ease-in-out; 
 
       a {
         padding: 0 30px;
-        border-left: 3px solid transparent;
 
         .inner-theader {
           font-size: 22px;
@@ -125,16 +126,27 @@
       }
 
       &.active {
+        border-left-color: $primary;
 
         a {
           color: $home-text;
           background: transparent;
-          border-left-color: $primary;
           border-radius: 0;
           padding: 0 30px;
         }
+
+        &:hover, &:focus {
+          text-decoration: none;
+          background-color: transparent;
+          border-radius: 0;
+        }
       }
 
+      &:hover, &:focus {
+        text-decoration: none;
+        background-color: #eeeeee;
+        border-radius: 4px;
+      }
     }
   }
 
@@ -184,7 +196,7 @@
       background-color: $primary;
       color: $white;
       font-weight: 600;
-      border-radius: 12px;
+      border-radius: 4px;
       border-color: $primary;
 
       &:hover, &:focus {
@@ -212,5 +224,47 @@
         background-size: cover;
       }
     }
+  }
+}
+
+.custom-row {
+  padding: 0 7.5px;
+}
+
+.custom-col {
+  padding: 0;
+  margin-top: 12px;
+}
+
+.custom-img {
+  position: relative;
+  width: 285px;
+  height: 170px;
+  margin: 0 auto;
+  border-radius: 4px;
+  border: 3px solid white;
+  box-shadow: 0px 0px 4px rgba(2, 2, 2, 0.4);
+}
+
+#btn_images_upload {
+  display: none;
+}
+
+.btn-img {
+  position: absolute;
+  top: 3px;
+  left: 10px;
+  width: 280px;
+  height: 164px;
+  opacity: 0;
+  border: 0px;
+  border-radius: 0;
+  font-size: 55px;
+  background-color: rgba(2, 2, 2, 0.5);
+  transition: all 0.3s ease-in-out;
+  &:hover, &:focus {
+    opacity: 0.8;
+    background-color: #66615B;
+    color: #fff;
   }
 }
