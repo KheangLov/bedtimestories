@@ -43,11 +43,6 @@ $(document).ready(function () {
       }
     });
   });
-  $('.name_inline_edit').editable({
-    mode: 'inline',
-    url: 'inline-edit.php',
-    title: 'Enter name'
-  });
   $('#multiple_upload').change(function () {
     var tmppath = URL.createObjectURL(event.target.files[0]);
     var files = $(this)[0].files;
@@ -148,6 +143,16 @@ function prevCate(curPage) {
 
 function nextCate(curPage) {
   window.location.href = 'category.php?page=' + (curPage + 1) + '';
+  return true;
+}
+
+function prevPost(curPage) {
+  window.location.href = 'post.php?page=' + (curPage - 1) + '';
+  return true;
+}
+
+function nextPost(curPage) {
+  window.location.href = 'post.php?page=' + (curPage + 1) + '';
   return true;
 }
 
@@ -435,3 +440,43 @@ function numberOnly(evt) {
     evt.preventDefault();
   }
 }
+
+var pt = document.getElementById("password_types");
+var nom = document.getElementById("number_of_months");
+console.log(pt.value);
+pt.addEventListener("change", () => {
+  if(pt.value == 0) {
+    nom.removeAttribute('disabled');
+  } else if(pt.value == 1) {
+    nom.setAttribute('disabled', 'disabled');
+  }
+});
+
+// var dateTime = document.getElementById("date_time");
+// var output = document.getElementById("show_datetime");
+// var countDownDate = new Date(dateTime.innerHTML).getTime();
+
+// // Update the count down every 1 second
+// var x = setInterval(function() {
+
+//   // Get today's date and time
+//   var now = new Date().getTime();
+
+//   // Find the distance between now and the count down date
+//   var distance = countDownDate - now;
+
+//   // Time calculations for days, hours, minutes and seconds
+//   var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+//   var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+//   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+//   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+//   // Display the result in the element with id="demo"
+//   output.value = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+//   // If the count down is finished, write some text 
+//   if (distance < 0) {
+//     clearInterval(x);
+//     output.value = "EXPIRED";
+//   }
+// }, 1000);

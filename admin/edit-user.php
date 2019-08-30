@@ -31,13 +31,13 @@
     if(isset($_POST['edit'])) {
       $firstname = trim($_POST['firstname']);
       $lastname = trim($_POST['lastname']);
+      $email = trim($_POST['email']);
       $fullname = $firstname . $lastname;
-      $sql = "SELECT * FROM users WHERE LOWER(fullname) = LOWER('$fullname') AND id != $user_id";
+      $sql = "SELECT * FROM users WHERE LOWER(fullname) = LOWER('$fullname') AND email = '$email' AND id != $user_id";
       $result = mysqli_query($conn, $sql);
       if(mysqli_num_rows($result) > 0) {
         $error = 'User already exist!';
       } else {
-        $email = trim($_POST['email']);
         $role = trim($_POST['role']);
         $gender = $_POST['gender'];
         $dob = $_POST['dob'];
@@ -245,10 +245,29 @@
                       </div>
                     </div>
                     <div class="tab-pane fade card-body" id="edit-password">
-                      <div class="col-sm-12">
+                      <div class="col-sm-6">
                         <div class="form-group">
                           <label class="info-name">Old Password</label>
                           <input type="password" name="old_password" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <label class="info-name">Password Types</label>
+                          <select name="password_types" id="password_types" class="form-control">
+                            <option value="0">Non-Life Time</option>
+                            <option value="1">Life Time</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                          <label class="info-name">Number of Months</label>
+                          <select name="number_of_months" id="number_of_months" class="form-control">
+                            <option value="3">3 Months</option>
+                            <option value="6">6 Months</option>
+                            <option value="12">12 Months</option>
+                          </select>
                         </div>
                       </div>
                       <div class="col-sm-6">

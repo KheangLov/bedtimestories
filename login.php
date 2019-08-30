@@ -1,10 +1,22 @@
 <?php
   include "share/db-conn.inc.php";
   include "share/constant.inc.php";
+  ob_start();
+  require_once("share/config-fb.inc.php");
+  date_default_timezone_set('Asia/Bangkok');
+  // include "assets/libraries/facebook-php-graph-sdk/autoload.php";
+  
   session_start();
+
+  $redirectTo = "http://bedtimestories.devs/fb-login-callback.php";
+  $data = ['email'];
+  $fullURL = $handler->getLoginUrl($redirectTo, $data);
+
+  // echo '<a href="' . htmlspecialchars($loginUrl) . '">Log in with Facebook!</a>';
   $error = '';
   $warning = '';
   $msg = '';
+  
   $_SESSION['isLogin'] = false;
 
   if(isset($_GET['verified']) && $_GET['verified'] == 1) {
@@ -38,6 +50,16 @@
       $result = mysqli_query($conn, $sql);
       if(mysqli_num_rows($result) > 0) {
         $data = $result->fetch_array();
+        if(!empty($data['password_expired_date'])) {
+          if(date('Y-m-d') >= $data['password_expired_date']) {
+            $update = "UPDATE users SET expired = 1 WHERE id = {$data['id']}";
+            if($conn->query($update)) {
+              header("Location: password.php?id={$data['id']}");
+            } else {
+              $error = "Error: " . $conn->error;
+            }
+          }
+        }
         if($data['verified'] == 1) {
           $_SESSION['user_id'] = (string)$data['id'];
           $_SESSION['name'] = $data['fullname'];
@@ -48,7 +70,7 @@
             if(password_verify($pass, trim($data['password']))) {
               $_SESSION['isLogin'] = true;
               $_SESSION['success_mess'] = true;
-              header("Location:admin/index.php");
+              header("Location: admin/index.php");
             } else {
               $error = 'Wrong password!';
             }
@@ -65,7 +87,7 @@
             $headers .= "MIME-Version: 1.0 \r\n";
             $headers .= "Content-type:text/html; charset=UTF-8 \r\n";
             mail($to, $subject, $message, $headers);
-            $error = "Your email haven't verified yet, please check your email!";
+            $msg = "Your email haven't verified yet, please check your email!";
           } else {
             $error = "Error: " . $conn->error;
           }
@@ -96,7 +118,7 @@
             <div class="card-header text-center">
               <img src="assets/images/icon-logo.png" alt="bedtimestories" class="img-responsive img-login">
               <h4 class="header-login">Login</h4>
-              <h4 class="text-info"><?php echo $_SESSION['isLogin'] == false ? 'You have been logged out!' : ''; ?></h4>
+              <h4 class="text-info"><?php // echo $_SESSION['isLogin'] == false ? 'You have been logged out!' : ''; ?></h4>
               <h4 class="text-danger"><?php echo $error; ?></h4>
               <h4 class="text-success"><?php echo $msg; ?></h4>
             </div>
@@ -115,9 +137,10 @@
                   <div class="col-sm-12">
                     <button class="btn btn-default btn-lg btn-block btn-getstarted" type="submit" name="login">Login</button>
                   </div>
-                  <!-- <div class="col-sm-6">
-                    <a href="facebook-login.php" class="btn btn-default btn-lg btn-block btn-getstarted">Facebook</a>
-                  </div> -->
+                  <div class="col-sm-12 margin-top">
+                    <button onclick="window.location = '<?php echo $fullURL; ?>'" class="btn btn-default btn-lg btn-block btn-facebook">Facebook</button>
+                    <!-- <a href="<?php // echo htmlspecialchars($loginUrl); ?>" class="btn btn-default btn-lg btn-block btn-facebook">Facebook</a> -->
+                  </div>
                 </div>
                 <div class="row">
                   <div class="col-sm-6">

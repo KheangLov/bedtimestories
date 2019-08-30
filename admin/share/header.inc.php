@@ -4,12 +4,20 @@
   session_start();
   $text = "";
   if($_SESSION['isLogin'] == true) {
+    // if(!isset($_SESSION['access_token'])) {
+    //   header("Location: ../login.php");
+    //   // exit();
+    // }
     $text = "Welcome to our homepage user: ";
   } else {
     $_SESSION['error'] = 'Please login first!';
     header("Location:../login.php");
   }
-  $_SESSION['isLogin'] == false;
+  // if(!isset($_SESSION['access_token'])) {
+  //   header("Location:../login.php");
+  // }
+  // var_dump($_SESSION['isLogin']);
+  // $_SESSION['isLogin'] == false;
   $userId = $_SESSION['user_id'];
 ?>
 <!DOCTYPE html>

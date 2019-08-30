@@ -199,7 +199,7 @@
               if($get_page != '' && $get_page != 1) :
             ?>
                 <li>
-                  <a href="#" onClick="prevUser(<?php echo $get_page; ?>)" aria-label="Previous">
+                  <a href="#" onClick="prevPost(<?php echo $get_page; ?>)" aria-label="Previous">
                     <i class="fa fa-angle-left"></i>
                   </a>
                 </li>
@@ -208,13 +208,13 @@
               $number_of_page = ceil($number_of_post / $per_page);
               for($page=1; $page<=$number_of_page; $page++) :
             ?>
-                <li class="<?php echo $page == $get_page ? 'active' : ''; ?>"><a href="user.php?page=<?php echo $page; ?>"><?php echo $page; ?></a></li>
+                <li class="<?php echo $page == $get_page ? 'active' : ''; ?>"><a href="post.php?page=<?php echo $page; ?>"><?php echo $page; ?></a></li>
             <?php
               endfor;
               if($get_page != '' && $get_page != $number_of_page) :
             ?>
                 <li>
-                  <a href="#" onClick="nextUser(<?php echo $get_page; ?>)" aria-label="Next">
+                  <a href="#" onClick="nextPost(<?php echo $get_page; ?>)" aria-label="Next">
                     <i class="fa fa-angle-right"></i>
                   </a>
                 </li>

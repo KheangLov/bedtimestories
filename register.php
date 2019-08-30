@@ -1,6 +1,9 @@
 <?php
   include "share/db-conn.inc.php";
   include "share/constant.inc.php";
+  if($_SESSION['isLogin'] === true) {
+    header("Location: admin/index.php?permission=denied");
+  }
   $error = '';
   $msg = '';
   $check_required = false;
@@ -44,12 +47,12 @@
             $vkey = md5(time().$fullname);
             $verified = 0;
             $stmt = "INSERT INTO users(firstname, lastname, fullname, email, gender, password, role_id, status, vkey, verified, created_date, updated_date) 
-            VALUES('$firstname', '$lastname', '$fullname', '$email', '$gender', '$password', $role, '$status', '$vkey', $verified, '$created_date', '$updated_date')";
+              VALUES('$firstname', '$lastname', '$fullname', '$email', '$gender', '$password', $role, '$status', '$vkey', $verified, '$created_date', '$updated_date')";
             if($conn->query($stmt)) {
               $to = $email;
               $subject = 'Email verification';
               $message = "<a href=\"http://bedtimestories.devs/verify.php?vkey={$vkey}\">Verify Account</a>";
-              $headers = "From: lovsokheang@gmail.com \r\n";
+              $headers = "From: kheang015@gmail.com \r\n";
               $headers .= "MIME-Version: 1.0 \r\n";
               $headers .= "Content-type:text/html; charset=UTF-8 \r\n";
               mail($to, $subject, $message, $headers);

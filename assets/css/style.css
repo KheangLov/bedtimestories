@@ -7003,6 +7003,20 @@ input[type="file"].input-display {
   font-size: 12px;
   padding: 0px 0px 0px 5px; }
 
+.btn-facebook {
+  background-color: #3b5998;
+  border-color: #3b5998;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 15px; }
+  .btn-facebook:hover, .btn-facebook:focus {
+    border-color: #3b5998;
+    background-color: transparent;
+    color: #3b5998; }
+
+.margin-top {
+  margin-top: 15px; }
+
 #post_select_visibility {
   display: none; }
 

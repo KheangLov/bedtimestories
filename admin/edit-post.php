@@ -84,7 +84,7 @@
         category_id = $post_cate, updated_date = '$post_update',
         thumbnail = '$thumb'
         WHERE id = $post_id";
-      
+      // var_dump($conn->query($draft_post_sql));
       if($conn->query($draft_post_sql) === true) {
         header("Location: post.php?post=draft_updated");
       } else {
@@ -92,49 +92,40 @@
       }
     }
     if(isset($_POST['save_publish'])) {
+      if(!empty($_FILES['thumbnail']['name'])) {
+        $file_extens = array("jpg", "png", "jpeg", "gif");
+        $thumb = $_FILES['thumbnail']['name'];
+        $thumb_tmpname = $_FILES['thumbnail']['tmp_name'];
+        $thumb_size = $_FILES["thumbnail"]["size"];
+        $thumb_des = "../assets/upload/thumbnails/" . $thumb;
+        $thumb_type = strtolower(pathinfo($thumb_des, PATHINFO_EXTENSION));
+        if($thumb_size > 2000000) {
+          $error_thumb = "File's size is too large!";
+        } else {
+          if(!in_array($thumb_type, $file_extens)) {
+            $error_thumb = "Image's file extension is not valid!";
+          } else {
+            move_uploaded_file($thumb_tmpname, $thumb_des);
+          }
+        }
+      }
       $post_title = trim($_POST['title']);
       $post_content = $_POST['content'];
       $post_desc = $_POST['description'];
-      if($post_title == '' || $post_content == '' || $post_desc == '') {
+      if($post_title == '' || $post_content == '') {
         $check_required = true;
       } else {
         $post_cate = trim($_POST['category']);
-        $post_status = strtolower(PUBLISH);
+        $post_status = PUBLISH;
         $post_vis = trim($_POST['visibility']);
         $post_user = $data['users_id'];
-        if(!empty($_FILES['thumbnail']['name'])) {
-          $file_extens = array("jpg", "png", "jpeg", "gif");
-          $thumb = $_FILES['thumbnail']['name'];
-          $thumb_tmpname = $_FILES['thumbnail']['tmp_name'];
-          $thumb_size = $_FILES["thumbnail"]["size"];
-          $thumb_des = "../assets/upload/thumbnails/" . $thumb;
-          $thumb_type = strtolower(pathinfo($thumb_des, PATHINFO_EXTENSION));
-          if($thumb_size > 2000000) {
-            $error_thumb = "File's size is too large!";
-          } else {
-            if(!in_array($thumb_type, $file_extens)) {
-              $error_thumb = "Image's file extension is not valid!";
-            } else {
-              move_uploaded_file($thumb_tmpname, $thumb_des);
-            }
-          }
-        }
-        // if($image != '') {
-        //   $post_image = $_SESSION['image'];
-        // } else {
-        //   $post_image = '';
-        // }
-        // if($thumbnail != '') {
-        //   $post_thumbnail = $_SESSION['thumbnail'];
-        // } else {
-        //   $post_thumbnail = '';
-        // }
         $post_update = date("Y-m-d h:i:s");
         $publish_post_sql = "UPDATE stories 
           SET title = '$post_title', content = '$post_content', description = '$post_desc', 
           status = '$post_status', visibility = '$post_vis', user_id = $post_user, 
           category_id = $post_cate, updated_date = '$post_update', thumbnail = '$thumb'
           WHERE id = $post_id";
+        var_dump($conn->query($publish_post_sql));
         if($conn->query($publish_post_sql) === true) {
           header("Location: post.php?post=publish_updated");
         } else {
@@ -153,7 +144,7 @@
           <div class="col-sm-9">
             <div class="card">
               <div class="card-header">
-                <h2 class="add-post">Title</h2>
+                <h2 class="add-post">Title <?php echo $check_required == true ? '<span class="text-danger">* required</span>' : ''; ?></h2>
                 <h4 class="text-danger"><?php echo $error != '' ? $error : ''; ?></h4>
                 <h4 class="text-success"><?php echo $msg != '' ? $msg : ''; ?></h4>
               </div>
@@ -168,6 +159,7 @@
                 <span id="thumbnail-text" class="file-text">No file chosen!</span>
               </div>
               <div class="card-body">
+                <?php echo $check_required == true ? '<span class="text-danger">* required</span>' : ''; ?> 
                 <textarea name="content" id="" cols="30" rows="30" class="form-control"><?php echo $data['content']; ?></textarea>
               </div>
             </div>
