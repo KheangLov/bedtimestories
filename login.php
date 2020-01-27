@@ -2,17 +2,12 @@
   include "share/db-conn.inc.php";
   include "share/constant.inc.php";
   ob_start();
-  require_once("share/config-fb.inc.php");
   date_default_timezone_set('Asia/Bangkok');
-  // include "assets/libraries/facebook-php-graph-sdk/autoload.php";
   
   session_start();
 
-  $redirectTo = "http://bedtimestories.devs/fb-login-callback.php";
   $data = ['email'];
-  $fullURL = $handler->getLoginUrl($redirectTo, $data);
-
-  // echo '<a href="' . htmlspecialchars($loginUrl) . '">Log in with Facebook!</a>';
+  
   $error = '';
   $warning = '';
   $msg = '';
@@ -82,7 +77,7 @@
           if($conn->query($update)) {
             $to = $data['email'];
             $subject = 'Email verification';
-            $message = "<a href=\"http://bedtimestories.devs/verify.php?vkey={$vkey}\">Verify Account</a>";
+            $message = "<a href=\"http://mybedtimestories.epizy.com/verify.php?vkey={$vkey}\">Verify Account</a>";
             $headers = "From: lovsokheang@gmail.com \r\n";
             $headers .= "MIME-Version: 1.0 \r\n";
             $headers .= "Content-type:text/html; charset=UTF-8 \r\n";
@@ -118,7 +113,6 @@
             <div class="card-header text-center">
               <img src="assets/images/icon-logo.png" alt="bedtimestories" class="img-responsive img-login">
               <h4 class="header-login">Login</h4>
-              <h4 class="text-info"><?php // echo $_SESSION['isLogin'] == false ? 'You have been logged out!' : ''; ?></h4>
               <h4 class="text-danger"><?php echo $error; ?></h4>
               <h4 class="text-success"><?php echo $msg; ?></h4>
             </div>
@@ -135,20 +129,20 @@
                 </div>
                 <div class="row">
                   <div class="col-sm-12">
-                    <button class="btn btn-default btn-lg btn-block btn-getstarted" type="submit" name="login">Login</button>
-                  </div>
-                  <div class="col-sm-12 margin-top">
-                    <button onclick="window.location = '<?php echo $fullURL; ?>'" class="btn btn-default btn-lg btn-block btn-facebook">Facebook</button>
-                    <!-- <a href="<?php // echo htmlspecialchars($loginUrl); ?>" class="btn btn-default btn-lg btn-block btn-facebook">Facebook</a> -->
+                    <button class="btn btn-default btn-lg btn-block btn-getstarted" type="submit" name="login">
+                        <i class="fa fa-sign-in"></i>
+                        Login
+                    </button>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-sm-6">
+                    <div class="register-wrapper text-left">
+                        <a href="index.php" class="regi-link">Bedtimestories</a>
+                        <a href="register.php" class="regi-link dis-flex">Register</a>
+                    </div>
                   </div>
                   <div class="col-sm-6">
-                    <div class="register-wrapper text-right">
-                      <a href="register.php" class="regi-link">Register</a>
-                    </div>
                   </div>
                 </div>
               </form>

@@ -5,9 +5,7 @@
   </div>
   
   <script src="../assets/libraries/jQuery/jquery.min.js"></script>
-  <script src="../assets/libraries/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
-  <script src="../assets/libraries/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
-  <script src="../assets/libraries/bootstrap-notify/bootstrap-notify.js"></script>
+  <script src="../assets/libraries/bootstrap/js/bootstrap.min.js"></script>
   <script src="../assets/js/script.js"></script>
 </body>
 </html>

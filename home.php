@@ -95,20 +95,6 @@
                   <?php
                     endwhile;
                   ?>
-                  <!-- <div class="col-sm-4">
-                    <div class="inner-col">
-                      <img src="assets/images/bookshelf.svg" alt="bookshelf" class="img-responsive">
-                      <h3 class="col-header">Teach Valuable Life Lessons</h3>
-                      <p class="col-text">We deeply care about diversity and empowerment - each Storyworld contains educational aspects and storytelling tips to teach valuable life lessons.</p>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="inner-col">
-                      <img src="assets/images/book.svg" alt="book" class="img-responsive">
-                      <h3 class="col-header">A Safety Net for Storytelling</h3>
-                      <p class="col-text">Each story includes an easy-to-remember summary of Storypoints and the interactive Storybuilder generates millions of exciting storylines.</p>
-                    </div>
-                  </div> -->
                 </div>
               </div>
             </section>
@@ -152,26 +138,7 @@
                       <?php
                         endwhile;
                       ?>
-                          <!-- <li class="post-tab">
-                            <a data-toggle="tab" href="#second-story">
-                              <h3 class="inner-theader">Endless source of storylines</h3>
-                              <p class="inner-ttext">
-                                Storyworlds are growing collections of thematically-related stories written by authors from around the world.
-                              </p>
-                            </a>
-                          </li>
-                          <li class="post-tab">
-                            <a data-toggle="tab" href="#third-story">
-                              <h3 class="inner-theader">Growing collection of Storyworlds</h3>
-                              <p class="inner-ttext">
-                                Interactively create your very own adventures - generate millions of hilarious stories in your genre of choice.
-                              </p>
-                            </a>
-                          </li> -->
                     </ul>
-                    <!-- <a href="https://itunes.apple.com/us/app/bedtime-stories-read-tell/id1231933548" class="app-store">
-                      <img src="assets/images/app-store.svg" alt="app-store" class="img-appstore">
-                    </a> -->
                   </div>
                   <div class="col-sm-6">
                     <div class="tab-content">
@@ -189,12 +156,6 @@
                           <div id="<?php echo $rows['btn_name']; ?>" class="tab-pane fade<?php echo $i == 1 ? ' in active' : ''; ?>">
                             <img src="assets/upload/post_images/<?php echo $rows['image']; ?>" alt="<?php echo $rows['image']; ?>" class="img-responsive img-center">
                           </div>
-                          <!-- <div id="second-story" class="tab-pane fade">
-                            <img src="assets/images/storyworld@1x-8aff2543.jpg" alt="storyworld@1x" class="img-responsive img-center">
-                          </div>
-                          <div id="third-story" class="tab-pane fade">
-                            <img src="assets/images/storybuilder@1x-c2817d58.jpg" alt="storybuilder@1x" class="img-responsive img-center">
-                          </div> -->
                       <?php
                         endwhile;
                       ?>
@@ -223,14 +184,14 @@
                     <?php echo $rows['content']; ?>
                     </h2>
                   </div>
-                  <!-- <div class="col-sm-6">
+                  <div class="col-sm-6">
                     <div class="input-group input-group-lg">
                       <input type="text" class="form-control form-custom" placeholder="Enter your email">
                       <span class="input-group-btn">
                         <button class="btn btn-default btn-form" type="button">Subscribe</button>
                       </span>
                     </div>
-                  </div> -->
+                  </div>
                 </div>
               </div>
             </div>

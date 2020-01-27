@@ -85,6 +85,11 @@
         while($all_cates = $cates_result->fetch_assoc()) :
           $cate_id = $all_cates['id'];
           $cate_name = $all_cates['name'];
+          $count_cate_sql = "SELECT COUNT(*) AS count_cate FROM categories
+            INNER JOIN stories ON categories.id = stories.category_id
+            WHERE LOWER(stories.`status`) = 'publish' AND LOWER(stories.`visibility`) = 'public' AND LOWER(categories.name) = LOWER('{$cate_name}')";
+          $result_cate_count = mysqli_query($conn, $count_cate_sql);
+          $count_cate = $result_cate_count->fetch_assoc();
           $cate_sql = "SELECT categories.name AS cate_name, stories.* FROM categories
             INNER JOIN stories ON categories.id = stories.category_id 
             WHERE LOWER(stories.`status`) = 'publish' AND LOWER(stories.`visibility`) = 'public' AND LOWER(categories.name) = LOWER('{$cate_name}') LIMIT 6";
@@ -94,7 +99,13 @@
             <section class="section-wrapper">
               <div class="section-header">
                 <h4 class="section-title"><?php echo $cate_name; ?></h4>
-                <a href="seemore.php?cate_id=<?php echo $cate_id; ?>" class="see-more">See More</a>
+                <?php
+                  if($count_cate['count_cate'] > 6) :
+                ?>
+                    <a href="seemore.php?cate_id=<?php echo $cate_id; ?>" class="see-more">See More</a>
+                <?php
+                  endif;
+                ?>
               </div>
               <div class="block-grid-xs-2 block-grid-sm-4 block-grid-md-6 block-grid-lg-6">
                 <?php

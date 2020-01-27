@@ -163,11 +163,10 @@
                 </div>
                 <input type="submit" name="register" class="btn btn-default btn-lg btn-block btn-getstarted" value="Register">
                 <div class="row">
-                  <div class="col-sm-6">
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="register-wrapper text-right">
-                      <a href="login.php" class="regi-link">Login</a>
+                  <div class="col-sm-12">
+                     <div class="register-wrapper text-left">
+                      <a href="index.php" class="regi-link">Bedtimestories</a>
+                      <a href="login.php" class="regi-link dis-flex">Login</a>
                     </div>
                   </div>
                 </div>

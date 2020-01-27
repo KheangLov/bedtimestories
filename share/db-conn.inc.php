@@ -1,8 +1,8 @@
 <?php
-  $servername = "localhost";
-  $username = "bedtimestories";
-  $password = "not4you";
-  $dbname = "bedtimestories";
+  $servername = "sql205.epizy.com";
+  $username = "epiz_24437212";
+  $password = "TyTkdEjA2R";
+  $dbname = "epiz_24437212_bedtimestories";
 
   // Create connection
   $conn = new mysqli($servername, $username, $password, $dbname);
